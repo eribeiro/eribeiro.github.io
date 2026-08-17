@@ -2,10 +2,16 @@ schema_version: 5
 
 site:
   title: ReadingTracks
-  tagline: Papers, researchers, venues, and reading tracks for a Systems & AI reading club.
+  tagline: Papers, researchers, venues, and reading tracks for Systems & AI reading club.
   author_name: Edward Ribeiro
   author_url: https://github.com/eribeiro
   footer: Data kept in YAML and statically loaded in the browser.
+
+# Optional manual cloud backup. Create a Google OAuth 2.0 Web client, authorize
+# this site's origin, enable the Drive API, and paste its public client ID here.
+cloud_sync:
+  google_drive:
+    client_id: ""
 
 # Area chips shown at the top of the filter bar. Every paper's `areas` list
 # should only use values from here.
