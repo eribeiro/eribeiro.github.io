@@ -60,6 +60,14 @@ for required_dir in data assets vendor; do
   fi
 done
 
+source_commit="$(git -C "$SOURCE_DIR" log -1 --format=%H -- index.html)"
+source_commit_short="$(git -C "$SOURCE_DIR" log -1 --format=%h -- index.html)"
+
+if [[ -z "$source_commit" || -z "$source_commit_short" ]]; then
+  printf 'Error: could not determine the latest commit for index.html.\n' >&2
+  exit 1
+fi
+
 RSYNC_ARGS=(-a --delete --delete-excluded --itemize-changes)
 if [[ "$DRY_RUN" == true ]]; then
   RSYNC_ARGS+=(--dry-run)
@@ -81,5 +89,10 @@ rsync "${RSYNC_ARGS[@]}" \
 if [[ "$DRY_RUN" == true ]]; then
   printf 'Dry run complete; no files were changed.\n'
 else
+  sed -i.bak \
+    -e "s/__INDEX_COMMIT__/$source_commit/g" \
+    -e "s/__INDEX_COMMIT_SHORT__/$source_commit_short/g" \
+    "$DEST_DIR/index.html"
+  rm "$DEST_DIR/index.html.bak"
   printf 'ReadingTracks synced from %s to %s\n' "$SOURCE_DIR" "$DEST_DIR"
 fi
