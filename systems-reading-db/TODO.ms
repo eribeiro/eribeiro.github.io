@@ -1,2 +1,0 @@
-
-* Add Heidi Howard papers

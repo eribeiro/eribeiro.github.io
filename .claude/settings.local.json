@@ -1,0 +1,40 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(git -C /Users/eribeiro/projects/eribeiro.github.io ls-files)",
+      "Bash(git *)",
+      "WebSearch",
+      "WebFetch(domain:arxiv.org)",
+      "WebFetch(domain:www.eurosys.org)",
+      "WebFetch(domain:dblp.org)",
+      "WebFetch(domain:www.cs.umd.edu)",
+      "WebFetch(domain:dl.acm.org)",
+      "WebFetch(domain:www.vldb.org)",
+      "WebFetch(domain:dblp.uni-trier.de)",
+      "WebFetch(domain:www.semanticscholar.org)",
+      "WebFetch(domain:brooker.co.za)",
+      "WebFetch(domain:www.repository.cam.ac.uk)",
+      "WebFetch(domain:hstore.cs.brown.edu)",
+      "WebFetch(domain:cs.brown.edu)",
+      "WebFetch(domain:www.cl.cam.ac.uk)",
+      "WebFetch(domain:db.cs.cmu.edu)",
+      "WebFetch(domain:www.heidihoward.co.uk)",
+      "WebFetch(domain:www.wikidata.org)",
+      "WebFetch(domain:cacm.acm.org)",
+      "WebFetch(domain:anil.recoil.org)",
+      "WebFetch(domain:hh360.user.srcf.net)",
+      "Bash(python3 -c ' *)",
+      "WebFetch(domain:vldb.org)",
+      "WebFetch(domain:web.eecs.umich.edu)",
+      "WebFetch(domain:www.cse.iitb.ac.in)",
+      "WebFetch(domain:www.amazon.science)",
+      "WebFetch(domain:people.eecs.berkeley.edu)",
+      "WebFetch(domain:people.mpi-sws.org)",
+      "WebFetch(domain:scholar.google.com)",
+      "Bash(curl -s \"https://dblp.org/search/publ/api?q=OceanBase+707+Million+tpmC&format=json\" -A \"Mozilla/5.0\" --max-time 20)",
+      "WebFetch(domain:sites.computer.org)",
+      "WebFetch(domain:sigmodrecord.org)",
+      "Bash(python3 *)"
+    ]
+  }
+}

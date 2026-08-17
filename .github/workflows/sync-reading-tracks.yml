@@ -1,0 +1,49 @@
+name: Sync ReadingTracks
+
+on:
+  repository_dispatch:
+    types: [reading-tracks-updated]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: sync-reading-tracks
+  cancel-in-progress: false
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out the website
+        uses: actions/checkout@v4
+        with:
+          path: site
+
+      - name: Check out ReadingTracks
+        uses: actions/checkout@v4
+        with:
+          repository: eribeiro/reading-tracks
+          ref: ${{ github.event.client_payload.sha || 'main' }}
+          path: reading-tracks-source
+
+      - name: Sync the static site
+        working-directory: site
+        run: scripts/sync_reading_tracks.sh --source "$GITHUB_WORKSPACE/reading-tracks-source"
+
+      - name: Commit and push changes
+        working-directory: site
+        env:
+          SOURCE_SHA: ${{ github.event.client_payload.sha || 'main' }}
+        run: |
+          if git diff --quiet -- reading-tracks; then
+            echo "ReadingTracks is already up to date."
+            exit 0
+          fi
+
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add reading-tracks
+          git commit -m "Sync ReadingTracks from ${SOURCE_SHA}"
+          git push

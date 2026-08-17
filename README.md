@@ -41,6 +41,23 @@ docker compose up
 
 The site will be available at `localhost:4000`.
 
+## Syncing ReadingTracks
+
+To update the static ReadingTracks site from a sibling checkout:
+
+```bash
+scripts/sync_reading_tracks.sh --dry-run
+scripts/sync_reading_tracks.sh
+```
+
+Use `--source /path/to/reading-tracks` when the project is checked out elsewhere.
+
+Pushes to `eribeiro/reading-tracks` can trigger this sync automatically through
+the workflows in both repositories. Add a fine-grained personal access token as
+the `SITE_SYNC_TOKEN` Actions secret in the ReadingTracks repository. Restrict
+the token to `eribeiro/eribeiro.github.io` and grant it repository Contents
+write access so it can create the dispatch event.
+
 ## Theme
 
 This site uses the official [Minimal Mistakes](https://github.com/mmistakes/minimal-mistakes) theme (© Michael Rose, MIT License) via `remote_theme` in `_config.yml`. Only `_config.yml`, `_data`, content collections, and `assets/css/main.scss`/`assets/js` are customized locally — layouts, includes, and Sass partials come from the upstream theme. See `LICENSE` for license details.

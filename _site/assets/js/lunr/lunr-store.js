@@ -1,33 +1,9 @@
 var store = [{
-        "title": "Blog Post number 1",
-        "excerpt":"This is a sample blog post. Lorem ipsum I can’t remember the rest of lorem ipsum and don’t have an internet connection right now. Testing testing testing this blog post. Blog posts are cool.   Headings are cool   You can have many headings   Aren’t headings cool?  ","categories": [],
-        "tags": ["cool posts","category1","category2"],
-        "url": "/posts/2012/08/blog-post-1/",
-        "teaser": null
-      },{
-        "title": "Blog Post number 2",
-        "excerpt":"This is a sample blog post. Lorem ipsum I can’t remember the rest of lorem ipsum and don’t have an internet connection right now. Testing testing testing this blog post. Blog posts are cool.   Headings are cool   You can have many headings   Aren’t headings cool?  ","categories": [],
-        "tags": ["cool posts","category1","category2"],
-        "url": "/posts/2013/08/blog-post-2/",
-        "teaser": null
-      },{
-        "title": "Blog Post number 3",
-        "excerpt":"This is a sample blog post. Lorem ipsum I can’t remember the rest of lorem ipsum and don’t have an internet connection right now. Testing testing testing this blog post. Blog posts are cool.   Headings are cool   You can have many headings   Aren’t headings cool?  ","categories": [],
-        "tags": ["cool posts","category1","category2"],
-        "url": "/posts/2014/08/blog-post-3/",
-        "teaser": null
-      },{
-        "title": "Blog Post number 4",
-        "excerpt":"This is a sample blog post. Lorem ipsum I can’t remember the rest of lorem ipsum and don’t have an internet connection right now. Testing testing testing this blog post. Blog posts are cool.   Headings are cool   You can have many headings   Aren’t headings cool?  ","categories": [],
-        "tags": ["cool posts","category1","category2"],
-        "url": "/posts/2012/08/blog-post-4/",
-        "teaser": null
-      },{
-        "title": "Future Blog Post",
-        "excerpt":"This post will show up by default. To disable scheduling of future posts, edit config.yml and set future: false.  ","categories": [],
-        "tags": ["cool posts","category1","category2"],
-        "url": "/posts/2012/08/blog-post-4/",
-        "teaser": null
+        "title": "ReadingTracks",
+        "excerpt":"ReadingTracks is a fork-and-edit template for running a reading club’s paper catalog as a static site: papers, the researchers behind them, the venues they were published in, and curated “reading tracks” showing how ideas build on each other over time. No backend, no build step, no framework — just an...","categories": [],
+        "tags": [],
+        "url": "/projects/reading-tracks/",
+        "teaser": "/images/reading-tracks-logo.png"
       },{
         "title": "Talk 1 on Relevant Topic in Your Field",
         "excerpt":"This is a description of your talk, which is a markdown file that can be all markdown-ified like any other post. Yay markdown!  ","categories": [],
