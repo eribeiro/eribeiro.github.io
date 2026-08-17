@@ -29,18 +29,26 @@
   <div id="areaFilters" class="chips" aria-label="Areas"></div>
 
   <div class="select-row">
-    <label>Year<select id="year"><option value="">ALL</option></select></label>
-    <label>Decade<select id="decade"><option value="">ALL</option></select></label>
-    <label>Era<select id="era"><option value="">ALL</option></select></label>
+    <label class="paper-only-filter">Year<select id="year"><option value="">ALL</option></select></label>
+    <label class="paper-only-filter">Decade<select id="decade"><option value="">ALL</option></select></label>
+    <label class="paper-only-filter">Era<select id="era"><option value="">ALL</option></select></label>
     <label>Track<select id="lineage"><option value="">ALL</option></select></label>
-    <label>Venue<select id="venue"><option value="">ALL</option></select></label>
-    <label>Type<select id="type"><option value="">ALL</option></select></label>
-    <label>Tag<select id="tag"><option value="">ALL</option></select></label>
-    <label>Sorting
+    <label class="paper-only-filter">Venue<select id="venue"><option value="">ALL</option></select></label>
+    <label class="paper-only-filter">Type<select id="type"><option value="">ALL</option></select></label>
+    <label class="paper-only-filter">Tag<select id="tag"><option value="">ALL</option></select></label>
+    <label class="paper-only-filter">Sorting
       <select id="grouping">
         <option value="year">Group by year</option>
         <option value="decade">Group by decade</option>
         <option value="none">No grouping</option>
+      </select>
+    </label>
+    <label id="trackSortingLabel" hidden>Sorting
+      <select id="trackSorting">
+        <option value="name">Name</option>
+        <option value="shortest">Shortest first</option>
+        <option value="longest">Longest first</option>
+        <option value="progress">Continue reading</option>
       </select>
     </label>
   </div>
@@ -48,17 +56,22 @@
   <div class="view-row">
     <nav class="tabs" aria-label="Content type">
       <button class="tab active" data-view="papers">Papers</button>
+      <button class="tab" data-view="bookmarks">Bookmarks</button>
       <button class="tab" data-view="researchers">Researchers</button>
       <button class="tab" data-view="venues">Venues</button>
       <button class="tab" data-view="lineages">Tracks</button>
     </nav>
-    <button id="clearFilters" class="secondary">Clean Filters</button>
+    <div class="control-actions">
+      <button id="toggleAllTracks" class="secondary" hidden>Expand all</button>
+      <button id="clearProgress" class="secondary" hidden>Clear reading progress</button>
+      <button id="clearFilters" class="secondary">Clear filters</button>
+    </div>
   </div>
 </section>
 
-<section id="resultsSummary" class="summary" tabindex="-1"><strong id="resultCount">Loading…</strong><span id="activeSummary"></span></section>
+<section id="resultsSummary" class="summary" tabindex="-1"><strong id="resultCount" aria-live="polite">Loading…</strong><span id="activeSummary"></span></section>
 <nav id="groupingNav" class="grouping-nav" aria-label="Jump to group" hidden></nav>
-<section id="results" class="results" aria-live="polite"></section>
+<section id="results" class="results"></section>
 </main>
 <footer>
   <span id="siteFooter">Data kept in YAML and statically loaded in the browser.</span>
@@ -66,10 +79,20 @@
   <small>
     © 2026 Edward Ribeiro. Licensed under the <a href="LICENSE">MIT License</a>.
     Version 1.0.0 · Schema v5 · Commit
-    <a id="sourceCommit" href="https://github.com/eribeiro/reading-tracks/commit/ac51ce55f8821c758309b4866d6bb709f146fec3" target="_blank" rel="noopener">ac51ce5</a>.
+    <a id="sourceCommit" href="https://github.com/eribeiro/reading-tracks/commit/24a133922c86296eabd93167f9c4c29a86d45001" target="_blank" rel="noopener">24a1339</a>.
   </small>
 </footer>
 <a id="backToResults" class="back-to-results" href="#resultsSummary" hidden><span aria-hidden="true">↑</span> Back to results</a>
+<dialog id="clearProgressDialog" class="confirmation-dialog" aria-labelledby="clearProgressTitle" aria-describedby="clearProgressDescription">
+  <form method="dialog">
+    <h2 id="clearProgressTitle">Clear reading progress?</h2>
+    <p id="clearProgressDescription">This will remove all completed-paper progress stored on this device. This action cannot be undone.</p>
+    <div class="dialog-actions">
+      <button class="secondary" value="cancel" autofocus>Cancel</button>
+      <button id="confirmClearProgress" class="danger" value="confirm">Clear progress</button>
+    </div>
+  </form>
+</dialog>
 <script src="vendor/js-yaml.min.js"></script>
 <script src="app.js"></script>
 </body>
