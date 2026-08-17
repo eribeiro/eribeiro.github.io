@@ -147,6 +147,7 @@ lineages:
     - blsm-2012
     - bwtree-2013
     - wisckey-2016
+    - wiredtiger-io-2016
     - monkey-2017
     - pebblesdb-2017
     - dostoevsky-2018
@@ -7759,4 +7760,35 @@ papers:
       paper: https://doi.org/10.1145/3698820
     predecessors:
       - surf-2018
+      - wiredtiger-io-2016
     successors: []
+  - id: wiredtiger-io-2016
+    title: I/O Characteristics of MongoDB and Trim-Based Optimization in Flash SSDs
+    year: 2016
+    authors:
+      - Trong-Dat Nguyen
+      - Sang-Won Lee
+    venue: EDB
+    areas:
+      - Databases
+      - Data management
+      - Infrastructure
+    tags:
+      - WiredTiger
+      - MongoDB
+      - storage engine
+      - flash SSD
+      - checkpointing
+      - TRIM
+    type: essential
+    lineages:
+      - storage-engines
+    why_read: Examines WiredTiger's collection, index, journal, and checkpoint I/O patterns, then shows how coordinating its space reclamation with SSD TRIM affects performance.
+    difficulty: intermediate
+    reading_time_minutes: 45
+    links:
+      paper: https://doi.org/10.1145/3007818.3007844
+    predecessors:
+      - modern-btree-techniques-2011
+    successors:
+      - memento-filter-2024
