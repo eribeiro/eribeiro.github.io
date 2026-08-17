@@ -10,8 +10,6 @@ const norm = v => (v ?? "").toString().normalize("NFD").replace(/\p{Diacritic}/g
 let resultsSummaryVisible=true;
 const PROGRESS_KEY="readingtracks.progress.v1";
 const BOOKMARKS_KEY="readingtracks.bookmarks.v1";
-const GOOGLE_DRIVE_SCOPE="https://www.googleapis.com/auth/drive.appdata";
-const GOOGLE_DRIVE_FILE="readingtracks-state-v1.json";
 
 async function loadYaml(path) {
   const r = await fetch(path);
@@ -42,7 +40,7 @@ async function init() {
     state.config=cfg;
     state.data={papers:pd.papers,paperMap:new Map(pd.papers.map(p=>[p.id,p])),lineages:pd.lineages,metadata:pd.metadata,researchers:rd.researchers,venues:vd.venues};
     loadProgress(); loadBookmarks();
-    applyBranding(); configureGoogleDrive(); wire(); populate(); render();
+    applyBranding(); wire(); populate(); render();
   } catch(e) {
     $("results").innerHTML=`<div class="empty"><strong>Could not load the YAMLs.</strong><br>${esc(e.message)}<br><br>Serve the folder over HTTP (e.g., python3 -m http.server), not via file://.</div>`;
     $("resultCount").textContent=`Error - ${e}`;
@@ -61,14 +59,6 @@ function applyBranding() {
   }
   if($("siteFooter") && s.footer) $("siteFooter").textContent=s.footer;
 }
-function googleDriveClientId() {
-  return String(state.config.cloud_sync?.google_drive?.client_id||"").trim();
-}
-function configureGoogleDrive() {
-  const configured=Boolean(googleDriveClientId());
-  $("saveGoogleDrive").disabled=!configured;
-  $("googleDriveStatus").textContent=configured?"Not connected.":"Add a Google OAuth client ID to config.yaml to enable this backup.";
-}
 function wire() {
   $("search").addEventListener("input", e=>{state.search=e.target.value;render();});
   for (const id of ["year","decade","era","lineage","venue","type","tag","grouping"])
@@ -85,7 +75,6 @@ function wire() {
   $("confirmClearProgress").addEventListener("click",()=>{
     state.completed.clear(); saveProgress(); render();
   });
-  $("saveGoogleDrive").addEventListener("click",saveToGoogleDrive);
   $("expandAllTracks").addEventListener("click",()=>{
     state.visibleTracks.forEach(name=>state.expandedTracks.add(name));
     render();
@@ -432,108 +421,6 @@ function loadBookmarks() {
 }
 function saveBookmarks() {
   try { localStorage.setItem(BOOKMARKS_KEY,JSON.stringify([...state.bookmarks])); } catch(_) {}
-}
-function cloudStateDocument() {
-  const modifiedAt=new Date().toISOString();
-  return {
-    schemaVersion:1,
-    updatedAt:modifiedAt,
-    bookmarks:Object.fromEntries([...state.bookmarks].sort().map(id=>[id,{value:true,modifiedAt}])),
-    progress:Object.fromEntries([...state.completed].sort().map(id=>[id,{completed:true,modifiedAt}])),
-    tombstones:{}
-  };
-}
-function requestGoogleAccessToken() {
-  return new Promise((resolve,reject)=>{
-    if(!window.google?.accounts?.oauth2) {
-      reject(new Error("Google Identity Services did not load. Check your connection and try again."));
-      return;
-    }
-    const client=google.accounts.oauth2.initTokenClient({
-      client_id:googleDriveClientId(),
-      scope:GOOGLE_DRIVE_SCOPE,
-      callback:response=>{
-        if(response.error) {
-          reject(new Error(response.error_description||response.error));
-          return;
-        }
-        if(!google.accounts.oauth2.hasGrantedAllScopes(response,GOOGLE_DRIVE_SCOPE)) {
-          reject(new Error("Google Drive app-data permission was not granted."));
-          return;
-        }
-        resolve(response.access_token);
-      },
-      error_callback:error=>reject(new Error(error.message||error.type||"Google authorization failed."))
-    });
-    client.requestAccessToken();
-  });
-}
-async function googleDriveRequest(url,accessToken,options={}) {
-  const headers=new Headers(options.headers||{});
-  headers.set("Authorization",`Bearer ${accessToken}`);
-  const response=await fetch(url,{...options,headers});
-  if(!response.ok) {
-    let message=`Google Drive request failed (${response.status}).`;
-    try {
-      const body=await response.json();
-      if(body.error?.message) message=body.error.message;
-    } catch(_) {}
-    throw new Error(message);
-  }
-  return response;
-}
-async function findGoogleDriveState(accessToken) {
-  const query=encodeURIComponent(`name = '${GOOGLE_DRIVE_FILE}' and trashed = false`);
-  const fields=encodeURIComponent("files(id,name,modifiedTime)");
-  const url=`https://www.googleapis.com/drive/v3/files?spaces=appDataFolder&q=${query}&orderBy=modifiedTime%20desc&pageSize=1&fields=${fields}`;
-  const response=await googleDriveRequest(url,accessToken);
-  const body=await response.json();
-  return body.files?.[0]||null;
-}
-async function createGoogleDriveState(accessToken,content) {
-  const boundary=`readingtracks_${crypto.randomUUID().replaceAll("-","")}`;
-  const metadata=JSON.stringify({name:GOOGLE_DRIVE_FILE,mimeType:"application/json",parents:["appDataFolder"]});
-  const body=[
-    `--${boundary}\r\nContent-Type: application/json; charset=UTF-8\r\n\r\n${metadata}\r\n`,
-    `--${boundary}\r\nContent-Type: application/json\r\n\r\n${content}\r\n`,
-    `--${boundary}--`
-  ].join("");
-  const url="https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart&fields=id%2CmodifiedTime";
-  const response=await googleDriveRequest(url,accessToken,{
-    method:"POST",
-    headers:{"Content-Type":`multipart/related; boundary=${boundary}`},
-    body
-  });
-  return response.json();
-}
-async function updateGoogleDriveState(accessToken,fileId,content) {
-  const url=`https://www.googleapis.com/upload/drive/v3/files/${encodeURIComponent(fileId)}?uploadType=media&fields=id%2CmodifiedTime`;
-  const response=await googleDriveRequest(url,accessToken,{
-    method:"PATCH",
-    headers:{"Content-Type":"application/json"},
-    body:content
-  });
-  return response.json();
-}
-async function saveToGoogleDrive() {
-  const button=$("saveGoogleDrive"), status=$("googleDriveStatus");
-  button.disabled=true;
-  status.textContent="Waiting for Google authorization…";
-  try {
-    const accessToken=await requestGoogleAccessToken();
-    status.textContent="Saving…";
-    const existing=await findGoogleDriveState(accessToken);
-    const content=JSON.stringify(cloudStateDocument(),null,2);
-    const saved=existing
-      ?await updateGoogleDriveState(accessToken,existing.id,content)
-      :await createGoogleDriveState(accessToken,content);
-    const when=saved.modifiedTime?new Date(saved.modifiedTime):new Date();
-    status.textContent=`Saved ${state.bookmarks.size} bookmarks and ${state.completed.size} completed papers at ${when.toLocaleString()}.`;
-  } catch(error) {
-    status.textContent=`Not saved: ${error.message}`;
-  } finally {
-    button.disabled=!googleDriveClientId();
-  }
 }
 function active() {
   const ps=[];

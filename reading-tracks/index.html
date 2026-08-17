@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>ReadingTracks</title>
-  <meta name="description" content="Papers, researchers, venues, and reading tracks for Systems & AI reading club.">
+  <meta name="description" content="Papers, researchers, venues, and reading tracks for a Systems & AI reading clubs.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700&family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
@@ -73,16 +73,6 @@
 <section id="resultsSummary" class="summary" tabindex="-1"><strong id="resultCount" aria-live="polite">Loading…</strong><span id="activeSummary"></span></section>
 <nav id="groupingNav" class="grouping-nav" aria-label="Jump to group" hidden></nav>
 <section id="results" class="results"></section>
-<section class="cloud-save" aria-labelledby="cloudSaveTitle">
-  <div>
-    <h2 id="cloudSaveTitle">Google Drive backup</h2>
-    <p>Manually save bookmarks and reading progress to your private ReadingTracks app-data file.</p>
-  </div>
-  <div class="cloud-save-actions">
-    <button id="saveGoogleDrive" class="secondary" type="button">Save to Google Drive</button>
-    <output id="googleDriveStatus" for="saveGoogleDrive" aria-live="polite">Not connected.</output>
-  </div>
-</section>
 </main>
 <footer>
   <span id="siteFooter">Data kept in YAML and statically loaded in the browser.</span>
@@ -90,7 +80,7 @@
   <small>
     © 2026 Edward Ribeiro. Licensed under the <a href="LICENSE">MIT License</a>.
     Version 1.0.0 · Schema v5 · Commit
-    <a id="sourceCommit" href="https://github.com/eribeiro/reading-tracks/commit/0ef163c5c8e01fe3c460827dc9ca02c75f051d38" target="_blank" rel="noopener">0ef163c</a>.
+    <a id="sourceCommit" href="https://github.com/eribeiro/reading-tracks/commit/8df88d0c5e6fdf0c62fc03eec21f4db591e75df5" target="_blank" rel="noopener">8df88d0</a>.
   </small>
 </footer>
 <a id="backToResults" class="back-to-results" href="#resultsSummary" hidden><span aria-hidden="true">↑</span> Back to results</a>
@@ -105,7 +95,6 @@
   </form>
 </dialog>
 <script src="vendor/js-yaml.min.js"></script>
-<script src="https://accounts.google.com/gsi/client" async defer></script>
 <script src="app.js"></script>
 </body>
 </html>
