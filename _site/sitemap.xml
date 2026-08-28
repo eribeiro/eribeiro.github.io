@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd" xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 <url>
+<loc>https://edwardoliveira.github.io/blog/clustered-index-vs-clustering-index/</loc>
+<lastmod>2026-08-28T00:00:00+00:00</lastmod>
+</url>
+<url>
 <loc>https://edwardoliveira.github.io/projects/reading-tracks/</loc>
 <lastmod>2026-08-16T00:00:00+00:00</lastmod>
 </url>
@@ -75,6 +79,9 @@
 <loc>https://edwardoliveira.github.io/year-archive/</loc>
 </url>
 <url>
+<loc>https://edwardoliveira.github.io/AGENTS/</loc>
+</url>
+<url>
 <loc>https://edwardoliveira.github.io/CLAUDE/</loc>
 </url>
 <url>
@@ -82,7 +89,7 @@
 </url>
 <url>
 <loc>https://edwardoliveira.github.io/reading-tracks/</loc>
-<lastmod>2026-08-16T18:43:37+00:00</lastmod>
+<lastmod>2026-08-17T06:09:04+00:00</lastmod>
 </url>
 <url>
 <loc>https://edwardoliveira.github.io/talkmap/map.html</loc>

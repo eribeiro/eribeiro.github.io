@@ -1,1 +1,155 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.10.0">Jekyll</generator><link href="https://edwardoliveira.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="https://edwardoliveira.github.io/" rel="alternate" type="text/html" /><updated>2026-08-16T20:13:45+00:00</updated><id>https://edwardoliveira.github.io/feed.xml</id><title type="html">Edward Ribeiro</title><subtitle>MSc student at University of Utah</subtitle><author><name>Edward Ribeiro</name><email>edward.ribeiro@gmail.com</email></author></feed>
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.10.0">Jekyll</generator><link href="https://edwardoliveira.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="https://edwardoliveira.github.io/" rel="alternate" type="text/html" /><updated>2026-08-28T07:45:35+00:00</updated><id>https://edwardoliveira.github.io/feed.xml</id><title type="html">Edward Ribeiro</title><subtitle>MSc student at University of Utah</subtitle><author><name>Edward Ribeiro</name><email>edward.ribeiro@gmail.com</email></author><entry><title type="html">“Clustered Index” Doesn’t Mean What You Think It Means (And That’s Alright!)</title><link href="https://edwardoliveira.github.io/blog/clustered-index-vs-clustering-index/" rel="alternate" type="text/html" title="“Clustered Index” Doesn’t Mean What You Think It Means (And That’s Alright!)" /><published>2026-08-28T00:00:00+00:00</published><updated>2026-08-28T00:00:00+00:00</updated><id>https://edwardoliveira.github.io/blog/clustered-index-vs-clustering-index</id><content type="html" xml:base="https://edwardoliveira.github.io/blog/clustered-index-vs-clustering-index/"><![CDATA[<p><img src="/images/posts/i-dont-think-meme.gif" alt="I don't think meme" /></p>
+
+<p>Early this week, during a book club session, I found myself helplessly trying to navigate by heart through the concepts of <em><strong>clustered indexes, index-organized tables and covering indexes</strong></em> and getting corrected by fellow readers that were going strictly by Kleppmann and Riccomini’s <a href="https://www.oreilly.com/library/view/designing-data-intensive-applications/9781098119058/"><em>Designing Data-Intensive Applications</em></a> (2nd Edition, 2026). Motivated by my own confusion, I went back to the books I own and the web for clearer definitions.</p>
+
+<p>To cut to the chase, what actually happened is that two database traditions picked the same words (i.e., <em>“clustering index”</em> and <em>“clustered index”</em>) for two genuinely different physical structures!</p>
+
+<p>While I’d learned it first from Silberschatz, Korth &amp; Sudarshan’s <a href="https://www.db-book.com/"><em>Database System Concepts</em></a> (currently on 7th Edition, 2021), and a couple of lesser-known books,  Kleppmann and Riccomini’s definition matches something else entirely. And it turns out <strong><em>their usage is the one that matches the industry’s actual database engine implementations!</em></strong> Therefore, neither of us were way off during the book discussion or inventing anything, for that matter; we were just each drinking from different wells. 🥲</p>
+
+<p><em>This post is the writeup I wish I’d had going into that conversation.</em> ;-)</p>
+
+<h2 id="the-claim-that-started-it">The claim that started it</h2>
+
+<p>The definition I knew, in Silberschatz, Korth, and Sudarshan’s own words:</p>
+
+<blockquote>
+  <p>“… a <strong>clustering index</strong> is an index whose search key also defines the sequential order of the file. Clustering indices are also called <strong>primary indices</strong>; the term <em>primary index</em> may appear to denote an index on a primary key, but such indices can in fact be built on any search key. The search key of a clustering index is often the primary key, although that is not  necessarily so. Indices whose search key specifies an order different from the sequential order of the file are called non clustering indices, or secondary indices. The terms “clustered” and “nonclustered” are often used in place of “clustering” and “non clustering.”</p>
+</blockquote>
+
+<p>In other words, they describe a clustering index as one where the heap file itself is ordered according to the index search key.</p>
+
+<p><img src="/images/posts/clustering_index_vs_primary_key_index.svg" alt="silberschatz clustering index concepts" /></p>
+
+<p>But if we check the literature a bit further, Elmasri and Navathe’s <a href="https://www.amazon.com.br/Fundamentals-Database-Systems-Paperback-Elmasri/dp/8131792471">Fundamentals of Database Systems</a> (7th ed, 2016) has an even more specific definition of <strong>Clustering Indexes</strong>:</p>
+
+<blockquote>
+  <p><em>“If file records are physically ordered on a nonkey field — which <strong>does not</strong> have a distinct value for each record — that field is called the <strong>clustering field</strong> and the data file is called a <strong>clustered file</strong>. We can create a different type of index, called a <strong>clustering index</strong>, to speed up retrieval of all the records that have the same value for the clustering field. This differs from a primary index, which requires that the ordering field of the data file have a <strong>distinct value</strong> for each record. A <strong>clustering index</strong> is also an ordered file with two fields; the first field is of the same type as the clustering field of the data file, and the second field is a disk block pointer. There is one entry in the clustering index for each distinct value of the clustering field, and it contains the value and a pointer to the first block in the data file that has a record with that value for its clustering field.</em></p>
+
+  <p><em>(…)</em></p>
+
+  <p><em>A clustering index is another example of a nondense (E.N., sparse) index because it has an entry for every distinct value of the indexing field, which is a nonkey by definition and hence has duplicate values rather than a unique value for every record in the file.”</em></p>
+</blockquote>
+
+<p>There’s a subtle distinction worth flagging here. In Elmasri and Navathe terminology, <em>if the physical ordering field is the primary key, they normally call the associated index a primary index, not a clustering index.</em></p>
+
+<p><img src="/images/posts/primary_index_vs_clustering_index.svg" alt="navathe clustering index concept" /></p>
+
+<p>Independently, Oracle has used the term <a href="https://docs.oracle.com/en/database/oracle/oracle-database/26/cncpt/indexes-and-index-organized-tables.html"><strong>Index-Organized Table (IOT)</strong></a> since at least Oracle8, though the underlying idea predates the name. In Oracle’s own docs, <em>an IOT is a table with no separate heap file, that is, the data lives directly inside a B-tree, keyed by (typically) the primary key.</em></p>
+
+<p>DDIA collapses both of these into a single definition:</p>
+
+<blockquote>
+  <p>“If the actual data (row, document, vertex) is stored directly within the index structure, it is called a <strong>clustered index</strong>. For example, in MySQL’s InnoDB storage engine, the primary key of a table is always a clustered index, and in SQL Server, you can specify one clustered index per table [43].”</p>
+</blockquote>
+
+<center>
+<img src="/images/posts/peter-parker-meme.jpg" alt="alt text" style="width: 30%;" />
+<br />
+<br />
+</center>
+
+<p><strong>But that’s not an error on their part!</strong> It’s the terminology <a href="https://dev.mysql.com/doc/refman/9.7/en/innodb-index-types.html">MySQL’s InnoDB</a>, <a href="https://learn.microsoft.com/en-us/sql/relational-databases/indexes/clustered-and-nonclustered-indexes-described">SQL Server</a> and <a href="https://docs.pingcap.com/tidb/stable/clustered-indexes/">TiDB</a>, among others, actually use in their own documentation. The “clustered index” in their world <em>is</em> what Oracle calls an index-organized table. Same structure, different products/companies, different words.</p>
+
+<p>Markus Winand’s <a href="https://sql-performance-explained.com">SQL Performance Explained</a> (2nd edition, 2025) reconciles IOT and clustered index definitions, as quoted below:</p>
+
+<blockquote>
+  <p><em>“Some databases can indeed use an index as primary table store. The Oracle database calls this concept <strong>index-organized tables (IOT)</strong>, other databases use the term <strong>clustered index</strong>. In this section, both terms are used to either put the emphasis on the table or the index characteristics as needed. An index-organized table is thus a B-tree index without a heap table. This results in two benefits: (1) it saves the space for the heap structure; (2) every access on a clustered index is automatically an index-only scan. Both benefits sound promising but are hardly achievable in practice.”</em></p>
+</blockquote>
+
+<h2 id="three-structures-one-collision">Three structures, one collision</h2>
+
+<p>Before getting to the confusing part, here’s the structure everyone agrees on and the baseline the other two get compared against.</p>
+
+<h3 id="1-the-baseline-heap-file--ordinary-secondary-index">1. The baseline: heap file + ordinary secondary index</h3>
+
+<p>Rows sit in an unordered heap and a B+-Tree index points into it.</p>
+
+<p><a href="/images/posts/01-heap-plus-secondary-index.svg"><img src="/images/posts/01-heap-plus-secondary-index.svg" alt="Heap file with secondary index" /></a></p>
+
+<h3 id="2-clustering-index-the-academic-vernacular-silberschatzsnavathes">2. “Clustering index”: the academic vernacular (Silberschatz’s/Navathe’s)</h3>
+
+<p><em>The heap file is still there, but it’s been physically sorted to match the index key.</em> Because order matches, the index doesn’t even need an entry for every row, one entry per disk block is enough (i.e., it can be a sparse index).</p>
+
+<p><a href="/images/posts/02-clustering-index-silberschatz.svg"><img src="/images/posts/02-clustering-index-silberschatz.svg" alt="Clustering index over a sorted heap" /></a></p>
+
+<p>The important detail: this is a <em>maintained property</em>, not a structural guarantee. New inserts can land out of order until the next reorganize.  <code class="language-plaintext highlighter-rouge">OPTIMIZE TABLE</code> in <a href="https://dev.mysql.com/doc/refman/8.0/en/optimize-table.html">MySQL’s MyISAM</a> engine, or <code class="language-plaintext highlighter-rouge">CLUSTER</code> in <a href="https://www.postgresql.org/docs/current/sql-cluster.html">PostgreSQL</a> are both real-world instances of this exact concept.</p>
+
+<p><strong>Db2</strong> goes a step further than MySQL and PostgreSQL: it names this concept directly. Its own <a href="https://www.ibm.com/docs/en/db2/11.5.x?topic=indexes-clustered-non-clustered">documentation</a> describes a clustering index as one that determines how rows are physically ordered in a table space; a genuinely separate object from the table, exactly like Silberschatz’s model. <a href="https://www.ibm.com/docs/en/db2-for-zos/12.0.0?topic=gia-clustering-indexes">Db2</a> even tracks a cluster ratio to measure how well-sorted the heap currently is, and recommends a <code class="language-plaintext highlighter-rouge">REORG</code> when it drifts.</p>
+
+<p>One caveat: Db2’s clustering index is still a dense (B-tree) index, with one entry per row. Silberschatz’s definition allows the index itself to go sparse once ordering is guaranteed, but Db2 doesn’t take that shortcut. So it’s a real match on the heap-file question, just not on the sparse-index detail.</p>
+
+<h3 id="3-clustered-index--index-organized-table-the-engineering-vernacular-innodb-sql-server-oracle-iot-tidb">3. “Clustered index” / index-organized table: the engineering vernacular (InnoDB, SQL Server, Oracle IOT, TiDB)</h3>
+
+<p><em>No heap file exists.</em> The B-tree’s leaf nodes directly hold the row data.</p>
+
+<p><a href="/images/posts/03-clustered-index-iot.svg"><img src="/images/posts/03-clustered-index-iot.svg" alt="Clustered index with no separate heap" /></a></p>
+
+<p>Here the sort order isn’t something you maintain. It’s structurally impossible to violate, because there’s nothing to fall out of sync. The row <em>is</em> the leaf.</p>
+
+<p>One more consequence follows directly from structure 3:</p>
+
+<h3 id="4-the-two-hop-cost-of-secondary-indexes-on-a-clustered-index">4. The two-hop cost of secondary indexes on a clustered index</h3>
+
+<p>Once there’s no heap to point into, a secondary index (say, on <code class="language-plaintext highlighter-rouge">email</code>) can’t store a physical rowid. It stores the clustering key instead, then does a second lookup into the clustered B-tree index to fetch the row.</p>
+
+<p><a href="/images/posts/04-secondary-index-over-clustered-index.svg"><img src="/images/posts/04-secondary-index-over-clustered-index.svg" alt="Secondary index pointing into a clustered index" /></a></p>
+
+<p><strong><em>This two-hop pattern is exactly what Kleppmann and Riccomini are describing when they discuss the cost of secondary indexes on clustered-index tables in DDIA book!</em></strong></p>
+
+<p>By the way, Winand lays out exactly why this hurts once you add a second index on top of a clustered one. As the rows inside an index-organized table can move at any time to preserve B-tree order, a secondary index can’t store a physical pointer (<em>rowid</em>) to them, so it has to store the clustering key (often the primary key) instead and use that to look the row up.</p>
+
+<p>In practice, this means every lookup through a secondary index costs two searches instead of one: an INDEX RANGE SCAN on the secondary index, followed by an INDEX UNIQUE SCAN into the clustered index for each match. As Winand puts it, <em>“accessing an index-organized table via a secondary index is very inefficient.”</em></p>
+
+<p>The fix is the same one used for heap tables: an index-only scan, though here it’s better described as a “secondary-index-only scan”; and the payoff is even bigger, since it eliminates an entire INDEX UNIQUE SCAN per row rather than a single table access.</p>
+
+<h2 id="why-the-definitions-collided">Why the definitions collided</h2>
+
+<ul>
+  <li><strong>Oracle</strong> calls this structure an <em>index-organized table</em> and reserves <em>cluster</em> for something unrelated (i.e., multiple tables sharing storage blocks by a cluster key);</li>
+  <li><strong>MySQL/InnoDB and Microsoft SQL Server</strong> call the same structure a <em>clustered index</em>;</li>
+  <li><strong>Classical database texts</strong> like Silberschatz et al’s and Navathe et al’s are describing a <em>different</em> axis of classification: does index order match file order? Not whether the heap exists at all…</li>
+  <li><strong>IBM Db2</strong> is the outlier that actually lines up with the classical texts: its clustering index is a genuinely separate object from the table, and Db2 tracks how well the two stay in sync, that is, the same axis Silberschatz is describing, not the IOT axis Oracle/MySQL/SQL Server are on.</li>
+</ul>
+
+<p>Two structures, several vocabularies, one underlying set of concepts, with Db2 being the rare case where a vendor’s terminology and the classical textbook terminology actually agree. But none of the sources is “wrong” in isolation; the confusion only shows up when you read across them, or cross-references them, which is exactly what happens in a book club drawing on multiple references.</p>
+
+<h2 id="bonus-round-covering-index-no-controversy-here">Bonus round: covering index (no controversy here!)</h2>
+
+<p>Not every indexing term is contested. While looking into this, I also revisited <strong>covering index</strong>, as defined in Markus Winand’s <a href="https://sql-performance-explained.com"><em>SQL Performance Explained</em></a> (2025). Unlike the clustered/clustering mess, this one is consistent everywhere: SQL Server docs, PostgreSQL literature, Couchbase docs, and Winand’s book all agree:</p>
+
+<blockquote>
+  <p>A <strong>covering index</strong> contains every column a query needs —<code class="language-plaintext highlighter-rouge">SELECT</code>-list columns as well as<code class="language-plaintext highlighter-rouge">WHERE</code>and<code class="language-plaintext highlighter-rouge">JOIN</code> columns —, so the database engine never has to visit the underlying table at all.</p>
+</blockquote>
+
+<p><a href="/images/posts/05-covering-index.svg"><img src="/images/posts/05-covering-index.svg" alt="Covering index compared to a non-covering index" /></a></p>
+
+<p>Or specifically quoting Winand’s book:</p>
+
+<blockquote>
+  <p><em>“If an index prevents a table access it is also called a <strong>covering index</strong>.The term is misleading, however, because it sounds like an index property. The phrase index-only scan correctly suggests that it is an execution plan operation.”</em></p>
+</blockquote>
+
+<p>The nice part: this concept is orthogonal to the clustering debate above. It applies whether you’re skipping a hop to a heap file (Silberschatz et al’s clustering index) or skipping a hop into a clustered B-tree (DDIA’s clustered index).</p>
+
+<p>By the way, a <a href="https://www.yugabyte.com/blog/how-a-distributed-sql-database-boosts-secondary-index-queries-with-index-only-scan/">YugaByte’s blog post</a> goes further by citing other covering indexes’ diverse names:</p>
+
+<blockquote>
+  <p><em>“The solution is simple and has many names: “covering index”, “include index”, “projection index”, “fat index” and even “Tapio index” from the name of the author of “Interscience Relational Database Index Design and the Optimizers” (Tapio Lahdenmäki) who explained this in detail.”</em></p>
+</blockquote>
+
+<p>But, all in all, they’re all aliases/nicknames for the same mechanism, not competing definitions. <em>Phew!</em> 😅</p>
+
+<h2 id="a-key-takeaway">A key takeaway</h2>
+
+<p>If you’re reading multiple database books then assume “clustered/clustering index” means different things depending on which book is in your hand, until proven otherwise. When in doubt, ask yourself: <em>is there a separate heap file here, or not?</em> That question cuts through the vocabulary every time.</p>
+
+<p><img src="/images/posts/heap_file_decision_takeaway.svg" alt="key-takeway" /></p>
+
+<p><strong>Cheers!<br />
+Edward</strong></p>
+
+<p><em>PS: I checked whether this is a known erratum in DDIA and it isn’t, <strong>understandly so because it isn’t an error!</strong> <code class="language-plaintext highlighter-rouge">¯\_(ツ)_/¯</code> Nevertheless, I did suggest a clarifying footnote to O’Reilly, since a one-line pointer to the academic usage might save the next reader the doubt I had.</em></p>
+
+<hr />
+
+<p><em>August, 28th, 2026</em></p>]]></content><author><name>Edward Ribeiro</name><email>edward.ribeiro@gmail.com</email></author><category term="Blog" /><category term="clustered-index" /><category term="clustering-index" /><category term="index-organized-table" /><category term="covering-index" /><category term="database-internals" /><summary type="html"><![CDATA[A book club argument over Kleppmann and Riccomini's DDIA sent me chasing down why "clustering index" and "clustered index" mean two different physical structures, depending on which database book (or vendor's docs) you're reading.]]></summary></entry></feed>

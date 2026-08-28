@@ -4,18 +4,23 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>ReadingTracks</title>
-  <meta name="description" content="Papers, researchers, venues, and reading tracks for a Systems & AI reading club.">
-  <!-- <link rel="preconnect" href="https://fonts.googleapis.com">
+  <meta name="description" content="Papers, researchers, venues, and reading tracks for a Systems & AI reading clubs.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700&family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet"> -->
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700&family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
 <header class="site-header">
-  <div>
-    <h1 id="siteTitle">ReadingTracks</h1>
-    <p id="siteTagline">Papers, researchers, venues, and reading tracks for a Systems &amp; AI reading club.</p>
-    <p>Created by <a id="authorLink" href="https://github.com/eribeiro" target="_blank" rel="noopener">Edward Ribeiro</a></p>
+  <div class="header-inner">
+    <a class="header-logo" href="./" aria-label="ReadingTracks home">
+      <img src="assets/reading-tracks-logo.png" alt="" width="400" height="240">
+    </a>
+    <div>
+      <h1 id="siteTitle">ReadingTracks</h1>
+      <p id="siteTagline">Papers, researchers, venues, and reading tracks for a Systems &amp; AI reading club.</p>
+      <p>Created by Claude & Codex, with a little dash of seasoning by <a id="authorLink" href="https://github.com/eribeiro" target="_blank" rel="noopener">Edward Ribeiro.</a></p>
+    </div>
   </div>
 </header>
 <main>
@@ -24,18 +29,26 @@
   <div id="areaFilters" class="chips" aria-label="Areas"></div>
 
   <div class="select-row">
-    <label>Year<select id="year"><option value="">ALL</option></select></label>
-    <label>Decade<select id="decade"><option value="">ALL</option></select></label>
-    <label>Era<select id="era"><option value="">ALL</option></select></label>
+    <label class="paper-only-filter">Year<select id="year"><option value="">ALL</option></select></label>
+    <label class="paper-only-filter">Decade<select id="decade"><option value="">ALL</option></select></label>
+    <label class="paper-only-filter">Era<select id="era"><option value="">ALL</option></select></label>
     <label>Track<select id="lineage"><option value="">ALL</option></select></label>
-    <label>Venue<select id="venue"><option value="">ALL</option></select></label>
-    <label>Type<select id="type"><option value="">ALL</option></select></label>
-    <label>Tag<select id="tag"><option value="">ALL</option></select></label>
-    <label>Sorting
+    <label class="paper-only-filter">Venue<select id="venue"><option value="">ALL</option></select></label>
+    <label class="paper-only-filter">Type<select id="type"><option value="">ALL</option></select></label>
+    <label class="paper-only-filter">Tag<select id="tag"><option value="">ALL</option></select></label>
+    <label class="paper-only-filter">Sorting
       <select id="grouping">
         <option value="year">Group by year</option>
         <option value="decade">Group by decade</option>
         <option value="none">No grouping</option>
+      </select>
+    </label>
+    <label id="trackSortingLabel" hidden>Sorting
+      <select id="trackSorting">
+        <option value="name">Name</option>
+        <option value="shortest">Shortest first</option>
+        <option value="longest">Longest first</option>
+        <option value="progress">Continue reading</option>
       </select>
     </label>
   </div>
@@ -43,18 +56,44 @@
   <div class="view-row">
     <nav class="tabs" aria-label="Content type">
       <button class="tab active" data-view="papers">Papers</button>
+      <button class="tab" data-view="bookmarks">Bookmarks</button>
       <button class="tab" data-view="researchers">Researchers</button>
       <button class="tab" data-view="venues">Venues</button>
       <button class="tab" data-view="lineages">Tracks</button>
     </nav>
-    <button id="clearFilters" class="secondary">Clean Filters</button>
+    <div class="control-actions">
+      <button id="expandAllTracks" class="secondary" hidden>Expand all</button>
+      <button id="collapseAllTracks" class="secondary" hidden>Collapse open</button>
+      <button id="clearProgress" class="secondary" hidden>Clear reading progress</button>
+      <button id="clearFilters" class="secondary">Clear filters</button>
+    </div>
   </div>
 </section>
 
-<section class="summary"><strong id="resultCount">Loading…</strong><span id="activeSummary"></span></section>
-<section id="results" class="results" aria-live="polite"></section>
+<section id="resultsSummary" class="summary" tabindex="-1"><strong id="resultCount" aria-live="polite">Loading…</strong><span id="activeSummary"></span></section>
+<nav id="groupingNav" class="grouping-nav" aria-label="Jump to group" hidden></nav>
+<section id="results" class="results"></section>
 </main>
-<footer id="siteFooter">Data kept in YAML and statically loaded in the browser.</footer>
+<footer>
+  <span id="siteFooter">Data kept in YAML and statically loaded in the browser.</span>
+  <br>
+  <small>
+    © 2026 Edward Ribeiro. Licensed under the <a href="LICENSE">MIT License</a>.
+    Version 1.0.0 · Schema v5 · Commit
+    <a id="sourceCommit" href="https://github.com/eribeiro/reading-tracks/commit/8df88d0c5e6fdf0c62fc03eec21f4db591e75df5" target="_blank" rel="noopener">8df88d0</a>.
+  </small>
+</footer>
+<a id="backToResults" class="back-to-results" href="#resultsSummary" hidden><span aria-hidden="true">↑</span> Back to results</a>
+<dialog id="clearProgressDialog" class="confirmation-dialog" aria-labelledby="clearProgressTitle" aria-describedby="clearProgressDescription">
+  <form method="dialog">
+    <h2 id="clearProgressTitle">Clear reading progress?</h2>
+    <p id="clearProgressDescription">This will remove all completed-paper progress stored on this device. This action cannot be undone.</p>
+    <div class="dialog-actions">
+      <button class="secondary" value="cancel" autofocus>Cancel</button>
+      <button id="confirmClearProgress" class="danger" value="confirm">Clear progress</button>
+    </div>
+  </form>
+</dialog>
 <script src="vendor/js-yaml.min.js"></script>
 <script src="app.js"></script>
 </body>

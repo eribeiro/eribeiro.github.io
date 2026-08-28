@@ -1,0 +1,242 @@
+digraph HeapSecondary {
+    graph [
+        rankdir = TB;
+        bgcolor = "white";
+        pad = 0.35;
+        // More horizontal space between B+Tree nodes
+        nodesep = 1.10;
+        ranksep = 0.90;
+        splines = polyline;
+        // Draw edges after nodes so arrowheads remain visible
+        outputorder = nodesfirst;
+        labelloc = "t";
+        label = "Heap File + Secondary Index";
+        fontname = "Helvetica";
+        fontsize = 22;
+    ];
+    
+    node [fontname = "Helvetica"; fontsize = 10;];
+    
+    edge [fontname = "Helvetica"; fontsize = 9; color = "#444444"; penwidth = 1.35; arrowsize = 0.75; arrowhead = normal;];
+    
+    
+    // ============================================================
+    // ROOT PAGE
+    // ============================================================
+    
+    root [shape = plain;label = <
+        <TABLE
+        BORDER="2"
+        CELLBORDER="1"
+        CELLSPACING="0"
+        CELLPADDING="4"
+        COLOR="#3568a8"
+        BGCOLOR="#dceeff"
+        >
+        <TR>
+        <TD COLSPAN="2">
+        <FONT POINT-SIZE="11"><B>Root</B></FONT>
+        </TD>
+        </TR>
+        <TR>
+        <TD PORT="p0" WIDTH="52">
+        &lt; 25
+        </TD>
+        <TD PORT="p1" WIDTH="52">
+        &#8805; 25
+        </TD>
+        </TR>
+        </TABLE>
+        >;];
+    
+    
+    // ============================================================
+    // LEAF PAGES
+    // ============================================================
+    
+    leaf1 [shape = plain;label = <
+        <TABLE
+        BORDER="2"
+        CELLBORDER="1"
+        CELLSPACING="0"
+        CELLPADDING="4"
+        COLOR="#558b3d"
+        BGCOLOR="#e4f4dc"
+        >
+        <TR>
+        <TD COLSPAN="3">
+        <FONT POINT-SIZE="11"><B>Leaf</B></FONT>
+        </TD>
+        </TR>
+        <TR>
+        <TD PORT="p10" WIDTH="48">
+        <B>10</B><BR/>
+        <FONT POINT-SIZE="8">ptr</FONT>
+        </TD>
+        <TD PORT="p15" WIDTH="48">
+        <B>15</B><BR/>
+        <FONT POINT-SIZE="8">ptr</FONT>
+        </TD>
+        <TD PORT="next" WIDTH="34">
+        <FONT POINT-SIZE="8">next</FONT>
+        </TD>
+        </TR>
+        </TABLE>
+        >;];
+    
+    
+    leaf2 [shape = plain;label = <
+        <TABLE
+        BORDER="2"
+        CELLBORDER="1"
+        CELLSPACING="0"
+        CELLPADDING="4"
+        COLOR="#558b3d"
+        BGCOLOR="#e4f4dc"
+        >
+        <TR>
+        <TD COLSPAN="3">
+        <FONT POINT-SIZE="11"><B>Leaf</B></FONT>
+        </TD>
+        </TR>
+        <TR>
+        <TD PORT="p25" WIDTH="48">
+        <B>25</B><BR/>
+        <FONT POINT-SIZE="8">ptr</FONT>
+        </TD>
+        <TD PORT="p47" WIDTH="48">
+        <B>47</B><BR/>
+        <FONT POINT-SIZE="8">ptr</FONT>
+        </TD>
+        <TD PORT="next" WIDTH="34">
+        <FONT POINT-SIZE="8">next</FONT>
+        </TD>
+        </TR>
+        </TABLE>
+        >;];
+    
+    
+    // Keep leaf pages at the same level
+    subgraph {
+        rank = same;
+        leaf1;
+        leaf2;
+    }
+    
+    
+    // ============================================================
+    // B+TREE EDGES
+    // ============================================================
+    
+    root:p0:s -> leaf1:n [weight = 5; arrowsize = 0.70;];
+    
+    
+    
+    
+    root:p1:s -> leaf2:n [weight = 5; arrowsize = 0.70;];
+    
+    
+    
+    
+    
+    // Horizontal B+Tree sibling pointer.
+    // Target p25:w rather than leaf2:w so both endpoints have
+    // exactly the same vertical position.
+    leaf1:next:e -> leaf2:p25:w [style = dashed; color = "#777777"; penwidth = 1.1; arrowsize = 0.65; arrowhead = normal; constraint = false;];
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    // ============================================================
+    // HEAP FILE
+    // 
+    // Deliberately shuffled:
+    // 
+    //      25 | 10 | 47 | 15
+    // 
+    // to emphasize that physical heap order is unrelated to
+    // secondary-index key order.
+    // ============================================================
+    
+    heap [shape = plain;label = <
+        <TABLE
+        BORDER="2"
+        CELLBORDER="1"
+        CELLSPACING="0"
+        CELLPADDING="9"
+        COLOR="#ca8a04"
+        BGCOLOR="#fff4d6"
+        >
+        <TR>
+        <TD COLSPAN="4">
+        <FONT POINT-SIZE="11">
+        <B>Heap File (unordered)</B>
+        </FONT>
+        </TD>
+        </TR>
+        <TR>
+        <TD PORT="h25" WIDTH="115" HEIGHT="44">
+        Row id = <B>25</B>
+        </TD>
+        <TD PORT="h10" WIDTH="115" HEIGHT="44">
+        Row id = <B>10</B>
+        </TD>
+        <TD PORT="h47" WIDTH="115" HEIGHT="44">
+        Row id = <B>47</B>
+        </TD>
+        <TD PORT="h15" WIDTH="115" HEIGHT="44">
+        Row id = <B>15</B>
+        </TD>
+        </TR>
+        </TABLE>
+        >;];
+    
+    
+    // ============================================================
+    // SECONDARY INDEX -> HEAP POINTERS
+    // ============================================================
+    
+    leaf1:p10:s -> heap:h10:n [style = dashed; color = "#666666"; penwidth = 1.35; arrowsize = 0.95; arrowhead = vee;];
+    
+    
+    
+    
+    
+    
+    
+    leaf1:p15:s -> heap:h15:n [style = dashed; color = "#666666"; penwidth = 1.35; arrowsize = 0.95; arrowhead = vee;];
+    
+    
+    
+    
+    
+    
+    
+    leaf2:p25:s -> heap:h25:n [style = dashed; color = "#666666"; penwidth = 1.35; arrowsize = 0.95; arrowhead = vee;];
+    
+    
+    
+    
+    
+    
+    
+    leaf2:p47:s -> heap:h47:n [style = dashed; color = "#666666"; penwidth = 1.35; arrowsize = 0.95; arrowhead = vee;];
+    
+    
+    
+    
+    
+    
+    
+    
+    // ============================================================
+    // LAYOUT STABILIZATION
+    // ============================================================
+    
+    leaf1 -> leaf2 [style = invis; weight = 20;];
+}

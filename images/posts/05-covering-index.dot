@@ -1,0 +1,406 @@
+digraph CoveringIndex {
+    graph [
+        rankdir = TB;
+        bgcolor = "white";
+        pad = 0.35;
+
+        nodesep = 1.10;
+        ranksep = 0.90;
+
+        splines = polyline;
+        outputorder = nodesfirst;
+
+        labelloc = "t";
+        label = "Covering Index vs. Non-Covering Index";
+        fontname = "Helvetica";
+        fontsize = 22;
+    ];
+
+    node [
+        fontname = "Helvetica";
+        fontsize = 10;
+    ];
+
+    edge [
+        fontname = "Helvetica";
+        fontsize = 9;
+        color = "#444444";
+        penwidth = 1.35;
+        arrowsize = 0.75;
+        arrowhead = normal;
+    ];
+
+
+    // ============================================================
+    // QUERY
+    // ============================================================
+
+    query [
+        shape = plain;
+        label = <
+            <TABLE
+                BORDER="2"
+                CELLBORDER="0"
+                CELLSPACING="0"
+                CELLPADDING="9"
+                COLOR="#666666"
+                BGCOLOR="#f5f5f5"
+            >
+                <TR>
+                    <TD ALIGN="CENTER" VALIGN="MIDDLE">
+                        <FONT POINT-SIZE="11"><B>Query</B></FONT>
+                    </TD>
+                </TR>
+                <TR>
+                    <TD
+                        WIDTH="430"
+                        ALIGN="CENTER"
+                        VALIGN="MIDDLE"
+                    >
+                        <FONT POINT-SIZE="11">SELECT name, email WHERE email = 'alice@a.org'</FONT>
+                    </TD>
+                </TR>
+            </TABLE>
+        >;
+    ];
+
+
+    // ============================================================
+    // NON-COVERING INDEX
+    // ============================================================
+
+    nc_root [
+        shape = plain;
+        label = <
+            <TABLE
+                BORDER="2"
+                CELLBORDER="1"
+                CELLSPACING="0"
+                CELLPADDING="4"
+                COLOR="#3568a8"
+                BGCOLOR="#dceeff"
+            >
+                <TR>
+                    <TD ALIGN="CENTER" VALIGN="MIDDLE">
+                        <FONT POINT-SIZE="11">
+                            <B>Root</B>
+                        </FONT>
+                    </TD>
+                </TR>
+
+                <TR>
+                    <TD
+                        PORT="p0"
+                        WIDTH="130"
+                        ALIGN="CENTER"
+                        VALIGN="MIDDLE"
+                    >
+                        <FONT POINT-SIZE="11">email range</FONT>
+                    </TD>
+                </TR>
+            </TABLE>
+        >;
+    ];
+
+
+    nc_leaf [
+        shape = plain;
+        label = <
+            <TABLE
+                BORDER="2"
+                CELLBORDER="1"
+                CELLSPACING="0"
+                CELLPADDING="6"
+                COLOR="#558b3d"
+                BGCOLOR="#e4f4dc"
+            >
+                <TR>
+                    <TD ALIGN="CENTER" VALIGN="MIDDLE">
+                        <FONT POINT-SIZE="11">
+                            <B>Leaf Page</B>
+                        </FONT>
+                    </TD>
+                </TR>
+
+                <TR>
+                    <TD
+                        PORT="e1"
+                        WIDTH="220"
+                        HEIGHT="55"
+                        ALIGN="CENTER"
+                        VALIGN="MIDDLE"
+                    >
+                        <TABLE BORDER="0" CELLBORDER="0" CELLSPACING="0" CELLPADDING="0">
+                            <TR><TD ALIGN="CENTER"><FONT POINT-SIZE="11"><B>email = alice@a.org</B></FONT></TD></TR>
+                            <TR><TD ALIGN="CENTER"><FONT POINT-SIZE="11">PK / rowid</FONT></TD></TR>
+                        </TABLE>
+                    </TD>
+                </TR>
+            </TABLE>
+        >;
+    ];
+
+
+    // ============================================================
+    // TABLE ROW FOR NON-COVERING INDEX
+    // ============================================================
+
+    nc_table [
+        shape = plain;
+        label = <
+            <TABLE
+                BORDER="2"
+                CELLBORDER="0"
+                CELLSPACING="0"
+                CELLPADDING="9"
+                COLOR="#ca8a04"
+                BGCOLOR="#fff4d6"
+            >
+                <TR>
+                    <TD
+                        WIDTH="250"
+                        HEIGHT="62"
+                        ALIGN="CENTER"
+                        VALIGN="MIDDLE"
+                    >
+                        <TABLE BORDER="0" CELLBORDER="0" CELLSPACING="0" CELLPADDING="0">
+                            <TR><TD ALIGN="CENTER"><B>Table Row</B></TD></TR>
+                            <TR><TD ALIGN="CENTER"><FONT POINT-SIZE="10">id, name, email, ...</FONT></TD></TR>
+                        </TABLE>
+                    </TD>
+                </TR>
+            </TABLE>
+        >;
+    ];
+
+
+    // ============================================================
+    // COVERING INDEX
+    // ============================================================
+
+    c_root [
+        shape = plain;
+        label = <
+            <TABLE
+                BORDER="2"
+                CELLBORDER="1"
+                CELLSPACING="0"
+                CELLPADDING="4"
+                COLOR="#3568a8"
+                BGCOLOR="#dceeff"
+            >
+                <TR>
+                    <TD ALIGN="CENTER" VALIGN="MIDDLE">
+                        <FONT POINT-SIZE="11">
+                            <B>Root</B>
+                        </FONT>
+                    </TD>
+                </TR>
+
+                <TR>
+                    <TD
+                        PORT="p0"
+                        WIDTH="130"
+                        ALIGN="CENTER"
+                        VALIGN="MIDDLE"
+                    >
+                        <FONT POINT-SIZE="11">email range</FONT>
+                    </TD>
+                </TR>
+            </TABLE>
+        >;
+    ];
+
+
+    c_leaf [
+        shape = plain;
+        label = <
+            <TABLE
+                BORDER="2"
+                CELLBORDER="1"
+                CELLSPACING="0"
+                CELLPADDING="6"
+                COLOR="#558b3d"
+                BGCOLOR="#e4f4dc"
+            >
+                <TR>
+                    <TD ALIGN="CENTER" VALIGN="MIDDLE">
+                        <FONT POINT-SIZE="11">
+                            <B>Leaf Page</B>
+                        </FONT>
+                    </TD>
+                </TR>
+
+                <TR>
+                    <TD
+                        PORT="e1"
+                        WIDTH="220"
+                        HEIGHT="55"
+                        ALIGN="CENTER"
+                        VALIGN="MIDDLE"
+                    >
+                        <TABLE BORDER="0" CELLBORDER="0" CELLSPACING="0" CELLPADDING="0">
+                            <TR><TD ALIGN="CENTER"><FONT POINT-SIZE="11"><B>email = alice@a.org</B></FONT></TD></TR>
+                            <TR><TD ALIGN="CENTER"><FONT POINT-SIZE="11">name = 'Alice'</FONT></TD></TR>
+                        </TABLE>
+                    </TD>
+                </TR>
+            </TABLE>
+        >;
+    ];
+
+
+    // ============================================================
+    // RESULT RETURNED DIRECTLY
+    // ============================================================
+
+    c_done [
+        shape = plain;
+        label = <
+            <TABLE
+                BORDER="2"
+                CELLBORDER="0"
+                CELLSPACING="0"
+                CELLPADDING="9"
+                COLOR="#558b3d"
+                BGCOLOR="#e4f4dc"
+            >
+                <TR>
+                    <TD
+                        WIDTH="250"
+                        HEIGHT="62"
+                        ALIGN="CENTER"
+                        VALIGN="MIDDLE"
+                    >
+                        <TABLE BORDER="0" CELLBORDER="0" CELLSPACING="0" CELLPADDING="0">
+                            <TR><TD ALIGN="CENTER"><B>Result Returned Directly</B></TD></TR>
+                            <TR><TD ALIGN="CENTER"><FONT POINT-SIZE="10">table is not touched</FONT></TD></TR>
+                        </TABLE>
+                    </TD>
+                </TR>
+            </TABLE>
+        >;
+    ];
+
+
+    // ============================================================
+    // LEFT / RIGHT STACKS, EACH ENCLOSED IN A DASHED BOX
+    // ============================================================
+
+    subgraph cluster_nc {
+        label = "Without a Covering Index";
+        style = dashed;
+        color = "#999999";
+        fontname = "Helvetica-Bold";
+        fontsize = 13;
+        margin = 24;
+
+        nc_root;
+        nc_leaf;
+        nc_table;
+    }
+
+    subgraph cluster_c {
+        label = "With a Covering Index (email, name)";
+        style = dashed;
+        color = "#999999";
+        fontname = "Helvetica-Bold";
+        fontsize = 13;
+        margin = 24;
+
+        c_root;
+        c_leaf;
+        c_done;
+    }
+
+
+    // ============================================================
+    // QUERY -> BOTH ALTERNATIVES
+    // ============================================================
+
+    query -> nc_root:n [
+        weight = 5;
+        arrowsize = 0.70;
+    ];
+
+    query -> c_root:n [
+        weight = 5;
+        arrowsize = 0.70;
+    ];
+
+
+    // ============================================================
+    // INDEX TRAVERSAL
+    // ============================================================
+
+    nc_root:p0:s -> nc_leaf:n [
+        weight = 5;
+        arrowsize = 0.70;
+    ];
+
+    c_root:p0:s -> c_leaf:n [
+        weight = 5;
+        arrowsize = 0.70;
+    ];
+
+
+    // ============================================================
+    // NON-COVERING:
+    // extra lookup required to obtain name from the table
+    // ============================================================
+
+    nc_leaf:e1:s -> nc_table:n [
+        color = "#b85450";
+        penwidth = 1.8;
+        arrowsize = 0.95;
+        arrowhead = vee;
+    ];
+
+
+    // ============================================================
+    // COVERING:
+    // all requested columns are already available in the index
+    // ============================================================
+
+    c_leaf:e1:s -> c_done:n [
+        color = "#558b3d";
+        penwidth = 1.8;
+        arrowsize = 0.95;
+        arrowhead = vee;
+    ];
+
+
+    // ============================================================
+    // EXPLANATION
+    // ============================================================
+
+    note [
+        shape = plain;
+        label = <
+            <TABLE
+                BORDER="2"
+                CELLBORDER="0"
+                CELLSPACING="0"
+                CELLPADDING="10"
+                COLOR="#ca8a04"
+                BGCOLOR="#efe3c6"
+            >
+                <TR>
+                    <TD
+                        WIDTH="520"
+                        HEIGHT="68"
+                        ALIGN="CENTER"
+                        VALIGN="MIDDLE"
+                    >
+                        <TABLE BORDER="0" CELLBORDER="0" CELLSPACING="0" CELLPADDING="0">
+                            <TR><TD ALIGN="CENTER"><B>A covering index contains every column needed by the query</B></TD></TR>
+                            <TR><TD HEIGHT="8"></TD></TR>
+                            <TR><TD ALIGN="CENTER"><FONT POINT-SIZE="10">Non-covering: index lookup + table lookup</FONT></TD></TR>
+                            <TR><TD ALIGN="CENTER"><FONT POINT-SIZE="10">Covering: index lookup only</FONT></TD></TR>
+                        </TABLE>
+                    </TD>
+                </TR>
+            </TABLE>
+        >;
+    ];
+}

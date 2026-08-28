@@ -1,0 +1,80 @@
+<?xml version="1.0" standalone="no"?>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="480pt" height="165pt" viewBox="0.00 0.00 479.55 164.80">
+<g id="graph0" class="graph" transform="translate(4,160.8000030517578) scale(1)" data-name="ClusteringIndex">
+
+<polygon fill="white" stroke="none" points="-4,4 -4,-160.8 475.55,-160.8 475.55,4 -4,4"/>
+<text text-anchor="middle" x="235.77" y="-139.3" font-family="Helvetica,sans-Serif" font-size="15.00">Clustering Index (Silberschatz / Navathe) - sparse, over sorted heap</text>
+<!-- root -->
+<g id="node1" class="node" pointer-events="visible" data-name="root">
+
+<polygon fill="#dae8fc" stroke="none" points="146.75,-90.8 146.75,-130.8 326.75,-130.8 326.75,-90.8 146.75,-90.8"/>
+<polygon fill="none" stroke="#6c8ebf" points="147.75,-110.8 147.75,-129.8 325.75,-129.8 325.75,-110.8 147.75,-110.8"/>
+<text text-anchor="start" x="150.54" y="-116.9" font-family="Helvetica,sans-Serif" font-size="11.00">Sparse Index Page (1 entry / block)</text>
+<polygon fill="none" stroke="#6c8ebf" points="147.75,-91.8 147.75,-110.8 214.75,-110.8 214.75,-91.8 147.75,-91.8"/>
+<text text-anchor="start" x="162.44" y="-97.9" font-family="Helvetica,sans-Serif" font-size="11.00">Key=10</text>
+<polygon fill="none" stroke="#6c8ebf" points="214.75,-91.8 214.75,-110.8 269.75,-110.8 269.75,-91.8 214.75,-91.8"/>
+<text text-anchor="start" x="223.44" y="-97.9" font-family="Helvetica,sans-Serif" font-size="11.00">Key=40</text>
+<polygon fill="none" stroke="#6c8ebf" points="269.75,-91.8 269.75,-110.8 325.75,-110.8 325.75,-91.8 269.75,-91.8"/>
+<text text-anchor="start" x="278.94" y="-97.9" font-family="Helvetica,sans-Serif" font-size="11.00">Key=70</text>
+<polygon fill="none" stroke="#6c8ebf" points="146.75,-90.8 146.75,-130.8 326.75,-130.8 326.75,-90.8 146.75,-90.8"/>
+</g>
+<!-- b1 -->
+<g id="node2" class="node" pointer-events="visible" data-name="b1">
+
+<polygon fill="#fff2cc" stroke="#d6b656" points="95.75,-36 -0.25,-36 -0.25,0 95.75,0 95.75,-36"/>
+<text text-anchor="middle" x="47.75" y="-21" font-family="Helvetica,sans-Serif" font-size="10.00">Block 1</text>
+<text text-anchor="middle" x="47.75" y="-9" font-family="Helvetica,sans-Serif" font-size="10.00">rows: 10,15,22,30</text>
+</g>
+<!-- root&#45;&gt;b1 -->
+<g id="edge3" class="edge" data-name="root:p10-&gt;b1" data-comment="root-&gt;b1">
+
+<path fill="none" stroke="black" d="M146.75,-100.8C111.48,-100.8 81.99,-69.56 64.61,-45.69"/>
+<polygon fill="black" stroke="black" points="67.57,-43.82 59,-37.59 61.82,-47.8 67.57,-43.82"/>
+<text text-anchor="middle" x="104.62" y="-60.7" font-family="Times,serif" font-size="9.00">1 ptr / block</text>
+</g>
+<!-- b2 -->
+<g id="node3" class="node" pointer-events="visible" data-name="b2">
+
+<polygon fill="#fff2cc" stroke="#d6b656" points="290.75,-36 194.75,-36 194.75,0 290.75,0 290.75,-36"/>
+<text text-anchor="middle" x="242.75" y="-21" font-family="Helvetica,sans-Serif" font-size="10.00">Block 2</text>
+<text text-anchor="middle" x="242.75" y="-9" font-family="Helvetica,sans-Serif" font-size="10.00">rows: 40,45,55,60</text>
+</g>
+<!-- root&#45;&gt;b2 -->
+<g id="edge4" class="edge" data-name="root:p40-&gt;b2" data-comment="root-&gt;b2">
+
+<path fill="none" stroke="black" d="M242.75,-90.8C242.75,-76.58 242.75,-60.78 242.75,-47.62"/>
+<polygon fill="black" stroke="black" points="246.25,-47.92 242.75,-37.92 239.25,-47.92 246.25,-47.92"/>
+<text text-anchor="middle" x="264.62" y="-60.7" font-family="Times,serif" font-size="9.00">1 ptr / block</text>
+</g>
+<!-- b3 -->
+<g id="node4" class="node" pointer-events="visible" data-name="b3">
+
+<polygon fill="#fff2cc" stroke="#d6b656" points="471.35,-36 390.15,-36 390.15,0 471.35,0 471.35,-36"/>
+<text text-anchor="middle" x="430.75" y="-21" font-family="Helvetica,sans-Serif" font-size="10.00">Block 3</text>
+<text text-anchor="middle" x="430.75" y="-9" font-family="Helvetica,sans-Serif" font-size="10.00">rows: 70,75,80</text>
+</g>
+<!-- root&#45;&gt;b3 -->
+<g id="edge5" class="edge" data-name="root:p70-&gt;b3" data-comment="root-&gt;b3">
+
+<path fill="none" stroke="black" d="M326.75,-100.8C363.25,-100.8 394.51,-69.28 412.97,-45.37"/>
+<polygon fill="black" stroke="black" points="415.61,-47.69 418.73,-37.57 409.98,-43.54 415.61,-47.69"/>
+<text text-anchor="middle" x="422.62" y="-60.7" font-family="Times,serif" font-size="9.00">1 ptr / block</text>
+</g>
+<!-- b1&#45;&gt;b2 -->
+<g id="edge1" class="edge" data-name="b1-&gt;b2">
+
+<path fill="none" stroke="#999999" stroke-dasharray="5,2" d="M96.2,-18C122.57,-18 155.42,-18 183.32,-18"/>
+<polygon fill="#999999" stroke="#999999" points="183.03,-21.5 193.03,-18 183.03,-14.5 183.03,-21.5"/>
+<text text-anchor="middle" x="145.25" y="-34.5" font-family="Times,serif" font-size="9.00">physically</text>
+<text text-anchor="middle" x="145.25" y="-23.7" font-family="Times,serif" font-size="9.00">sorted</text>
+</g>
+<!-- b2&#45;&gt;b3 -->
+<g id="edge2" class="edge" data-name="b2-&gt;b3">
+
+<path fill="none" stroke="#999999" stroke-dasharray="5,2" d="M291.16,-18C317.91,-18 351.16,-18 378.5,-18"/>
+<polygon fill="#999999" stroke="#999999" points="378.3,-21.5 388.3,-18 378.3,-14.5 378.3,-21.5"/>
+<text text-anchor="middle" x="340.22" y="-34.5" font-family="Times,serif" font-size="9.00">physically</text>
+<text text-anchor="middle" x="340.22" y="-23.7" font-family="Times,serif" font-size="9.00">sorted</text>
+</g>
+</g>
+</svg>

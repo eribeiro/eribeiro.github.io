@@ -7,3 +7,22 @@ search: false
 
 @import "minimal-mistakes/skins/{{ site.minimal_mistakes_skin | default: 'default' }}"; // skin
 @import "minimal-mistakes"; // main partials
+
+// .page always reserves padding-inline-end for a right-hand TOC sidebar
+// (see _page.scss), even when the page has no toc. Reclaim that space
+// on pages that don't render one, widening the content column.
+.page:not(:has(.sidebar__right)) {
+  @include breakpoint($large) {
+    padding-inline-end: 0;
+  }
+
+  @include breakpoint($x-large) {
+    padding-inline-end: 0;
+  }
+}
+
+// SVG diagrams are vector, so stretch them to fill the (now wider)
+// content column instead of rendering at their small intrinsic size.
+.page__content img[src$=".svg"] {
+  width: 100%;
+}

@@ -1,0 +1,46 @@
+digraph ClusteringIndex {
+    rankdir = TB;
+    bgcolor = white;
+    fontname = "Helvetica";
+    label = "Clustering Index (Silberschatz / Navathe) - sparse, over sorted heap";
+    labelloc = t;
+    fontsize = 15;
+    nodesep = 0.7;
+    ranksep = 0.6;
+    
+    node [shape = plain; fontname = "Helvetica"; fontsize = 11;];
+    
+    root [label = <
+        <TABLE BORDER="1" CELLBORDER="1" CELLSPACING="0" BGCOLOR="#dae8fc" COLOR="#6c8ebf">
+        <TR><TD COLSPAN="3">Sparse Index Page (1 entry / block)</TD></TR>
+        <TR><TD PORT="p10">Key=10</TD><TD PORT="p40">Key=40</TD><TD PORT="p70">Key=70</TD></TR>
+        </TABLE>
+        >;];
+    
+    node [shape = box; style = filled; fillcolor = "#fff2cc"; color = "#d6b656"; fontsize = 10;];
+    b1 [label = "Block 1\nrows: 10,15,22,30";];
+    b2 [label = "Block 2\nrows: 40,45,55,60";];
+    b3 [label = "Block 3\nrows: 70,75,80";];
+    
+    subgraph {
+        rank = same;
+        b1;
+        b2;
+        b3;
+    }
+    b1 -> b2 [style = dashed; constraint = false; label = "physically\nsorted"; fontsize = 9; color = "#999999";];
+    b2 -> b3 [style = dashed; constraint = false; label = "physically\nsorted"; fontsize = 9; color = "#999999";];
+    
+    root:p10 -> b1 [label = "1 ptr / block"; fontsize = 9;];
+    root:p40 -> b2 [label = "1 ptr / block"; fontsize = 9;];
+    root:p70 -> b3 [label = "1 ptr / block"; fontsize = 9;];
+    
+    subgraph cluster_heap {
+        label = "Heap File - physically sorted by key (still a separate structure)";
+        style = dashed;
+        color = "#999999";
+        b1;
+        b2;
+        b3;
+    }
+}

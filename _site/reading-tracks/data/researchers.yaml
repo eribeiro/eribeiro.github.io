@@ -77,6 +77,11 @@ researchers:
       - self-driving-dbms-2017
       - ottertune-2017
       - staring-into-the-abyss-2014
+      - mainlining-databases-2020
+      - empirical-columnar-formats-2023
+      - f3-file-format-2025
+      - surf-2018
+      - order-preserving-key-compression-2020
   - id: barbara-liskov
     name: Barbara Liskov
     areas:
@@ -282,7 +287,17 @@ researchers:
       - B-trees
       - query optimization
     paper_ids:
+      - volcano-parallelism-1990
+      - query-evaluation-techniques-1993
       - volcano-1994
+      - cascades-1995
+      - five-minute-rule-1997
+      - modern-btree-techniques-2011
+      - in-memory-performance-big-data-2014
+      - f1-query-2018
+      - f1-lightning-2020
+      - napa-2021
+      - napa-progressive-partitioning-2023
   - id: heidi-howard
     name: Heidi Howard
     areas:
@@ -620,7 +635,8 @@ researchers:
     topics:
       - Database performance
       - hardware-conscious DBMS
-    paper_ids: []
+    paper_ids:
+      - dbmss-modern-processor-1999
   - id: neoklis-polyzotis
     name: Neoklis Polyzotis
     areas:
@@ -676,8 +692,14 @@ researchers:
       - MonetDB
       - DuckDB
     paper_ids:
+      - memory-access-bottleneck-1999
       - x100-2005
+      - morsel-driven-parallelism-2014
+      - how-good-query-optimizers-2015
+      - compiled-vs-vectorized-2018
       - duckdb-2019
+      - data-blocks-2016
+      - fastlanes-file-format-2025
   - id: philip-bernstein
     name: Philip A. Bernstein
     areas:
@@ -776,7 +798,13 @@ researchers:
       - execution
       - HyPer
     paper_ids:
+      - hyper-2011
       - neumann-2011
+      - morsel-driven-parallelism-2014
+      - how-good-query-optimizers-2015
+      - compiled-vs-vectorized-2018
+      - umbra-2020
+      - art-2013
   - id: tianqi-chen
     name: Tianqi Chen
     areas:
@@ -818,6 +846,116 @@ researchers:
       - scheduling
       - Distributed computing
     paper_ids: []
+  - id: andrey-gubichev
+    name: Andrey Gubichev
+    areas:
+      - Databases
+      - Data management
+    topics:
+      - query optimization
+      - cardinality estimation
+      - distributed SQL
+      - F1 Query
+    paper_ids:
+      - how-good-query-optimizers-2015
+      - f1-query-2018
+  - id: martin-kersten
+    name: Martin Kersten
+    areas:
+      - Databases
+      - Data management
+    topics:
+      - MonetDB
+      - column stores
+      - adaptive indexing
+      - database architecture
+    paper_ids:
+      - memory-access-bottleneck-1999
+      - database-cracking-2007
+      - monetdb-two-decades-2012
+  - id: murat-demirbas
+    name: Murat Demirbas
+    areas:
+      - Distributed Systems
+      - Databases
+    topics:
+      - distributed consensus
+      - replication
+      - distributed transactions
+      - fault tolerance
+      - distributed coordination
+    paper_ids:
+      - logical-physical-clocks-2014
+      - panopticon-2015
+      - wankeeper-2017
+      - live-data-migration-2018
+      - dissecting-replication-protocols-2019
+      - linearizable-quorum-reads-paxos-2019
+      - wpaxos-2020
+      - pigpaxos-2021
+      - bunchbft-2022
+      - mongodb-distributed-transactions-verification-2025
+      - leaseguard-2026
+      - evaluating-distributed-coordination-2026
+  - id: stavros-harizopoulos
+    name: Stavros Harizopoulos
+    areas:
+      - Databases
+    topics:
+      - OLTP architecture
+      - column stores
+      - database performance
+    paper_ids:
+      - end-architectural-era-2007
+      - oltp-looking-glass-2008
+  - id: stefan-manegold
+    name: Stefan Manegold
+    areas:
+      - Databases
+      - Data management
+    topics:
+      - MonetDB
+      - hardware-conscious databases
+      - adaptive indexing
+      - query processing
+    paper_ids:
+      - memory-access-bottleneck-1999
+      - database-cracking-2007
+      - monetdb-two-decades-2012
+  - id: stratos-idreos
+    name: Stratos Idreos
+    areas:
+      - Databases
+      - Data management
+    topics:
+      - adaptive indexing
+      - database cracking
+      - column stores
+      - data systems design
+    paper_ids:
+      - database-cracking-2007
+      - monetdb-two-decades-2012
+      - monkey-2017
+      - dostoevsky-2018
+  - id: viktor-leis
+    name: Viktor Leis
+    areas:
+      - Databases
+      - Data management
+    topics:
+      - query optimization
+      - query execution
+      - main-memory databases
+      - storage engines
+    paper_ids:
+      - morsel-driven-parallelism-2014
+      - how-good-query-optimizers-2015
+      - compiled-vs-vectorized-2018
+      - oltp-looking-glass-16-years-later-2025
+      - btrblocks-2023
+      - art-2013
+      - hot-2018
+      - surf-2018
   - id: zhihao-jia
     name: Zhihao Jia
     areas:

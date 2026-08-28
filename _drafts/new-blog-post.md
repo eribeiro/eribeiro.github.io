@@ -5,7 +5,9 @@ excerpt: "A short summary of the post."
 categories:
   - Blog
 tags:
-  - draft
+  - clustered-index
+  - index-oriented-table
+  - covering-index
 ---
 
 Write the introduction here.

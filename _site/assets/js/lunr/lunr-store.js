@@ -1,4 +1,10 @@
 var store = [{
+        "title": "\"Clustered Index\" Doesn't Mean What You Think It Means (And That's Alright!)",
+        "excerpt":"Early this week, during a book club session, I found myself helplessly trying to navigate by heart through the concepts of clustered indexes, index-organized tables and covering indexes and getting corrected by fellow readers that were going strictly by Kleppmann and Riccomini’s Designing Data-Intensive Applications (2nd Edition, 2026). Motivated by...","categories": ["Blog"],
+        "tags": ["clustered-index","clustering-index","index-organized-table","covering-index","database-internals"],
+        "url": "/blog/clustered-index-vs-clustering-index/",
+        "teaser": null
+      },{
         "title": "ReadingTracks",
         "excerpt":"ReadingTracks is a fork-and-edit template for running a reading club’s paper catalog as a static site: papers, the researchers behind them, the venues they were published in, and curated “reading tracks” showing how ideas build on each other over time. No backend, no build step, no framework — just an...","categories": [],
         "tags": [],

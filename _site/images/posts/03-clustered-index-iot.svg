@@ -1,0 +1,112 @@
+<?xml version="1.0" standalone="no"?>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="1162pt" height="302pt" viewBox="0.00 0.00 1162.40 301.80">
+<g id="graph0" class="graph" transform="translate(25.200000762939453,276.6000061035156) scale(1)" data-name="ClusteringIndex">
+
+<polygon fill="white" stroke="none" points="-25.2,25.2 -25.2,-276.6 1137.2,-276.6 1137.2,25.2 -25.2,25.2" style=""/>
+<text text-anchor="middle" x="556" y="-227.6" font-family="Helvetica,sans-Serif" font-size="22.00" style="">Clustered Index / Index-Organized Table</text>
+<!-- root -->
+<g id="node1" class="node" pointer-events="visible" data-name="root">
+
+<polygon fill="#dceeff" stroke="none" points="409,-157.5 409,-210.5 599,-210.5 599,-157.5 409,-157.5" style=""/>
+<polygon fill="none" stroke="#3568a8" points="411,-183 411,-208 597,-208 597,-183 411,-183" style=""/>
+<text text-anchor="start" x="469.25" y="-193.1" font-family="Helvetica,sans-Serif" font-size="10.00" style="">        </text>
+<text text-anchor="start" x="491.48" y="-193.1" font-family="Helvetica,sans-Serif" font-weight="bold" font-size="11.00" style="">Root</text>
+<text text-anchor="start" x="516.52" y="-193.1" font-family="Helvetica,sans-Serif" font-size="10.00" style="">        </text>
+<polygon fill="none" stroke="#3568a8" points="411,-159 411,-183 503,-183 503,-159 411,-159" style=""/>
+<text text-anchor="start" x="416.84" y="-168" font-family="Helvetica,sans-Serif" font-size="10.00" style="">        PK &lt; 25        </text>
+<polygon fill="none" stroke="#3568a8" points="503,-159 503,-183 597,-183 597,-159 503,-159" style=""/>
+<text text-anchor="start" x="508.6" y="-168" font-family="Helvetica,sans-Serif" font-size="10.00" style="">        PK ≥ 25        </text>
+<polygon fill="none" stroke="#3568a8" stroke-width="2" points="410,-158.5 410,-209.5 598,-209.5 598,-158.5 410,-158.5" style=""/>
+</g>
+<!-- leaf1 -->
+<g id="node2" class="node" pointer-events="visible" data-name="leaf1">
+
+<polygon fill="#e4f4dc" stroke="none" points="0,0 0,-83 464,-83 464,0 0,0" style=""/>
+<polygon fill="none" stroke="#558b3d" points="2,-53.5 2,-80.5 462,-80.5 462,-53.5 2,-53.5" style=""/>
+<text text-anchor="start" x="106.16" y="-64.6" font-family="Helvetica,sans-Serif" font-size="10.00" style="">        </text>
+<text text-anchor="start" x="128.39" y="-64.6" font-family="Helvetica,sans-Serif" font-weight="bold" font-size="11.00" style="">Leaf Page — rows stored inside the tree</text>
+<text text-anchor="start" x="335.61" y="-64.6" font-family="Helvetica,sans-Serif" font-size="10.00" style="">        </text>
+<polygon fill="none" stroke="#558b3d" points="2,-1.5 2,-53.5 172,-53.5 172,-1.5 2,-1.5" style=""/>
+<text text-anchor="start" x="57.68" y="-34.5" font-family="Helvetica,sans-Serif" font-size="10.00" style="">        </text>
+<text text-anchor="start" x="79.91" y="-34.5" font-family="Helvetica,sans-Serif" font-weight="bold" font-size="10.00" style="">PK = 10</text>
+<text text-anchor="start" x="48.54" y="-24.5" font-family="Helvetica,sans-Serif" font-size="10.00" style="">        </text>
+<text text-anchor="start" x="70.77" y="-24.5" font-family="Helvetica,sans-Serif" font-size="8.00" style="">name, email, ...</text>
+<text text-anchor="start" x="44.11" y="-14.5" font-family="Helvetica,sans-Serif" font-size="10.00" style="">        </text>
+<text text-anchor="start" x="66.33" y="-14.5" font-family="Helvetica,sans-Serif" font-size="8.00" style="">FULL ROW</text>
+<text text-anchor="start" x="107.67" y="-14.5" font-family="Helvetica,sans-Serif" font-size="10.00" style="">        </text>
+<polygon fill="none" stroke="#558b3d" points="172,-1.5 172,-53.5 342,-53.5 342,-1.5 172,-1.5" style=""/>
+<text text-anchor="start" x="227.68" y="-34.5" font-family="Helvetica,sans-Serif" font-size="10.00" style="">        </text>
+<text text-anchor="start" x="249.91" y="-34.5" font-family="Helvetica,sans-Serif" font-weight="bold" font-size="10.00" style="">PK = 15</text>
+<text text-anchor="start" x="218.54" y="-24.5" font-family="Helvetica,sans-Serif" font-size="10.00" style="">        </text>
+<text text-anchor="start" x="240.77" y="-24.5" font-family="Helvetica,sans-Serif" font-size="8.00" style="">name, email, ...</text>
+<text text-anchor="start" x="214.11" y="-14.5" font-family="Helvetica,sans-Serif" font-size="10.00" style="">        </text>
+<text text-anchor="start" x="236.33" y="-14.5" font-family="Helvetica,sans-Serif" font-size="8.00" style="">FULL ROW</text>
+<text text-anchor="start" x="277.67" y="-14.5" font-family="Helvetica,sans-Serif" font-size="10.00" style="">        </text>
+<polygon fill="none" stroke="#558b3d" points="342,-1.5 342,-53.5 462,-53.5 462,-1.5 342,-1.5" style=""/>
+<text text-anchor="start" x="372.21" y="-25.5" font-family="Helvetica,sans-Serif" font-size="10.00" style="">        </text>
+<text text-anchor="start" x="394.44" y="-25.5" font-family="Helvetica,sans-Serif" font-size="8.00" style="">next</text>
+<text text-anchor="start" x="409.56" y="-25.5" font-family="Helvetica,sans-Serif" font-size="10.00" style="">        </text>
+<polygon fill="none" stroke="#558b3d" stroke-width="2" points="1,-1 1,-82 463,-82 463,-1 1,-1" style=""/>
+</g>
+<!-- leaf2 -->
+<g id="node3" class="node" pointer-events="visible" data-name="leaf2">
+
+<polygon fill="#e4f4dc" stroke="none" points="543,0 543,-83 1007,-83 1007,0 543,0" style=""/>
+<polygon fill="none" stroke="#558b3d" points="545,-53.5 545,-80.5 1005,-80.5 1005,-53.5 545,-53.5" style=""/>
+<text text-anchor="start" x="649.16" y="-64.6" font-family="Helvetica,sans-Serif" font-size="10.00" style="">        </text>
+<text text-anchor="start" x="671.39" y="-64.6" font-family="Helvetica,sans-Serif" font-weight="bold" font-size="11.00" style="">Leaf Page — rows stored inside the tree</text>
+<text text-anchor="start" x="878.61" y="-64.6" font-family="Helvetica,sans-Serif" font-size="10.00" style="">        </text>
+<polygon fill="none" stroke="#558b3d" points="545,-1.5 545,-53.5 715,-53.5 715,-1.5 545,-1.5" style=""/>
+<text text-anchor="start" x="600.68" y="-34.5" font-family="Helvetica,sans-Serif" font-size="10.00" style="">        </text>
+<text text-anchor="start" x="622.91" y="-34.5" font-family="Helvetica,sans-Serif" font-weight="bold" font-size="10.00" style="">PK = 25</text>
+<text text-anchor="start" x="591.54" y="-24.5" font-family="Helvetica,sans-Serif" font-size="10.00" style="">        </text>
+<text text-anchor="start" x="613.77" y="-24.5" font-family="Helvetica,sans-Serif" font-size="8.00" style="">name, email, ...</text>
+<text text-anchor="start" x="587.11" y="-14.5" font-family="Helvetica,sans-Serif" font-size="10.00" style="">        </text>
+<text text-anchor="start" x="609.33" y="-14.5" font-family="Helvetica,sans-Serif" font-size="8.00" style="">FULL ROW</text>
+<text text-anchor="start" x="650.67" y="-14.5" font-family="Helvetica,sans-Serif" font-size="10.00" style="">        </text>
+<polygon fill="none" stroke="#558b3d" points="715,-1.5 715,-53.5 885,-53.5 885,-1.5 715,-1.5" style=""/>
+<text text-anchor="start" x="770.68" y="-34.5" font-family="Helvetica,sans-Serif" font-size="10.00" style="">        </text>
+<text text-anchor="start" x="792.91" y="-34.5" font-family="Helvetica,sans-Serif" font-weight="bold" font-size="10.00" style="">PK = 47</text>
+<text text-anchor="start" x="761.54" y="-24.5" font-family="Helvetica,sans-Serif" font-size="10.00" style="">        </text>
+<text text-anchor="start" x="783.77" y="-24.5" font-family="Helvetica,sans-Serif" font-size="8.00" style="">name, email, ...</text>
+<text text-anchor="start" x="757.11" y="-14.5" font-family="Helvetica,sans-Serif" font-size="10.00" style="">        </text>
+<text text-anchor="start" x="779.33" y="-14.5" font-family="Helvetica,sans-Serif" font-size="8.00" style="">FULL ROW</text>
+<text text-anchor="start" x="820.67" y="-14.5" font-family="Helvetica,sans-Serif" font-size="10.00" style="">        </text>
+<polygon fill="none" stroke="#558b3d" points="885,-1.5 885,-53.5 1005,-53.5 1005,-1.5 885,-1.5" style=""/>
+<text text-anchor="start" x="915.21" y="-25.5" font-family="Helvetica,sans-Serif" font-size="10.00" style="">        </text>
+<text text-anchor="start" x="937.44" y="-25.5" font-family="Helvetica,sans-Serif" font-size="8.00" style="">next</text>
+<text text-anchor="start" x="952.56" y="-25.5" font-family="Helvetica,sans-Serif" font-size="10.00" style="">        </text>
+<polygon fill="none" stroke="#558b3d" stroke-width="2" points="544,-1 544,-82 1006,-82 1006,-1 544,-1" style=""/>
+</g>
+<!-- note -->
+<g id="node4" class="node" pointer-events="visible" data-name="note">
+
+<polygon fill="#efe3c6" stroke="none" points="678,-151 678,-217 1112,-217 1112,-151 678,-151" style=""/>
+<text text-anchor="start" x="833.59" y="-196" font-family="Helvetica,sans-Serif" font-size="10.00" style="">        </text>
+<text text-anchor="start" x="855.82" y="-196" font-family="Helvetica,sans-Serif" font-weight="bold" font-size="10.00" style="">No separate heap file</text>
+<text text-anchor="start" x="775.91" y="-176" font-family="Helvetica,sans-Serif" font-size="10.00" style="">        </text>
+<text text-anchor="start" x="798.14" y="-176" font-family="Helvetica,sans-Serif" font-size="10.00" style="">        The B+Tree leaf pages are the row storage.</text>
+<text text-anchor="start" x="759.4" y="-166" font-family="Helvetica,sans-Serif" font-size="10.00" style="">        Full table rows are stored directly in key order.        </text>
+<text text-anchor="start" x="1008.38" y="-166" font-family="Helvetica,sans-Serif" font-size="10.00" style="">        </text>
+<polygon fill="none" stroke="#ca8a04" stroke-width="2" points="679,-152 679,-216 1111,-216 1111,-152 679,-152" style=""/>
+</g>
+<!-- root&#45;&gt;leaf1 -->
+<g id="edge1" class="edge" data-name="root-&gt;leaf1">
+
+<path fill="none" stroke="#444444" stroke-width="1.35" d="M457,-158C457,-158 281.64,-99.55 240.55,-85.85" style=""/>
+<polygon fill="#444444" stroke="#444444" stroke-width="1.35" points="241.35,-83.54 233.94,-83.65 239.8,-88.18 241.35,-83.54" style=""/>
+</g>
+<!-- root&#45;&gt;leaf2 -->
+<g id="edge2" class="edge" data-name="root-&gt;leaf2">
+
+<path fill="none" stroke="#444444" stroke-width="1.35" d="M550,-158C550,-158 725.36,-99.55 766.45,-85.85" style=""/>
+<polygon fill="#444444" stroke="#444444" stroke-width="1.35" points="767.2,-88.18 773.06,-83.65 765.65,-83.54 767.2,-88.18" style=""/>
+</g>
+<!-- leaf1&#45;&gt;leaf2 -->
+<g id="edge3" class="edge" data-name="leaf1-&gt;leaf2">
+
+<path fill="none" stroke="#777777" stroke-width="1.1" stroke-dasharray="5,2" d="M463,-27.5C463,-27.5 510.48,-27.5 532.74,-27.5" style=""/>
+<polygon fill="#777777" stroke="#777777" stroke-width="1.1" points="535.84,-29.78 542.34,-27.5 535.84,-25.23 535.84,-29.78" style=""/>
+</g>
+</g>
+</svg>

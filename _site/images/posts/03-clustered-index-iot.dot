@@ -1,0 +1,168 @@
+digraph ClusteringIndex {
+    graph [rankdir = TB; bgcolor = "white"; pad = 0.35; nodesep = 1.10; ranksep = 0.95; splines = polyline; outputorder = nodesfirst; labelloc = "t"; label = "Clustered Index / Index-Organized Table"; fontname = "Helvetica"; fontsize = 22;];
+    
+    node [fontname = "Helvetica"; fontsize = 10;];
+    
+    edge [fontname = "Helvetica"; fontsize = 9; color = "#444444"; penwidth = 1.35; arrowsize = 0.75; arrowhead = normal;];
+    
+    
+    // ============================================================
+    // ROOT
+    // ============================================================
+    
+    root [shape = plain;label = <
+        <TABLE
+        BORDER="2"
+        CELLBORDER="1"
+        CELLSPACING="0"
+        CELLPADDING="5"
+        COLOR="#3568a8"
+        BGCOLOR="#dceeff"
+        >
+        <TR>
+        <TD COLSPAN="2" ALIGN="CENTER" VALIGN="MIDDLE">
+        <FONT POINT-SIZE="11"><B>Root</B></FONT>
+        </TD>
+        </TR>
+        <TR>
+        <TD PORT="p0" WIDTH="90" ALIGN="CENTER" VALIGN="MIDDLE">
+        PK &lt; 25
+        </TD>
+        <TD PORT="p1" WIDTH="90" ALIGN="CENTER" VALIGN="MIDDLE">
+        PK &#8805; 25
+        </TD>
+        </TR>
+        </TABLE>
+        >;];
+    
+    
+    // ============================================================
+    // LEAF PAGES
+    // Rows are stored directly in the B+Tree leaves
+    // ============================================================
+    
+    leaf1 [shape = plain;label = <
+        <TABLE
+        BORDER="2"
+        CELLBORDER="1"
+        CELLSPACING="0"
+        CELLPADDING="6"
+        COLOR="#558b3d"
+        BGCOLOR="#e4f4dc"
+        >
+        <TR>
+        <TD COLSPAN="3" ALIGN="CENTER" VALIGN="MIDDLE">
+        <FONT POINT-SIZE="11"><B>Leaf Page — rows stored inside the tree</B></FONT>
+        </TD>
+        </TR>
+        <TR>
+        <TD PORT="r10" WIDTH="170" HEIGHT="52" ALIGN="CENTER" VALIGN="MIDDLE">
+        <B>PK = 10</B><BR ALIGN="CENTER"/>
+        <FONT POINT-SIZE="8">name, email, ...</FONT><BR ALIGN="CENTER"/>
+        <FONT POINT-SIZE="8">FULL ROW</FONT>
+        </TD>
+        <TD PORT="r15" WIDTH="170" HEIGHT="52" ALIGN="CENTER" VALIGN="MIDDLE">
+        <B>PK = 15</B><BR ALIGN="CENTER"/>
+        <FONT POINT-SIZE="8">name, email, ...</FONT><BR ALIGN="CENTER"/>
+        <FONT POINT-SIZE="8">FULL ROW</FONT>
+        </TD>
+        <TD PORT="next" WIDTH="120" HEIGHT="52" ALIGN="CENTER" VALIGN="MIDDLE">
+        <FONT POINT-SIZE="8">next</FONT>
+        </TD>
+        </TR>
+        </TABLE>
+        >;];
+    
+    
+    leaf2 [shape = plain;label = <
+        <TABLE
+        BORDER="2"
+        CELLBORDER="1"
+        CELLSPACING="0"
+        CELLPADDING="6"
+        COLOR="#558b3d"
+        BGCOLOR="#e4f4dc"
+        >
+        <TR>
+        <TD COLSPAN="3" ALIGN="CENTER" VALIGN="MIDDLE">
+        <FONT POINT-SIZE="11"><B>Leaf Page — rows stored inside the tree</B></FONT>
+        </TD>
+        </TR>
+        <TR>
+        <TD PORT="r25" WIDTH="170" HEIGHT="52" ALIGN="CENTER" VALIGN="MIDDLE">
+        <B>PK = 25</B><BR ALIGN="CENTER"/>
+        <FONT POINT-SIZE="8">name, email, ...</FONT><BR ALIGN="CENTER"/>
+        <FONT POINT-SIZE="8">FULL ROW</FONT>
+        </TD>
+        <TD PORT="r47" WIDTH="170" HEIGHT="52" ALIGN="CENTER" VALIGN="MIDDLE">
+        <B>PK = 47</B><BR ALIGN="CENTER"/>
+        <FONT POINT-SIZE="8">name, email, ...</FONT><BR ALIGN="CENTER"/>
+        <FONT POINT-SIZE="8">FULL ROW</FONT>
+        </TD>
+        <TD PORT="next" WIDTH="120" HEIGHT="52" ALIGN="CENTER" VALIGN="MIDDLE">
+        <FONT POINT-SIZE="8">next</FONT>
+        </TD>
+        </TR>
+        </TABLE>
+        >;];
+    
+    
+    // Keep leaf pages aligned
+    subgraph {
+        rank = same;
+        leaf1;
+        leaf2;
+    }
+    
+    
+    // ============================================================
+    // TREE EDGES
+    // ============================================================
+    
+    root:p0:s -> leaf1:n [weight = 5; arrowsize = 0.70;];
+    
+    
+    
+    
+    root:p1:s -> leaf2:n [weight = 5; arrowsize = 0.70;];
+    
+    
+    
+    
+    
+    // Horizontal sibling pointer between leaves
+    leaf1:next:e -> leaf2:r25:w [style = dashed; color = "#777777"; penwidth = 1.1; arrowsize = 0.65; arrowhead = normal; constraint = false;];
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    // ============================================================
+    // EXPLANATION BOX
+    // ============================================================
+    
+    note [shape = plain;label = <
+        <TABLE
+        BORDER="2"
+        CELLBORDER="0"
+        CELLSPACING="0"
+        CELLPADDING="10"
+        COLOR="#ca8a04"
+        BGCOLOR="#efe3c6"
+        >
+        <TR>
+        <TD WIDTH="430" HEIGHT="62" ALIGN="CENTER" VALIGN="MIDDLE">
+        <B>No separate heap file</B><BR ALIGN="CENTER"/><BR ALIGN="CENTER"/>
+        <FONT POINT-SIZE="10">
+        The B+Tree leaf pages are the row storage.<BR ALIGN="CENTER"/>
+        Full table rows are stored directly in key order.
+        </FONT>
+        </TD>
+        </TR>
+        </TABLE>
+        >;];
+}

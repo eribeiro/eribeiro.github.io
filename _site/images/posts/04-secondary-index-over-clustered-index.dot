@@ -1,0 +1,64 @@
+digraph SecondaryOverClustered {
+    rankdir = TB;
+    bgcolor = white;
+    fontname = "Helvetica";
+    label = "Secondary Index on Top of a Clustered Index (InnoDB)";
+    labelloc = t;
+    fontsize = 15;
+    nodesep = 0.6;
+    ranksep = 0.55;
+    compound = true;
+    
+    node [shape = plain; fontname = "Helvetica"; fontsize = 10;];
+    
+    subgraph cluster_sec {
+        label = "Secondary Index (on email)";
+        style = dashed;
+        color = "#999999";
+        fontsize = 11;
+        
+        sroot [label = <
+            <TABLE BORDER="1" CELLBORDER="1" CELLSPACING="0" BGCOLOR="#dae8fc" COLOR="#6c8ebf">
+            <TR><TD>Root</TD></TR>
+            <TR><TD PORT="p0">email range</TD></TR>
+            </TABLE>
+            >;];
+        sleaf [label = <
+            <TABLE BORDER="1" CELLBORDER="1" CELLSPACING="0" BGCOLOR="#dae8fc" COLOR="#6c8ebf">
+            <TR><TD COLSPAN="2">Leaf Page (secondary)</TD></TR>
+            <TR>
+            <TD PORT="e1">bob@a.org<BR/>-&gt; PK=10</TD>
+            <TD PORT="e2">alice@a.org<BR/>-&gt; PK=25</TD>
+            </TR>
+            </TABLE>
+            >;];
+        sroot:p0 -> sleaf;
+    }
+    
+    subgraph cluster_clu {
+        label = "Clustered Index / IOT (Primary Key B+-Tree)";
+        style = dashed;
+        color = "#999999";
+        fontsize = 11;
+        
+        croot [label = <
+            <TABLE BORDER="1" CELLBORDER="1" CELLSPACING="0" BGCOLOR="#d5e8d4" COLOR="#82b366">
+            <TR><TD>Root</TD></TR>
+            <TR><TD PORT="p0">PK range</TD></TR>
+            </TABLE>
+            >;];
+        cleaf [label = <
+            <TABLE BORDER="1" CELLBORDER="1" CELLSPACING="0" BGCOLOR="#d5e8d4" COLOR="#82b366">
+            <TR><TD COLSPAN="2">Leaf Page (clustered)</TD></TR>
+            <TR>
+            <TD PORT="r10">PK=10<BR/>FULL ROW</TD>
+            <TD PORT="r25">PK=25<BR/>FULL ROW</TD>
+            </TR>
+            </TABLE>
+            >;];
+        croot:p0 -> cleaf;
+    }
+    
+    sleaf:e1:s -> cleaf:r10:s [label = "second lookup"; fontsize = 9; color = "#b85450"; penwidth = 1.5; constraint = false;];
+    sleaf:e2:s -> cleaf:r25:s [label = "second lookup"; fontsize = 9; color = "#b85450"; penwidth = 1.5; constraint = false;];
+}
