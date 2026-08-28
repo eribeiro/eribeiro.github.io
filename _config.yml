@@ -12,9 +12,9 @@ title                    : "Edward Ribeiro"
 title_separator          : "-"
 name                     : &name "Edward Ribeiro"
 description              : &description "MSc student at University of Utah"   # Update this with a general description of your site, this is the default if not overridden by a page
-url                      : "https://edwardoliveira.github.io"
+url                      : "https://eribeiro.github.io"
 baseurl                  : "" # the subpath of your site, e.g. "/blog"
-repository               : "edwardoliveira/edwardoliveira.github.io"
+repository               : "eribeiro/eribeiro.github.io"
 remote_theme             : "mmistakes/minimal-mistakes@4.28.1"
 minimal_mistakes_skin    : "default"
 
