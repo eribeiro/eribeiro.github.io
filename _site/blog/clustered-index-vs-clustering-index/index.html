@@ -316,10 +316,10 @@
         
         <p><img src="/images/posts/i-dont-think-meme.gif" alt="I don't think meme" /></p>
 
-<p>Early this week, during a book club session, I found myself helplessly trying to navigate through the concepts of <em><strong>clustered indexes, index-organized tables and covering indexes</strong></em> and getting corrected by fellow readers that were going strictly by Kleppmann and Riccomini’s <a href="https://www.oreilly.com/library/view/designing-data-intensive-applications/9781098119058/"><em>Designing Data-Intensive Applications</em></a> (2nd Edition, 2026). Motivated by my own confusion, I went back to the books I own and the web for clearer definitions.</p>
-
-<p>To cut to the chase, what actually happened is that two database traditions picked the same words (i.e., <em>“clustering index”</em> and <em>“clustered index”</em>) for two genuinely different physical structures!</p>
-
+<p>Early this week, during a book club session, I found myself stumbling through the nuances of <em><strong>clustered indexes, index-organized tables and covering indexes</strong></em>, only to be corrected by fellow readers that were going strictly by Kleppmann and Riccomini’s <a href="https://www.oreilly.com/library/view/designing-data-intensive-applications/9781098119058/"><em>Designing Data-Intensive Applications</em></a> (2nd Edition, 2026). Driven by my  confusion, I hit the books and the web to untangle it all.</p>
+<div class="custom-box">
+To cut to the chase, what actually happened is that two database traditions picked  similar words (<i>"clustering index"</i> and <i>"clustered index"</i>) for two genuinely different physical structures!
+</div>
 <p>While I’d learned it first from Silberschatz, Korth &amp; Sudarshan’s <a href="https://www.db-book.com/"><em>Database System Concepts</em></a> (currently on 7th Edition, 2021), and a couple of lesser-known books,  Kleppmann and Riccomini’s definition matches something else entirely. And it turns out <strong><em>their usage is the one that matches the industry’s actual database engine implementations!</em></strong> Therefore, neither of us were way off during the book discussion or inventing anything, for that matter; we were just each drinking from different wells. 🥲</p>
 
 <p><em>This post is the writeup I wish I’d had going into that conversation.</em> ;-)</p>
@@ -355,7 +355,7 @@
 <p>DDIA collapses both of these into a single definition:</p>
 
 <blockquote>
-  <p>“If the actual data (row, document, vertex) is stored directly within the index structure, it is called a <strong>clustered index</strong>. For example, in MySQL’s InnoDB storage engine, the primary key of a table is always a clustered index, and in SQL Server, you can specify one clustered index per table [43].”</p>
+  <p>“If the actual data (row, document, vertex) is stored directly within the index structure, it is called a <strong>clustered index</strong>. For example, in MySQL’s InnoDB storage engine, the primary key of a table is always a clustered index, and in SQL Server, you can specify one clustered index per table [43].”<sup id="fnref:innodb-primary-key" role="doc-noteref"><a href="#fn:innodb-primary-key" class="footnote" rel="footnote">1</a></sup></p>
 </blockquote>
 
 <center>
@@ -414,7 +414,7 @@
 
 <p>By the way, Winand lays out exactly why this hurts once you add a second index on top of a clustered one. As the rows inside an index-organized table can move at any time to preserve B-tree order, a secondary index can’t store a physical pointer (<em>rowid</em>) to them, so it has to store the clustering key (often the primary key) instead and use that to look the row up.</p>
 
-<p>In practice, this means every lookup through a secondary index costs two searches instead of one: an INDEX RANGE SCAN on the secondary index, followed by an INDEX UNIQUE SCAN into the clustered index for each match. As Winand puts it, <em>“accessing an index-organized table via a secondary index is very inefficient.”</em></p>
+<p>In practice, this means every lookup through a secondary index costs two searches instead of one: an INDEX RANGE SCAN<sup id="fnref:index-range-scan" role="doc-noteref"><a href="#fn:index-range-scan" class="footnote" rel="footnote">2</a></sup> on the secondary index, followed by an INDEX UNIQUE SCAN<sup id="fnref:index-unique-scan" role="doc-noteref"><a href="#fn:index-unique-scan" class="footnote" rel="footnote">3</a></sup> into the clustered index for each match. <em>By the way, I am borrowing Oracle’s EXPLAIN PLAN vocabulary here purely as an illustration of the two-hop pattern; InnoDB and SQL Server surface the same cost under their own plan-operation names.</em> As Winand puts it, <em>“accessing an index-organized table via a secondary index is very inefficient.”</em></p>
 
 <p>The fix is the same one used for heap tables: an index-only scan, though here it’s better described as a “secondary-index-only scan”; and the payoff is even bigger, since it eliminates an entire INDEX UNIQUE SCAN per row rather than a single table access.</p>
 
@@ -426,6 +426,10 @@
   <li><strong>Classical database texts</strong> like Silberschatz et al’s and Navathe et al’s are describing a <em>different</em> axis of classification: does index order match file order? Not whether the heap exists at all…</li>
   <li><strong>IBM Db2</strong> is the outlier that actually lines up with the classical texts: its clustering index is a genuinely separate object from the table, and Db2 tracks how well the two stay in sync, that is, the same axis Silberschatz is describing, not the IOT axis Oracle/MySQL/SQL Server are on.</li>
 </ul>
+
+<div class="custom-box">
+<strong>Heads up:</strong> Silberschatz's <i>"primary index"</i> (roughly a clustering index) and Elmasri/Navathe's <i>"primary index"</i> (ordered-by-unique-key, contrasted against their <i>"clustering index"</i>) are two more terms colliding under one name! Track which book you're in.
+</div>
 
 <p>Two structures, several vocabularies, one underlying set of concepts, with Db2 being the rare case where a vendor’s terminology and the classical textbook terminology actually agree. But none of the sources is “wrong” in isolation; the confusion only shows up when you read across them, or cross-references them, which is exactly what happens in a book club drawing on multiple references.</p>
 
@@ -461,14 +465,25 @@
 
 <p><img src="/images/posts/heap_file_decision_takeaway.svg" alt="key-takeway" /></p>
 
-<p><strong>Cheers!<br />
-Edward</strong></p>
-
-<p><em>PS: I checked whether this is a known erratum in DDIA and it isn’t, <strong>understandably so, because it isn’t an error!</strong> <code class="language-plaintext highlighter-rouge">¯\_(ツ)_/¯</code> Nevertheless, I did suggest a clarifying footnote to O’Reilly, since a one-line pointer to the academic usage might save the next reader the doubt I had.</em></p>
+<p><em>Cheers!<br />
+Edward</em></p>
 
 <hr />
 
 <p><em>August, 28th, 2026</em></p>
+<div class="footnotes" role="doc-endnotes">
+  <ol>
+    <li id="fn:innodb-primary-key" role="doc-endnote">
+      <p>More precisely, if a table has no primary key, InnoDB clusters on the first unique NOT NULL index instead, or a hidden internal row ID as a last resort, as discussed <a href="https://blog.jcole.us/2013/05/02/how-does-innodb-behave-without-a-primary-key/">here</a> and <a href="https://dev.mysql.com/doc/refman/5.7/en/innodb-index-types.html">here</a>. <a href="#fnref:innodb-primary-key" class="reversefootnote" role="doc-backlink">&#8617;</a></p>
+    </li>
+    <li id="fn:index-range-scan" role="doc-endnote">
+      <p><strong>Index Range Scan</strong> is a database operation where the system traverses an index tree to find a starting point and then walks through connected leaf nodes to read a targeted range of matching entries. Source: <a href="https://use-the-index-luke.com/sql/explain-plan/oracle/operations">Use The Index, Luke — Execution Plan Operations</a>. <a href="#fnref:index-range-scan" class="reversefootnote" role="doc-backlink">&#8617;</a></p>
+    </li>
+    <li id="fn:index-unique-scan" role="doc-endnote">
+      <p><strong>INDEX UNIQUE SCAN</strong> is a database operation that performs a B-tree traversal to find a single, specific row using a unique index. Source: <a href="https://use-the-index-luke.com/sql/explain-plan/oracle/operations">Use The Index, Luke — Execution Plan Operations</a>. <a href="#fnref:index-unique-scan" class="reversefootnote" role="doc-backlink">&#8617;</a></p>
+    </li>
+  </ol>
+</div>
 
         
       </section>

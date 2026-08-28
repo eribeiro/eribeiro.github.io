@@ -82,6 +82,14 @@ $(document).ready(function () {
     document.addEventListener("gumshoeActivate", scrollTocToContent);
   }
 
+  // Wrap plain (non-linked) diagram images so they get the same lightbox
+  // treatment as images the author manually links to themselves.
+  $(".page__content img[src$='.svg']").each(function () {
+    if ($(this).closest("a").length === 0) {
+      $(this).wrap('<a href="' + this.getAttribute("src") + '"></a>');
+    }
+  });
+
   // add lightbox class to all image links
   $(
     "a[href$='.jpg'],a[href$='.jpeg'],a[href$='.JPG'],a[href$='.png'],a[href$='.gif'],a[href$='.webp'],a[href$='.svg']"
@@ -121,6 +129,27 @@ $(document).ready(function () {
     closeOnContentClick: true,
     midClick: true, // allow opening popup on middle mouse click. Always set it to true if you don't provide alternative source.
   });
+
+  // Export to PDF button, folded into the post meta row next to read time
+  (function () {
+    var metaElement = document.querySelector(".page__meta");
+    if (!metaElement) return;
+
+    var sep = document.createElement("span");
+    sep.className = "page__meta-sep";
+
+    var pdfButton = document.createElement("button");
+    pdfButton.type = "button";
+    pdfButton.className = "page__meta-pdf";
+    pdfButton.innerHTML =
+      '<i class="fas fa-file-pdf" aria-hidden="true"></i> Export to PDF';
+    pdfButton.addEventListener("click", function () {
+      window.print();
+    });
+
+    metaElement.appendChild(sep);
+    metaElement.appendChild(pdfButton);
+  })();
 
   // Add anchors for headings
   (function () {

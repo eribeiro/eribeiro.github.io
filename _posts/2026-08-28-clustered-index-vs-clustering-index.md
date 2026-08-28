@@ -14,10 +14,10 @@ tags:
 
 ![I don't think meme](/images/posts/i-dont-think-meme.gif)
 
-Early this week, during a book club session, I found myself helplessly trying to navigate through the concepts of _**clustered indexes, index-organized tables and covering indexes**_ and getting corrected by fellow readers that were going strictly by Kleppmann and Riccomini's [*Designing Data-Intensive Applications*](https://www.oreilly.com/library/view/designing-data-intensive-applications/9781098119058/) (2nd Edition, 2026). Motivated by my own confusion, I went back to the books I own and the web for clearer definitions.
-
-To cut to the chase, what actually happened is that two database traditions picked the same words (i.e., _"clustering index"_ and _"clustered index"_) for two genuinely different physical structures!
-
+Early this week, during a book club session, I found myself stumbling through the nuances of _**clustered indexes, index-organized tables and covering indexes**_, only to be corrected by fellow readers that were going strictly by Kleppmann and Riccomini's [*Designing Data-Intensive Applications*](https://www.oreilly.com/library/view/designing-data-intensive-applications/9781098119058/) (2nd Edition, 2026). Driven by my  confusion, I hit the books and the web to untangle it all.
+<div class="custom-box">
+To cut to the chase, what actually happened is that two database traditions picked  similar words (<i>"clustering index"</i> and <i>"clustered index"</i>) for two genuinely different physical structures!
+</div>
 While I'd learned it first from Silberschatz, Korth & Sudarshan's [*Database System Concepts*](https://www.db-book.com/) (currently on 7th Edition, 2021), and a couple of lesser-known books,  Kleppmann and Riccomini's definition matches something else entirely. And it turns out **_their usage is the one that matches the industry's actual database engine implementations!_** Therefore, neither of us were way off during the book discussion or inventing anything, for that matter; we were just each drinking from different wells. 🥲
 
 _This post is the writeup I wish I'd had going into that conversation._ ;-)
@@ -50,7 +50,9 @@ Independently, Oracle has used the term [**Index-Organized Table (IOT)**](https:
 
 DDIA collapses both of these into a single definition:
 
-> "If the actual data (row, document, vertex) is stored directly within the index structure, it is called a **clustered index**. For example, in MySQL’s InnoDB storage engine, the primary key of a table is always a clustered index, and in SQL Server, you can specify one clustered index per table [43]."
+> "If the actual data (row, document, vertex) is stored directly within the index structure, it is called a **clustered index**. For example, in MySQL’s InnoDB storage engine, the primary key of a table is always a clustered index, and in SQL Server, you can specify one clustered index per table [43]."[^innodb-primary-key]
+
+[^innodb-primary-key]: More precisely, if a table has no primary key, InnoDB clusters on the first unique NOT NULL index instead, or a hidden internal row ID as a last resort, as discussed [here](https://blog.jcole.us/2013/05/02/how-does-innodb-behave-without-a-primary-key/) and [here](https://dev.mysql.com/doc/refman/5.7/en/innodb-index-types.html).
 
 <center>
 <img src="/images/posts/peter-parker-meme.jpg" alt="alt text" style="width: 30%;">
@@ -108,7 +110,11 @@ Once there's no heap to point into, a secondary index (say, on `email`) can't st
 
 By the way, Winand lays out exactly why this hurts once you add a second index on top of a clustered one. As the rows inside an index-organized table can move at any time to preserve B-tree order, a secondary index can't store a physical pointer (_rowid_) to them, so it has to store the clustering key (often the primary key) instead and use that to look the row up. 
 
-In practice, this means every lookup through a secondary index costs two searches instead of one: an INDEX RANGE SCAN on the secondary index, followed by an INDEX UNIQUE SCAN into the clustered index for each match. As Winand puts it, _"accessing an index-organized table via a secondary index is very inefficient."_ 
+In practice, this means every lookup through a secondary index costs two searches instead of one: an INDEX RANGE SCAN[^index-range-scan] on the secondary index, followed by an INDEX UNIQUE SCAN[^index-unique-scan] into the clustered index for each match. _By the way, I am borrowing Oracle's EXPLAIN PLAN vocabulary here purely as an illustration of the two-hop pattern; InnoDB and SQL Server surface the same cost under their own plan-operation names._ As Winand puts it, _"accessing an index-organized table via a secondary index is very inefficient."_ 
+
+[^index-range-scan]: **Index Range Scan** is a database operation where the system traverses an index tree to find a starting point and then walks through connected leaf nodes to read a targeted range of matching entries. Source: [Use The Index, Luke — Execution Plan Operations](https://use-the-index-luke.com/sql/explain-plan/oracle/operations).
+
+[^index-unique-scan]: **INDEX UNIQUE SCAN** is a database operation that performs a B-tree traversal to find a single, specific row using a unique index. Source: [Use The Index, Luke — Execution Plan Operations](https://use-the-index-luke.com/sql/explain-plan/oracle/operations).
 
 The fix is the same one used for heap tables: an index-only scan, though here it's better described as a "secondary-index-only scan"; and the payoff is even bigger, since it eliminates an entire INDEX UNIQUE SCAN per row rather than a single table access.
 
@@ -118,6 +124,10 @@ The fix is the same one used for heap tables: an index-only scan, though here it
 - **MySQL/InnoDB and Microsoft SQL Server** call the same structure a *clustered index*;
 - __Classical database texts__ like Silberschatz et al's and Navathe et al's are describing a *different* axis of classification: does index order match file order? Not whether the heap exists at all...
 - __IBM Db2__ is the outlier that actually lines up with the classical texts: its clustering index is a genuinely separate object from the table, and Db2 tracks how well the two stay in sync, that is, the same axis Silberschatz is describing, not the IOT axis Oracle/MySQL/SQL Server are on.
+
+<div class="custom-box">
+<strong>Heads up:</strong> Silberschatz's <i>"primary index"</i> (roughly a clustering index) and Elmasri/Navathe's <i>"primary index"</i> (ordered-by-unique-key, contrasted against their <i>"clustering index"</i>) are two more terms colliding under one name! Track which book you're in.
+</div>
 
 Two structures, several vocabularies, one underlying set of concepts, with Db2 being the rare case where a vendor's terminology and the classical textbook terminology actually agree. But none of the sources is "wrong" in isolation; the confusion only shows up when you read across them, or cross-references them, which is exactly what happens in a book club drawing on multiple references.
 
@@ -147,11 +157,8 @@ If you're reading multiple database books then assume "clustered/clustering inde
 
 ![key-takeway](/images/posts/heap_file_decision_takeaway.svg)
 
-__Cheers!<br/>
-Edward__
-
-
-_PS: I checked whether this is a known erratum in DDIA and it isn't, __understandably so, because it isn’t an error!__ `¯\_(ツ)_/¯` Nevertheless, I did suggest a clarifying footnote to O'Reilly, since a one-line pointer to the academic usage might save the next reader the doubt I had._
+_Cheers!<br/>
+Edward_
 
 ---
 
