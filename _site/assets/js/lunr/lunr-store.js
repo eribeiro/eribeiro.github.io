@@ -1,6 +1,6 @@
 var store = [{
         "title": "\"Clustered Index\" Doesn't Mean What You Think It Means (And That's Alright!)",
-        "excerpt":"Early this week, during a book club session, I found myself helplessly trying to navigate by heart through the concepts of clustered indexes, index-organized tables and covering indexes and getting corrected by fellow readers that were going strictly by Kleppmann and Riccomini’s Designing Data-Intensive Applications (2nd Edition, 2026). Motivated by...","categories": ["Blog"],
+        "excerpt":"Early this week, during a book club session, I found myself helplessly trying to navigate through the concepts of clustered indexes, index-organized tables and covering indexes and getting corrected by fellow readers that were going strictly by Kleppmann and Riccomini’s Designing Data-Intensive Applications (2nd Edition, 2026). Motivated by my own...","categories": ["Blog"],
         "tags": ["clustered-index","clustering-index","index-organized-table","covering-index","database-internals"],
         "url": "/blog/clustered-index-vs-clustering-index/",
         "teaser": null

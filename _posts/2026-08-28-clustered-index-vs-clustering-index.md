@@ -14,7 +14,7 @@ tags:
 
 ![I don't think meme](/images/posts/i-dont-think-meme.gif)
 
-Early this week, during a book club session, I found myself helplessly trying to navigate by heart through the concepts of _**clustered indexes, index-organized tables and covering indexes**_ and getting corrected by fellow readers that were going strictly by Kleppmann and Riccomini's [*Designing Data-Intensive Applications*](https://www.oreilly.com/library/view/designing-data-intensive-applications/9781098119058/) (2nd Edition, 2026). Motivated by my own confusion, I went back to the books I own and the web for clearer definitions.
+Early this week, during a book club session, I found myself helplessly trying to navigate through the concepts of _**clustered indexes, index-organized tables and covering indexes**_ and getting corrected by fellow readers that were going strictly by Kleppmann and Riccomini's [*Designing Data-Intensive Applications*](https://www.oreilly.com/library/view/designing-data-intensive-applications/9781098119058/) (2nd Edition, 2026). Motivated by my own confusion, I went back to the books I own and the web for clearer definitions.
 
 To cut to the chase, what actually happened is that two database traditions picked the same words (i.e., _"clustering index"_ and _"clustered index"_) for two genuinely different physical structures!
 
