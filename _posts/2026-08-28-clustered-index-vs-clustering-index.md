@@ -151,7 +151,7 @@ __Cheers!<br/>
 Edward__
 
 
-_PS: I checked whether this is a known erratum in DDIA and it isn't, __understandly so because it isn’t an error!__ `¯\_(ツ)_/¯` Nevertheless, I did suggest a clarifying footnote to O'Reilly, since a one-line pointer to the academic usage might save the next reader the doubt I had._
+_PS: I checked whether this is a known erratum in DDIA and it isn't, __understandably so, because it isn’t an error!__ `¯\_(ツ)_/¯` Nevertheless, I did suggest a clarifying footnote to O'Reilly, since a one-line pointer to the academic usage might save the next reader the doubt I had._
 
 ---
 
