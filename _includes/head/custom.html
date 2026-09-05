@@ -11,4 +11,19 @@
 <link rel="icon" href="/images/favicon.ico"/>
 <meta name="theme-color" content="#ffffff"/>
 
+{% if page.mathjax %}
+<!-- MathJax: renders the LaTeX math kramdown emits (math_engine: mathjax
+     leaves inline $...$ as-is and converts block $$...$$ to \[...\]).
+     MathJax v3 recognizes \[...\] by default but not bare $...$, so it's
+     enabled explicitly here. Opt in per post/page with `mathjax: true`. -->
+<script>
+  window.MathJax = {
+    tex: {
+      inlineMath: [['$', '$'], ['\\(', '\\)']]
+    }
+  };
+</script>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.min.js"></script>
+{% endif %}
+
 <!-- end custom head snippets -->

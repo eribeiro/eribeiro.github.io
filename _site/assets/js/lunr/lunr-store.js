@@ -1,4 +1,10 @@
 var store = [{
+        "title": "Sharding vs. Partitioning: When Definitions Got Sliced and Fractured",
+        "excerpt":"As I slowly, and reluctanctly, try to make a comeback to micro blogging social media, I stumbled accross the following tweet in my very first days there: For a long time, I used sharding and partitioning as interchangebly concepts, almost like synonyms, even though in my head sharding has ever...","categories": ["Blog"],
+        "tags": ["partitioning","sharding","database-internals"],
+        "url": "/blog/partitioning_vs_sharding/",
+        "teaser": null
+      },{
         "title": "\"Clustered Index\" Doesn't Mean What You Think It Means (And That's Alright!)",
         "excerpt":"Early this week, during a book club session, I found myself stumbling through the nuances of clustered indexes, index-organized tables and covering indexes, only to be corrected by fellow readers that were going strictly by Kleppmann and Riccomini’s Designing Data-Intensive Applications (2nd Edition, 2026). Driven by my confusion, I hit...","categories": ["Blog"],
         "tags": ["clustered-index","clustering-index","index-organized-table","covering-index","database-internals"],
