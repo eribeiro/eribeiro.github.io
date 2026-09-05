@@ -155,9 +155,11 @@ social:
 
 # Analytics
 analytics:
-  provider               :  "false" # false (default), "google", "google-universal", "google-analytics-4", "custom"
+  provider               :  "google-gtag"
   google:
-    tracking_id          :
+    tracking_id: "G-J3NKJDM4BJ"   # your GA4 Measurement ID
+    anonymize_ip: false
+    
 
 
 # Reading Files
