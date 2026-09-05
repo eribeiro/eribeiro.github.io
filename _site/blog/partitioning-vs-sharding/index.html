@@ -1,0 +1,1029 @@
+
+
+<!doctype html>
+<!--
+  Minimal Mistakes Jekyll Theme 4.28.1 by Michael Rose
+  Copyright 2013-2026 Michael Rose - mademistakes.com | @mmistakes
+  Copyright 2024-2026 iBug - ibugone.com | @iBug
+  Free for personal and commercial use under the MIT license
+  https://github.com/mmistakes/minimal-mistakes/blob/master/LICENSE
+-->
+
+<html lang="en-US" class="no-js" dir="ltr">
+  <head>
+    
+<meta charset="utf-8">
+
+
+<!-- begin _includes/seo.html --><title>Sharding vs. Partitioning: When Definitions Got Sliced and Fractured - Edward Ribeiro</title>
+<meta name="description" content="Social media replies insisting that partitioning stays on one server while sharding spans many nodes sent me on quest through vendor docs, and decades of database textbooks to check whether that clean split actually holds up.">
+
+
+  <meta name="author" content="Edward Ribeiro">
+  
+  <meta property="article:author" content="Edward Ribeiro">
+  
+
+
+<meta property="og:type" content="article">
+<meta property="og:locale" content="en_US">
+<meta property="og:site_name" content="Edward Ribeiro">
+<meta property="og:title" content="Sharding vs. Partitioning: When Definitions Got Sliced and Fractured">
+<meta property="og:url" content="http://localhost:4000/blog/partitioning-vs-sharding/">
+
+
+  <meta property="og:description" content="Social media replies insisting that partitioning stays on one server while sharding spans many nodes sent me on quest through vendor docs, and decades of database textbooks to check whether that clean split actually holds up.">
+
+
+
+
+
+
+
+
+
+  <meta property="article:published_time" content="2026-09-06T00:00:00+00:00">
+
+
+
+
+
+  
+
+  
+
+
+<link rel="canonical" href="http://localhost:4000/blog/partitioning-vs-sharding/">
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- end _includes/seo.html -->
+
+
+
+  <link href="/feed.xml" type="application/atom+xml" rel="alternate" title="Edward Ribeiro Feed">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<script>
+  document.documentElement.className = document.documentElement.className.replace(/\bno-js\b/g, '') + ' js ';
+  
+</script>
+
+<!-- For all browsers -->
+<link rel="stylesheet" href="/assets/css/main.css">
+<link rel="preload" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@latest/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@latest/css/all.min.css"></noscript>
+
+
+
+    
+
+<!-- start custom head snippets -->
+
+<!-- Site favicon -->
+<link rel="apple-touch-icon" sizes="180x180" href="http://localhost:4000/images/apple-touch-icon-180x180.png"/>
+<link rel="icon" type="image/svg+xml" href="http://localhost:4000/images/favicon.svg"/>
+<link rel="icon" type="image/png" href="http://localhost:4000/images/favicon-32x32.png" sizes="32x32"/>
+<link rel="icon" type="image/png" href="http://localhost:4000/images/favicon-192x192.png" sizes="192x192"/>
+<link rel="manifest" href="http://localhost:4000/images/manifest.json"/>
+<link rel="icon" href="/images/favicon.ico"/>
+<meta name="theme-color" content="#ffffff"/>
+
+
+<!-- MathJax: renders the LaTeX math kramdown emits (math_engine: mathjax
+     leaves inline $...$ as-is and converts block $$...$$ to \[...\]).
+     MathJax v3 recognizes \[...\] by default but not bare $...$, so it's
+     enabled explicitly here. Opt in per post/page with `mathjax: true`. -->
+<script>
+  window.MathJax = {
+    tex: {
+      inlineMath: [['$', '$'], ['\\(', '\\)']]
+    }
+  };
+</script>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.min.js"></script>
+
+
+<!-- end custom head snippets -->
+
+  </head>
+
+  <body class="layout--single">
+    
+<nav class="skip-links" aria-label="Skip links">
+  <ul>
+    <li><a href="#site-nav" class="screen-reader-shortcut">Skip to primary navigation</a></li>
+    <li><a href="#main" class="screen-reader-shortcut">Skip to content</a></li>
+    <li><a href="#footer" class="screen-reader-shortcut">Skip to footer</a></li>
+  </ul>
+</nav>
+
+    
+
+
+<div class="masthead">
+  <div class="masthead__inner-wrap">
+    <div class="masthead__menu">
+      <nav id="site-nav" class="greedy-nav" aria-label="Primary navigation">
+        
+        <a class="site-title" href="/">
+          Edward Ribeiro
+          
+        </a>
+        <ul class="visible-links">
+<li class="masthead__menu-item">
+              <a href="/year-archive/">Blog Posts</a>
+            </li>
+<li class="masthead__menu-item">
+              <a href="https://eribeiro.github.io/reading-tracks/">ReadingTracks</a>
+            </li>
+<li class="masthead__menu-item">
+              <a href="/projects/">Projects</a>
+            </li>
+</ul>
+        
+        <button class="greedy-nav__toggle hidden" type="button">
+          <span class="visually-hidden">Toggle menu</span>
+          <div class="navicon"></div>
+        </button>
+        <ul class="hidden-links hidden"></ul>
+      </nav>
+    </div>
+  </div>
+</div>
+
+
+    <div class="initial-content">
+      
+
+
+
+
+
+
+
+<div id="main" role="main">
+  
+
+  <div class="sidebar sticky">
+  
+
+
+
+<div itemscope itemtype="https://schema.org/Person" class="h-card">
+
+  
+    <div class="author__avatar">
+      <a href="http://localhost:4000/">
+        <img src="/images/profile.jpeg" alt="Edward Ribeiro" itemprop="image" class="u-photo">
+      </a>
+    </div>
+  
+
+  <div class="author__content">
+    <h3 class="author__name p-name" itemprop="name">
+      <a class="u-url" rel="me" href="http://localhost:4000/" itemprop="url">Edward Ribeiro</a>
+    </h3>
+    
+  </div>
+
+  <div class="author__urls-wrapper">
+    <button class="btn btn--inverse">Follow</button>
+    <ul class="author__urls social-icons">
+      
+
+      
+
+      
+
+      
+        <li>
+          <a href="mailto:edward.ribeiro@gmail.com" rel="me" class="u-email">
+            <meta itemprop="email" content="edward.ribeiro@gmail.com">
+            <i class="fas fa-fw fa-square-envelope" aria-hidden="true"></i><span class="label">Email</span>
+          </a>
+        </li>
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+        <li>
+          <a href="https://github.com/eribeiro" itemprop="sameAs" rel="nofollow noopener noreferrer me">
+            <i class="fab fa-fw fa-github" aria-hidden="true"></i><span class="label">GitHub</span>
+          </a>
+        </li>
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      
+
+      <!--
+  <li>
+    <a href="http://link-to-whatever-social-network.com/user/" itemprop="sameAs" rel="nofollow noopener noreferrer me">
+      <i class="fas fa-fw" aria-hidden="true"></i> Custom Social Profile Link
+    </a>
+  </li>
+-->
+    </ul>
+  </div>
+</div>
+
+  
+  
+  </div>
+
+
+
+  <article class="page h-entry" itemscope itemtype="https://schema.org/CreativeWork">
+    <meta itemprop="headline" content="Sharding vs. Partitioning: When Definitions Got Sliced and Fractured">
+    <meta itemprop="description" content="Social media replies insisting that partitioning stays on one server while sharding spans many nodes sent me on quest through vendor docs, and decades of database textbooks to check whether that clean split actually holds up.">
+    <meta itemprop="datePublished" content="2026-09-06T00:00:00+00:00">
+    
+
+    <div class="page__inner-wrap">
+      
+        <header>
+          <h1 id="page-title" class="page__title p-name" itemprop="headline">
+            <a href="http://localhost:4000/blog/partitioning-vs-sharding/" itemprop="url">Sharding vs. Partitioning: When Definitions Got Sliced and Fractured
+</a>
+          </h1>
+          
+
+
+  <p class="page__meta">
+    
+
+    
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          26 minute read
+        
+      </span>
+    
+  </p>
+
+
+        </header>
+      
+
+      <section class="page__content e-content" itemprop="text">
+        
+        <center>
+<div style="display: flex; justify-content: center; align-items: center; gap: 20px; flex-wrap: wrap;">
+<img src="/images/posts/partitioning_vs_sharding/fruit-ninja.gif" alt="fruit-ninja" style="width: 40%;">
+<img src="/images/posts/partitioning_vs_sharding/giphy.gif" alt="giphy" style="width: 40%;">
+</div>
+<br>
+<br>
+</center>
+
+<p>As I slowly, <em>and reluctantly</em>, try to make a comeback to microblogging sites after many years out, I stumbled across the following tweet in my very first days there:</p>
+
+<center>
+<img src="/images/posts/partitioning_vs_sharding/twitter-post.png" alt="Twitter post" style="width: 50%;">
+<br>
+<br>
+</center>
+
+<p>For a long time, I used <em>sharding</em> and <em>partitioning</em> as interchangeable concepts, almost like synonyms, even though <em>in my head</em> sharding has always been an <strong>industry-crafted term</strong> that heavily implied scaled-out multi-node architectures while partitioning was the more general concept above it. But to my surprise, many replies to this particular tweet were saying essentially this:</p>
+
+<blockquote>
+  <p><em>“Partitioning splits data within a single server, while sharding distributes data accross multiple servers to scale horizontally.”</em></p>
+</blockquote>
+
+<p>The same adage, expressed by different individuals, indicated a more solid, ingrained or established definition that went straight under my radar this whole time! I was mesmerized… Maybe something changed while I was out, hahah? Maybe I didn’t get the memo back then?</p>
+
+<p>In a previous life, this small discordance would immediately engage me on a real-life version of that famous <a href="https://xkcd.com/386/">XKCD cartoon</a>:</p>
+
+<center>
+<img src="/images/posts/partitioning_vs_sharding/duty_calls_2x.png" alt="Duty Calls XKCD" style="width: 40%;">
+<br>
+<br>
+</center>
+
+<p>But jumping headfirst into heated discussions for countless hours in a medium of limited expressiveness feels so dated, tiresome and, well, wasteful… Therefore, I decided to hit the respectable literature and products’ documentations, so that I could challenge my own (mis-)understandings, fill in the gaps, and <em>maybe</em> write an educational material in the process.</p>
+
+<p><em>And for what’s worth, a genuine and relevant doubt unfolded itself into a nice oportunity to review some crucial concepts in databases and distributed systems!</em> 😄</p>
+
+<center>
+<img src="/images/posts/partitioning_vs_sharding/duty_calls_3x.jpg" alt="Duty Calls 2 XKCD" style="width: 50%;">
+<br>
+<br>
+</center>
+
+<div class="custom-box">
+<p>To cut to the chase, there's no really right or wrong side. The <i>"partitioning is within one node; sharding is across nodes"</i> definition is a <strong>useful convention</strong> adopted by some database products and communities, <strong>but it is not an universal definition,</strong> and it is definitely <strong>not how the broader distributed (database) systems' communities define partitioning and sharding.</strong> The terminology became <i>muddy</i> because different database traditions evolved their vocabulary independently. Alas, <i>a similar thing</i> happened with <a href="/blog/clustered-index-vs-clustering-index/">clustered vs. clustering indexes</a>! 😝</p>
+</div>
+
+<!-- **UPDATE [09-05-2026]**: while wrapping up this post, I stumbled upon yet another post mentioning the aforementioned distinction between partitioning and sharding... Maybe this could be a timely blog post, after all? 😏
+
+<center>
+<img src="/images/posts/partitioning_vs_sharding/threads-post.png" alt="Duty Calls 2 XKCD" style="width: 40%;">
+<br/>
+<br/>
+</center> -->
+
+<p>To kickstart the discussion, let’s see how this kind of intermingling between partitioning and sharding definitions can be witnessed <em>nowadays</em> on many real-world systems’ terminologies. In the sample listing of <a href="#table-1">Table 1</a>, <em>“partition”</em> is being used to describe both single-node systems (e.g. PostgreSQL) and multi-node systems (e.g. DynamoDB), with a few other synonym terms (e.g., tablet and region) thrown into the mix! Therefore, <strong>the assertion that partitions are only for single nodes just doesn’t stand up to a closer look.</strong> <img class="emoji" title=":smiling_face_with_tear:" alt=":smiling_face_with_tear:" src="https://github.githubassets.com/images/icons/emoji/unicode/1f972.png" height="20" width="20"></p>
+
+<table>
+  <thead>
+    <tr>
+      <th>System</th>
+      <th>Name</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><a href="https://www.allthingsdistributed.com/files/amazon-dynamo-sosp2007.pdf">Dynamo</a></td>
+      <td>partition</td>
+    </tr>
+    <tr>
+      <td><a href="https://cassandra.apache.org/_/cassandra-basics.html">Cassandra</a></td>
+      <td>partition / token range</td>
+    </tr>
+    <tr>
+      <td><a href="https://kafka.apache.org/intro/">Kafka</a></td>
+      <td>partition</td>
+    </tr>
+    <tr>
+      <td><a href="https://docs.cloud.google.com/bigtable/docs/overview">Bigtable</a></td>
+      <td>tablet</td>
+    </tr>
+    <tr>
+      <td><a href="https://hbase.apache.org/book.html">HBase</a></td>
+      <td>region</td>
+    </tr>
+    <tr>
+      <td><a href="https://www.cockroachlabs.com/docs/stable/architecture/distribution-layer">CockroachDB</a></td>
+      <td>range</td>
+    </tr>
+    <tr>
+      <td><a href="https://www.mongodb.com/docs/manual/core/sharding-data-partitioning/">MongoDB</a></td>
+      <td>shard / chunk</td>
+    </tr>
+    <tr>
+      <td><a href="https://www.elastic.co/docs/deploy-manage/distributed-architecture/clusters-nodes-shards">Elasticsearch</a></td>
+      <td>shard</td>
+    </tr>
+    <tr>
+      <td><a href="https://solr.apache.org/guide/solr/latest/deployment-guide/solrcloud-shards-indexing.html">SolrCloud</a></td>
+      <td>shard</td>
+    </tr>
+    <tr>
+      <td><a href="https://www.postgresql.org/docs/current/ddl-partitioning.html">PostgreSQL</a></td>
+      <td>partition</td>
+    </tr>
+    <tr>
+      <td><a href="https://docs.oracle.com/en/database/oracle/oracle-database/26/vldbg/partition-admin.html">Oracle</a></td>
+      <td>partition</td>
+    </tr>
+    <tr>
+      <td><a href="https://vitess.io/docs/25.0/concepts/shard/">Vitess</a></td>
+      <td>shard</td>
+    </tr>
+    <tr>
+      <td><a href="https://docs.cloud.google.com/spanner/docs/schema-design">Spanner</a></td>
+      <td>split</td>
+    </tr>
+    <tr>
+      <td><a href="https://docs.pingcap.com/tidb/stable/tikv-overview/">TiDB</a></td>
+      <td>region</td>
+    </tr>
+    <tr>
+      <td><a href="https://docs.yugabyte.com/stable/architecture/docdb-sharding/">YugaByteDB</a></td>
+      <td>tablet</td>
+    </tr>
+    <tr>
+      <td><a href="https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/HowItWorks.Partitions.html">DynamoDB</a></td>
+      <td>partition</td>
+    </tr>
+    <tr>
+      <td><a href="https://iceberg.apache.org/docs/latest/partitioning/">Apache Iceberg</a></td>
+      <td>partition</td>
+    </tr>
+    <tr>
+      <td>
+<a href="https://docs.voltdb.com/UsingVoltDB/DesignPartition.php">H-Store/VoltDB</a><sup id="fnref:voltdb" role="doc-noteref"><a href="#fn:voltdb" class="footnote" rel="footnote">1</a></sup>
+</td>
+      <td>partition</td>
+    </tr>
+  </tbody>
+</table>
+
+<p><a id="table-1"></a></p>
+
+<p><strong>Table 1 - Real world systems’ terminologies</strong></p>
+
+<h2 id="then-why-do-people-say-partitioning--one-machine">Then why do people say “partitioning = one machine”?</h2>
+
+<p><em>Probably</em> because of <strong>the commercial database vendors’ terminology and the dot-com era’s web companies</strong>. The <em>“partitioning = single node, sharding = multiple nodes”</em> distinction <em>seems</em> to have emerged from these two different, but related, arenas, as we should see shortly.</p>
+
+<h4 id="the-commercial-dbms-prism-lens">The commercial DBMS’ prism lens</h4>
+
+<p>On one side, we had commercial DBMSs popularizing and strongly supporting, to this day, <strong>table partitioning</strong> as a product feature for subdividing one logical table into physical pieces under a single database installation. <a href="https://docs.oracle.com/cd/B13789_01/server.101/b10743/partconc.htm">Oracle 10g</a> describes partitioning as decomposing a large table or index into smaller pieces called partitions. <a href="https://www.postgresql.org/docs/18/ddl-partitioning.html">PostgreSQL</a> uses essentially the same product-level vocabulary: <em>“splitting what is logically one large table into smaller physical pieces.”</em> We also had other instances of this trend in products like <a href="https://learn.microsoft.com/en-us/sql/relational-databases/partitions/partitioned-tables-and-indexes">SQL Server</a>, <a href="https://dev.mysql.com/doc/refman/9.7/en/partitioning.html">MySQL</a>, and <a href="https://www.ibm.com/docs/en/db2/11.5.x?topic=tables-table-partitioning">Db2</a>, for example.</p>
+
+<p>So, when a DBA in the 2000s said that <em>“we partitioned the orders table”</em>, they usually meant a native DBMS feature like this:</p>
+
+<p><a href="/images/posts/partitioning_vs_sharding/table-partitioning.png"><img src="/images/posts/partitioning_vs_sharding/table-partitioning.png" alt="table partitioning"></a></p>
+
+<p>These features often look like:</p>
+
+<div class="language-sql highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">CREATE</span> <span class="k">TABLE</span> <span class="n">orders</span> <span class="p">(...)</span>
+<span class="k">PARTITION</span> <span class="k">BY</span> <span class="k">RANGE</span> <span class="p">(</span><span class="nb">timestamp</span><span class="p">);</span>
+</code></pre></div></div>
+
+<h4 id="the-web-scale-systems-prism-lens">The web-scale systems’ prism lens</h4>
+
+<p>On the other side, also during the 2000s, web companies faced a somewhat different problem due to the exponential growth of the web: a single database server couldn’t support all their users’ data and load, so web companies started using the term <em>sharding</em> specifically for describing the distribution of subsets of the application’s data over multiple database servers. Sharding was the operational term for companies like eBay, Yahoo!, Facebook, among others. An old engineering post by <a href="https://code.flickr.net/2010/02/08/ticket-servers-distributed-unique-primary-keys-on-the-cheap">Flickr</a> summarises how many companies operated back in the day:</p>
+
+<blockquote>
+  <p><em>“<strong>Sharding</strong> (aka <strong>data partioning</strong>) is how we scale Flickr’s datastore. Instead of storing all our data on one really big database, we have lots of databases, each with some of the data, and spread the load between them.”</em></p>
+</blockquote>
+
+<p>Back in the day, when an eBay/Flickr/Facebook/Google engineer said that <em>“we sharded users”</em>, they usually meant something like:</p>
+
+<p><a href="/images/posts/partitioning_vs_sharding/sharding-architecture.png"><img src="/images/posts/partitioning_vs_sharding/sharding-architecture.png" alt="sharding architecture"></a></p>
+
+<p>And later, during the 2010s, the “sharding” term solidified through the success of NoSQL systems such as MongoDB and Riak, for example. <a href="https://www.mongodb.com/docs/manual/sharding">MongoDB documentation</a> states that <em>“Sharding is a method for distributing data across multiple machines.”</em></p>
+
+<p>All of this produced an extremely convenient <strong>practitioner</strong> distinction:</p>
+
+<blockquote>
+  <p>Partitioning = split a table inside the database.
+Sharding = split the database across machines.</p>
+</blockquote>
+
+<p>There was a sociotechnical reason for the distinction: those two activities had radically different operational implications and consequences, so having two words was useful. The distinction is pedagogically convenient and historically understandable, but people eventually started treating the convention as if it were the formal definition. That is, the problem arose when the useful practitioner distinction became retroactively interpreted as a definition of partitioning itself, something that many decades of study and research on databases never supported.</p>
+
+<p>Nevertheless, there are examples in the industry that acknowledge the relation between partitioning and sharding. <a href="https://vitess.io/docs/archive/14.0/reference/features/sharding">Vitess documentation</a> is more explicit and intellectually cleaner, as it does not treat partitioning and sharding as mutually exclusive:</p>
+
+<blockquote>
+  <p><em>“<strong>Sharding</strong> is a method of <strong>horizontally partitioning</strong> a database to store data across two or more database servers.”</em></p>
+</blockquote>
+
+<p>And <a href="https://docs.oracle.com/en/database/oracle/oracle-database/12.2/admin/sharding-physical-organization.html">Oracle’s sharding documentation</a> has a section literally titled <em>“Sharding as Distributed Partitioning”</em>, showing that sharding is based on horizontal partitioning of data across multiple independent physical databases. It further says that table partitions within a shard are the same kind of partitions used in a non-sharded Oracle database.</p>
+
+<p>But things are far from being settled. Google Cloud currently has explanatory material saying that partitioning keeps pieces on the same server whereas sharding places them on different servers. Its own <a href="https://cloud.google.com/discover/what-is-database-sharding">explainer on data sharding</a> draws the line almost as cleanly as the tweet that started all this:</p>
+
+<blockquote>
+  <p><em>“<strong>Sharding is a specific type of horizontal partitioning</strong> where the data pieces are distributed across completely different servers… Partitioning involves splitting a large table into smaller, more manageable pieces (like splitting a log table by month) but keeping them on the same server instance.”</em></p>
+</blockquote>
+
+<p>But a few paragraphs further down <strong>the very same page</strong>, it describes Spanner — a “distributed SQL database” — as offering <em>“a ‘no-sharding’ experience”</em> that <em>“automatically shards data and balances load across regions,”</em> and credits Bigtable’s tablet splitting as “automatic sharding” too. And the same Google ecosystem also talks about <a href="https://cloud.google.com/spanner/docs/geo-partitioning">geo-partitioning</a>, which <em>“lets you further segment and store rows in your database table across different instance configurations,”</em> and about <a href="https://cloud.google.com/spanner/docs/create-manage-partitions">distributed Spanner instance partitions</a>, which are explicitly regional or multi-region constructs, each with their own compute capacity, spanning multiple servers by design. So even industry terminology isn’t internally uniform — sometimes not even within the same web page!</p>
+
+<p>Therefore, saying <em>“partitioning means single node”</em> without qualification is historically and technically misleading. A more precise statement is:</p>
+
+<blockquote>
+  <p><em>“In some RDBMS discussions, partitioning conventionally means intra-database table partitioning, while sharding means horizontal partitioning across database instances.”</em></p>
+</blockquote>
+
+<p>And even though partitioning was never inherently single-node in the literature, Silberschatz, Korth &amp; Sudarshan<a href="#ref-silberschatz2020">[3]</a> acknowledge that partitions may have such a narrower meaning:</p>
+
+<blockquote>
+  <p><em>“We also note that several database vendors use the term partitioning to denote the partitioning of tuples of a relation \(r\) into multiple physical relations \(r_1, r_2 ,…, r_n\), where all the physical relations \(r_i\) are stored in a single node. The relation \(r\) is not stored, but treated as a view defined by the query \(r_1 \cup r_2 \cup … \cup r_n\). Such intra-node partitioning of a relation is typically used to ensure that frequently accessed tuples are stored separately from infrequently accessed tuples and is different from horizontal partitioning across nodes.”</em></p>
+</blockquote>
+
+<p>Kleppmann and Riccomini<a href="#ref-kleppmann2026">[4]</a>, who devote no less than a whole chapter to sharding, also explain the nonconformity of the nomenclature surrounding sharding and partition:</p>
+
+<blockquote>
+  <p><em>“<strong>What we call a shard in this chapter has many names depending on which software you’re using.</strong> It’s called a partition in Kafka, a range in CockroachDB, a region in HBase and TiDB, a vBucket in Couchbase, a vnode in Riak, a token-range in Cassandra, and a tablet in Bigtable, YugaByteDB, and ScyllaDB, to name just a few.</em>
+<em>Some databases treat partitions and shards as two distinct concepts. For example, <strong>in PostgreSQL, partitioning is a way of splitting a large table into several files that are stored on the same machine</strong> (which has several advantages, such as making it very fast to delete an entire partition), whereas sharding splits a dataset accross multiple machines[1,2]. <strong>In many other systems, partitioning is just another word for sharding.</strong>“</em></p>
+</blockquote>
+
+<p>So far, we have two reputable sources stating that:</p>
+
+<ul>
+  <li>
+<em>a)</em> there is no clear separation between the concepts of partitioning and sharding, either in industry or academia, up to the point that the two terms are often used as synonyms (<em>phew!</em> 😅);</li>
+  <li>
+<em>b)</em> what is usually known as a partition can also mean something confined to a single node!</li>
+</ul>
+
+<h3 id="how-has-academia-treated-these-concepts">How has academia treated these concepts?</h3>
+
+<p>To really understand how academia has dealt with these concepts for decades, we should focus on their vernacular and their assumptions first. It may even come as a surprise to newcomers that what the practitioners usually call <em>“partitioning”</em> is frequently referred to by respectable sources in the literature as <em>“fragmentation”</em>. And the terminology mismatch doesn’t stop there, as we have words like <em>“sites”</em> for denoting nodes or computers, for example.</p>
+
+<p>In addition to that, it was already mentioned that classical and modern database literature doesn’t restrict the applicability of data partitioning to an intra-node setup. Also, data partitioning can be applied to either parallel or distributed database systems (and arrays of disks too!). As explained by Özsu and Valduriez<a href="#ref-ozsu2020">[2]</a>, the main reasons and objectives for fragmentation in distributed versus parallel databases are slightly different. For example, data localization is not that much of a concern in parallel DBMSs since the communication cost among nodes is much less than in geo-distributed DBMSs.</p>
+
+<h2 id="fragmentation-allocation-and-replication">Fragmentation, Allocation and Replication</h2>
+<center>
+<img src="/images/posts/partitioning_vs_sharding/good-bad-ugly-movie.gif" alt="The Good, The Bad and The Ugly" style="width: 70%;">
+<br>
+<br>
+</center>
+
+<p>The academic distributed/database literature cleanly separates the concepts of <em><strong>Fragmentation, Allocation, and Replication</strong></em> (or should we say <a href="https://en.wikipedia.org/wiki/The_Good,_the_Bad_and_the_Ugly"><em>“The Good, The Bad and The Ugly”</em></a>?) as three related but orthogonal axes of classification (see <a href="#figure-1">Figure 1</a>), with the following definitions:</p>
+
+<div class="custom-box">
+  <p><strong>- Fragmentation/Partitioning</strong>: the techniques for breaking a database <strong>relation (table)</strong> into logical units, called <strong>fragments (partitions)</strong>, and <i>maybe</i> distributing them among <strong>sites (nodes)</strong> or RAID disk arrays, for example;</p>
+  <p><strong>- Allocation (Placement):</strong> the process that maps, <i>for each fragment</i>, the sites at which it is stored;</p>
+  <p><strong>- Replication:</strong> the techniques that allow the fragments and its copies to be distributed in one or more sites to improve availability and performance;</p>
+</div>
+
+<p><a id="figure-1"></a></p>
+
+<p><a href="/images/posts/partitioning_vs_sharding/three-axis.png"><img src="/images/posts/partitioning_vs_sharding/three-axis.png" alt="Three axes of classification"></a></p>
+
+<p><strong>Figure 1 - Three axes of classification</strong></p>
+
+<h3 id="1-partitioning">1. Partitioning</h3>
+
+<p>Ramakrishnan and Gehrke<a href="#ref-ramakrishnan2003">[1]</a> define fragmentation (i.e., partitioning) as:</p>
+
+<blockquote>
+  <p><em>“<strong>Fragmentation</strong> consists of breaking a relation into smaller relations or <strong>fragments</strong> and storing the fragments (instead of the relation itself), possibly at different sites. In <strong>horizontal fragmentation</strong>, each fragment consists of a subset of rows of the original relation. In <strong>vertical fragmentation</strong>, each fragment consists of a subset of columns of the original relation.”</em></p>
+</blockquote>
+
+<p>So, this definition can be summarised in a short paragraph (or tweet!) as:</p>
+
+<blockquote>
+  <p><em>Partitioning means dividing a dataset into disjoint subsets according to some rule.</em></p>
+</blockquote>
+
+<p><em>The partitions (fragments) are defined as the logical unit of division and distribution in a database</em>, so that a relation \(R\) is split into (<em>usually</em>) disjoint \(P_i\) partitions over one or more attributes (called <em>partitioning attributes, partitioning keys or shard keys</em>) of \(R\), such that:</p>
+
+\[R = P_1 \cup P_2 \cup P_3 \cup ... \cup P_n\]
+
+<p>This definition doesn’t conditionate partitioning of data to its  placement, be it local or distributed among nodes. Those partitions \(P_{i}\), for \(i = \{1,.., n\}\) could either reside on a single node,</p>
+
+<p><a href="/images/posts/partitioning_vs_sharding/single-node-partition.png"><img src="/images/posts/partitioning_vs_sharding/single-node-partition.png" alt="single node partition"></a></p>
+
+<p>or be distributed among various nodes,</p>
+
+<p><a href="/images/posts/partitioning_vs_sharding/multi-node-partition.png"><img src="/images/posts/partitioning_vs_sharding/multi-node-partition.png" alt="multi-node partition"></a></p>
+
+<p>or even be a combination of single and multi-node, but, in any case, they are still <em>partitions</em>.</p>
+
+<h4 id="11-partitioning-strategies">1.1. Partitioning Strategies</h4>
+
+<p>As seen in Ramakrishnan and Gehrke’s definition, data partitioning is further divided into horizontal and vertical partitioning, and this is also defined by Özsu and Valduriez<a href="#ref-ozsu2020">[2]</a>:</p>
+
+<blockquote>
+  <p><em>“Relational tables can be partitioned either horizontally or vertically. The basis of horizontal fragmentation is the select operator where the selection predicates determine the fragmentation, while vertical fragmentation is performed by means of the project operator. The fragmentation may, of course, be nested. If the nestings are of different types, one gets hybrid fragmentation.”</em></p>
+</blockquote>
+
+<p>Regardless of the partitioning strategy applied, the fragmentation should guarantee that the database doesn’t undergo semantic changes during the process and ensure the reconstructibility property, that is, still be able to recover the original relation \(R\) from its fragments. Although not always present, it is usually desirable for the fragmentation technique to have a set of properties during decomposition of the tuples among partitions, as listed below:</p>
+
+<ul>
+  <li>Completeness: for any tuple \(t\) of a relation \(R\), \(t\) will be in at least one partition, that is, no information is lost. This is based on the selection and projection predicates chosen;</li>
+  <li>Reconstructibility: it should be possible to reconstruct the original relation \(R\) by using the UNION operator (for horizontal fragmentation) or the OUTER UNION operator (for vertical fragmentation);</li>
+  <li>Disjointness: there’s no intersection between two partitions under horizontal partitioning, and vertical partitions only share the unique key attribute (so it’s possible to reconstruct the original relation);</li>
+</ul>
+
+<h5 id="horizontal-partitioning">Horizontal Partitioning</h5>
+
+<p>Horizontal Partitioning splits the relation \(R\) into (usually) <em>disjoint</em> subsets of the tuples of the original relation, specified by a condition \(C\). The horizontal partitioning can be expressed as the relational algebra’s SELECT (\(\sigma\))<sup id="fnref:select-sql" role="doc-noteref"><a href="#fn:select-sql" class="footnote" rel="footnote">2</a></sup> operation:</p>
+
+\[\sigma_{C}(R)\]
+
+<p>Condition \(C\) is a predicate often composed of a single attribute – with the form \(R.\text{attr} \mathrel{\mathbf{op}} \text{value}\), where \(R.attr\) is an attribute of relation \(R\), <strong>op</strong> is a conditional operator (e.g., =, \(&lt;, \ge\)), and <em>value</em> is a literal.</p>
+
+<p>Suppose we have the following <em>PROJ</em> table and apply conditions \(C_{1} = BUDGET &lt; 250000\) and \(C_{2} = BUDGET \ge 250000\), this will produce two horizontal partitionings as below:</p>
+
+<p><a href="/images/posts/partitioning_vs_sharding/horizontal-partitioning.png"><img src="/images/posts/partitioning_vs_sharding/horizontal-partitioning.png" alt="horizontal partitioning"></a></p>
+
+<p>Elmasri and Navathe define an interesting property of horizontal partitioning:</p>
+
+<blockquote>
+  <p><em>“A set of horizontal fragments whose conditions \(C_1, C_2, … , C_n\) include all the tuples in R—that is, every tuple in R satisfies (\(C_1\) OR \(C_2\) OR … OR \(C_n\))—is called a <strong>complete horizontal fragmentation</strong> of R. In many cases a complete horizontal fragmentation is also <strong>disjoint</strong>; that is, no tuple in \(R\) satisfies (\(C_i\) AND \(C_j\)) for any \(i \neq j\).”</em></p>
+</blockquote>
+
+<p>And to reconstruct the relation R from a <strong>complete horizontal fragmentation</strong>, it is necessary to apply the UNION operation to the partitions.</p>
+
+<p>It’s also important to observe that depending on the \(C_i\) conditions of the horizontal partitioning, this may result in an uneven data distribution among the partitions (<strong>data skew</strong>), as illustrated by the image below where we split the horizontal fragments by the Dno column. This can potentially create <strong>hot spots</strong> and performance bottlenecks, with some partitions overloaded while others are mostly idle.</p>
+
+<p><a href="/images/posts/partitioning_vs_sharding/employee-horizontal-partitioning.png"><img src="/images/posts/partitioning_vs_sharding/employee-horizontal-partitioning.png" alt="employee horizontal partitioning"></a></p>
+
+<p>Both Silberschatz et al and Özsu and Valduriez mention that horizontal partitioning is widely used for parallel and distributed database systems because of its inherent opportunities for both interquery and intraquery parallelism<sup id="fnref:intra-inter-query" role="doc-noteref"><a href="#fn:intra-inter-query" class="footnote" rel="footnote">3</a></sup>.</p>
+
+<h5 id="horizontal-partitioning-strategies">Horizontal Partitioning Strategies</h5>
+
+<p>Horizontal partitioning can be further divided into different schemes to split the rows into disjoint subgroups:</p>
+
+<p><strong>1. Round-Robin Partitioning</strong></p>
+
+<p>For n processors, the ith tuple is assigned to the processor \(i \bmod n\). This technique is ideally suited for applications that read the entire relation sequentially for each query. As far as the literature goes, it is especially used in RAID disk arrays.</p>
+
+<p><a href="/images/posts/partitioning_vs_sharding/round-robin-partitioning.png"><img src="/images/posts/partitioning_vs_sharding/round-robin-partitioning.png" alt="round-robin partitioning"></a></p>
+
+<p><strong>2. Hash Partitioning</strong></p>
+
+<p>There’s a hash function that maps a key value to a partition number. This keeps data evenly distributed even if data grows and shrinks over time. It is best suited for point queries based on the partitioning attribute, but it’s also useful for sequential scans over the entire relation or range queries on the partitioning attribute. If the hash function is good, the number of tuples in each node is roughly the same, i.e. \(\frac{1}{N}\), for \(N\) nodes. Nevertheless, it is not well suited for point queries on nonpartitioning attributes.</p>
+
+<p><a href="/images/posts/partitioning_vs_sharding/hash-partitioning.png"><img src="/images/posts/partitioning_vs_sharding/hash-partitioning.png" alt="hash partitioning"></a></p>
+
+<p><strong>3. Range Partitioning</strong></p>
+
+<p>This strategy partitions tuples by the range of their key values. Tuples are sorted (conceptually), and n ranges are chosen for the sort key values so that each range contains roughly the same number of tuples. We assign contiguous attribute value ranges to each node. Given a set of nodes \(N_1, N_2, ..., N_n\), we choose a partitioning attribute \(A\) and a <strong>partitioning vector</strong> \([v_1, v_2, ..., v_{n-1}]\) such that, if \(i &lt; j\), then \(v_i &lt; v_j\). The relation \(R\) is partitioned as follows for a tuple \(t\), where \(t[A] = x\):</p>
+
+\[\begin{cases}
+  \text{if } x &lt; v_1 \implies \text{t goes to } N_1 \\
+  \text{if } x \geq v_n \implies \text{t goes to } N_n \\
+  \text{if } v_i \leq x &lt; v_{i+1} \implies \text{t goes to } N_{i+1}
+\end{cases}\]
+
+<p><a href="/images/posts/partitioning_vs_sharding/range-partitioning.png"><img src="/images/posts/partitioning_vs_sharding/range-partitioning.png" alt="range partitioning"></a></p>
+
+<!-- ```
+Partitioning strategy
+
+   ├── Range
+   ├── Hash
+   ├── List
+   ├── Consistent hash
+   ├── Directory
+   └── Composite
+``` -->
+
+<h5 id="primary-and-secondary-horizontal-partitioning">Primary and Secondary Horizontal Partitioning</h5>
+
+<p>A <strong>primary horizontal partitioning</strong> is a partition defined by predicates on root tables (source tables): tables that exist as independent entities, without any Foreign Key (FK) pointing to it, like, for example, the CUSTOMER table in the example below. This table can be partitioned by its range of IDs, for example.</p>
+
+<p>On the other hand, <strong>derived horizontal partitioning</strong> is the partitioning of a relation that results from predicates being defined by another relation (that is, the table depends on one or more other tables to exist and have uniqueness). Tables like ORDERS and INVENTORY are examples of such tables, so that we can partition them according to how their referenced parent table (e.g., CUSTOMER) was already partitioned, keeping related rows co-located on the same fragment for faster joins.</p>
+
+<p><a href="/images/posts/partitioning_vs_sharding/primary-secondary-horizontal-partitioning.png"><img src="/images/posts/partitioning_vs_sharding/primary-secondary-horizontal-partitioning.png" alt="primary and derived horizontal partitioning"></a></p>
+
+<h5 id="vertical-partitioning">Vertical Partitioning</h5>
+
+<p>Vertical partitioning splits a relation \(R\) into partitions each containing a subset of \(R\)’s attributes (columns). In other words, it divides a relation “vertically” by columns. This particular kind of data partitioning was successfully implemented by column-store DBMSs like MonetDB/X100, Vertica, Snowflake and DuckDB, for example, as well as columnar open data formats and OLAP query engines.</p>
+
+<p>Vertical Partitioning can be expressed as the relational algebra’s PROJECT (\(\pi\)) operation:</p>
+
+\[\pi_{L_i}(R)\]
+
+<p>where \({L_i}\) is the list of attributes (columns) of \(R\), for \(i = 1,..., N\), where \(N\) is the number of attributes of relation \(R\).</p>
+
+<p>Suppose that our PROJ table is split by two lists of attributes, \(L_{1} = \{PNO, BUDGET\}\) and \(L_{2} = \{PNO, PNAME, LOC\}\)</p>
+
+<p><a href="/images/posts/partitioning_vs_sharding/vertical-partitioning.png"><img src="/images/posts/partitioning_vs_sharding/vertical-partitioning.png" alt="horizontal and vertical partitioning"></a></p>
+
+<p>As we can see in the example above, PNO, the Primary Key (PK) of the PROJ table is duplicated on the two fragments – \(PROJ_{1}\) and \(PROJ_{2}\). This is not a coincidence, but a conscious distributed database design decision so that we are able to reconstruct the original relation \(R\) from its vertical fragments by using an OUTER UNION operation. In other words, our database design has a <em>lossless-join property</em>.</p>
+
+<p>A vertical partitioning is said to be a <em><strong>lossless-join decomposition</strong></em> if it’s always possible to reconstruct the original relation \(R\) from its vertical fragments \(L_1, L_2, ... L_n\). This is more succinctly expressed in relational algebra as:</p>
+
+\[R = \pi_{L_{1}}(R) \bowtie \pi_{L_{2}}(R)\]
+
+<p>That is, the natural join of the projection results <em>exactly</em> in the original relation \(R\). Conversely, if the same natural join computation results in a <strong>superset</strong> of the original relation then the decomposition is said to be lossy. This can be expressed succinctly in the relational algebra as:</p>
+
+\[R \subset \pi_{L_{1}}(R) \bowtie \pi_{L_{2}}(R)\]
+
+<p>Figure 2.2 in Georgiev’s thesis<a href="#ref-georgiev2008">[6]</a> shows examples of a lossy (a) and a lossless (b) decomposition.</p>
+
+<p><a href="/images/posts/partitioning_vs_sharding/lossless-lossy-decomposition.png"><img src="/images/posts/partitioning_vs_sharding/lossless-lossy-decomposition.png" alt="lossless and lossy decompositions"></a></p>
+
+<p>Finally, Ramakrishnan and Gehrke state the following about  vertical partitioning:</p>
+
+<blockquote>
+  <p><em>“To ensure that a vertical fragmentation is lossless-join, systems often assign a <strong>unique tuple id</strong> to each tuple in the original relation, as shown in Figure 22.4, and attach this id to the projection of the tuple in each fragment. If we think of the original relation as containing an additional tuple-id field that is a key, this field is added to each vertical fragment. Such a decomposition is guaranteed to be lossless-join.”</em></p>
+</blockquote>
+
+<p>As described by Elmasri and Navathe, a set of vertical partitions whose projection lists \(L_1, L_2, ... , L_n\) include all the attributes in \(R\) but share only the primary key attribute of R is called a <strong>complete vertical fragmentation</strong> of \(R\). Therefore, in this case, the projection lists satisfy the following conditions:</p>
+<ol>
+  <li>\(L_1 \cup L_2 \cup ... \cup L_n = ATTRS(R)\);</li>
+  <li>\(L_i \cap L_j = PK(R)\), for any \(i \neq j\),</li>
+</ol>
+
+<p>where ATTRS(R) is the set of all attributes of R and PK(R) is the primary key of R;</p>
+
+<p>And to reconstruct the relation R from a complete vertical fragmentation, we apply the OUTER UNION operation to the vertical fragments. Furthermore, for the \(R_1, R_2, ... R_n\) vertical fragments of \(R\), we have that \(R_1 \cap R_2 \cap ... \cap R_n = A\), where \(A\) is a unique key attribute of \(R\).</p>
+
+<h5 id="hybrid-partitioning">Hybrid Partitioning</h5>
+
+<p>A <strong>hybrid partitioning</strong> is the combination of horizontal partitioning and vertical partitioning, also called <strong>mixed partitioning</strong>. In this kind of partitioning, a fragment of a relation R can be specified by a SELECT-PROJECT combination of operations \(\pi_L(\sigma_C(R))\), and the original relation \(R\) can be reconstructed by applying UNION <strong>and</strong> OUTER UNION (or OUTER JOIN) operations in the appropriate order.</p>
+
+<p>In the Employee table example, if we partition by Department Number (Dno) and Social Security Number (SSN), there are four resulting partitions:</p>
+
+<p><a href="/images/posts/partitioning_vs_sharding/employee-hybrid-partitioning.png"><img src="/images/posts/partitioning_vs_sharding/employee-hybrid-partitioning.png" alt="hybrid partition"></a></p>
+
+<h3 id="2-allocation">2. Allocation</h3>
+
+<p>Allocation assigns a fragment to a particular node. The choice of site and degree of replication will be driven by performance and availability requirements. Some partitions may be replicated across all nodes of the system, while others remain local to a particular site, for example.</p>
+
+<h3 id="3-replication">3. Replication</h3>
+
+<p>Replication allows the storage of several copies of data to achieve data locality (i.e., keep the data closer to where it is most needed), availability (the probability that a system is continuously available during a time interval), reliability (the probability that a system is running at a certain point in time) and faster query execution by using local copies.</p>
+
+<p>The logical units of replication will vary depending on the requirements of the application, performance requirements, patterns of access, types and frequencies of transactions, and availability requirements. Basically, there are two extremes of replication: no replication at all – that is, each relation or fragment is stored in a single node – on one side and whole database replication on all nodes on the other side (called a <em>fully replicated database</em>). In between, we have a spectrum of partial replications of tables and table partitions. For example, H-Store/VoltDB supports both partitioned and replicated tables (that is, the whole table is replicated among all the nodes). The latter is used for small tables that are read-only or not frequently updated like a COUNTRY table, for example, while other tables are horizontally partitioned among the nodes.</p>
+
+<p>A thorough treatment of replication is beyond the scope of this blog post, but it’s strongly recommended that interested readers check Özsu and Valduriez’s<a href="#ref-ozsu2020">[2]</a>, Kleppmann and Riccomini’s<a href="#ref-kleppmann2026">[4]</a>, or Petrov’s<a href="#ref-petrov2019">[5]</a> chapters devoted to this subject.</p>
+
+<h2 id="so-what-is-sharding-in-the-academic-perspective-after-all">So what is sharding (<em>in the academic perspective</em>), after all?</h2>
+
+<p>All the authors cited so far address <em>sharding</em> in their works, but with slightly different nuances among them. <strong>For Özsu and Valduriez, Elmasri and Navathe, Ramakrishnan and Gehrke, and Silberschatz et al, <em>sharding is a synonym for horizontal partitioning</em></strong>, and they acknowledge that the term is especially widespread in the context of NoSQL databases, Big Data, and Cloud Computing systems.</p>
+
+<p>But Silberschatz et al also argument that in sharding architectures each node can have a traditional centralized, <em>maybe independent</em>, database instance (like standalone full MySQL DB instances, for example) and the queries would be routed by a middleware. In this architectural model, the sharding query requests can be executed by the database, or a middleware, or even application code. Each shard is an independent and standalone database that replicates all the database schema, but has only \(\frac{1}{N}\) of the data, in a cluster of size N.</p>
+
+<h2 id="key-takeaways">Key Takeaways</h2>
+
+<p>Based on what we have seen so far, a more concise definition of <em>sharding</em> could be:</p>
+
+<blockquote>
+  <p><strong>Sharding is horizontal partitioning of data distributed across different nodes.</strong></p>
+</blockquote>
+
+<p>And we may establish the following relation:</p>
+
+<blockquote>
+  <p><strong>Every sharding is a partitioning, but not every partitioning is a sharding.</strong></p>
+</blockquote>
+
+<p>This derives directly from the fact that there are partitioning on a single node, for example, while sharding usually involves horizontal partitioning + allocation among various nodes. Therefore, a key takeaway relationship among all of the main concepts exposed so far could be:</p>
+
+\[Sharding \subseteq \text{Horizontal Partitioning} \subseteq Partitioning\]
+
+<p>Or as a cool cheat sheet:</p>
+
+<p><a href="/images/posts/partitioning_vs_sharding/key-takeways.png"><img src="/images/posts/partitioning_vs_sharding/key-takeways.png" alt="key takeways"></a></p>
+
+<h2 id="references">References</h2>
+
+<ol>
+  <li>
+<span id="ref-ramakrishnan2003"></span>Ramakrishnan, R., &amp; Gehrke, J. (2003). <em><a href="https://pages.cs.wisc.edu/~dbbook/openAccess/thirdEdition/supporting_material.htm">Database Management Systems</a></em> (3rd ed.). McGraw-Hill.</li>
+  <li>
+<span id="ref-ozsu2020"></span>Özsu, M. T., &amp; Valduriez, P. (2020). <em><a href="https://cs.uwaterloo.ca/~ddbook/">Principles of Distributed Database Systems</a></em> (4th ed.). Springer.</li>
+  <li>
+<span id="ref-silberschatz2020"></span>Silberschatz, A., Korth, H. F., &amp; Sudarshan, S. (2020). <em><a href="https://www.db-book.com/">Database System Concepts</a></em> (7th ed.). McGraw-Hill.</li>
+  <li>
+<span id="ref-kleppmann2026"></span>Kleppmann, M., &amp; Riccomini, C. (2026). <em><a href="https://www.oreilly.com/library/view/designing-data-intensive-applications/9781098119058/">Designing Data-Intensive Applications</a></em> (2nd ed.). O’Reilly.</li>
+  <li>
+<span id="ref-petrov2019"></span>Petrov, A. (2019). <em><a href="https://www.databass.dev/">Database Internals</a></em> (1st ed.). O’Reilly.</li>
+  <li>
+<span id="ref-georgiev2008"></span>Georgiev, N. (2008). <em>A Web-Based Environment For Learning Normalization of Relational Database Schemata</em> (Master’s thesis).</li>
+</ol>
+<div class="footnotes" role="doc-endnotes">
+  <ol>
+    <li id="fn:voltdb" role="doc-endnote">
+      <p>The commercial database is currently known as Volt Active Data. <a href="#fnref:voltdb" class="reversefootnote" role="doc-backlink">↩</a></p>
+    </li>
+    <li id="fn:select-sql" role="doc-endnote">
+      <p>The SELECT operation should not be confused with the SQL’s SELECT clause; <a href="#fnref:select-sql" class="reversefootnote" role="doc-backlink">↩</a></p>
+    </li>
+    <li id="fn:intra-inter-query" role="doc-endnote">
+      <p>While interquery allows the parallel execution of a number of queries on various nodes, intraquery allows the parallel execution of a single query by breaking it up into subqueries and executing on various partitions in parallel. <a href="#fnref:intra-inter-query" class="reversefootnote" role="doc-backlink">↩</a></p>
+    </li>
+  </ol>
+</div>
+
+        
+      </section>
+
+      <footer class="page__meta">
+        
+        
+
+  
+    
+
+
+
+  
+
+  <p class="page__taxonomy">
+    <strong><i class="fas fa-fw fa-tags" aria-hidden="true"></i> Tags: </strong>
+    <span itemprop="keywords">
+    
+      <a href="/tags/#database-internals" class="page__taxonomy-item p-category" rel="tag">database-internals</a><span class="sep">, </span>
+    
+      <a href="/tags/#fragmentation" class="page__taxonomy-item p-category" rel="tag">fragmentation</a><span class="sep">, </span>
+    
+      <a href="/tags/#horizontal-partitioning" class="page__taxonomy-item p-category" rel="tag">horizontal-partitioning</a><span class="sep">, </span>
+    
+      <a href="/tags/#partitioning" class="page__taxonomy-item p-category" rel="tag">partitioning</a><span class="sep">, </span>
+    
+      <a href="/tags/#sharding" class="page__taxonomy-item p-category" rel="tag">sharding</a><span class="sep">, </span>
+    
+      <a href="/tags/#vertical-partitioning" class="page__taxonomy-item p-category" rel="tag">vertical-partitioning</a>
+    
+    </span>
+  </p>
+
+
+  
+
+  
+    
+
+
+
+  
+
+  <p class="page__taxonomy">
+    <strong><i class="fas fa-fw fa-folder-open" aria-hidden="true"></i> Categories: </strong>
+    <span itemprop="keywords">
+    
+      <a href="/categories/#blog" class="page__taxonomy-item p-category" rel="tag">Blog</a>
+    
+    </span>
+  </p>
+
+
+  
+
+
+        
+
+
+  <p class="page__date"><strong><i class="fas fa-fw fa-calendar-alt" aria-hidden="true"></i> Published:</strong> <time class="dt-published" datetime="2026-09-06T00:00:00+00:00">September 6, 2026</time></p>
+
+
+      </footer>
+
+      
+<section class="page__share">
+  <h4 class="page__share-title">Share on</h4>
+
+  <a href="https://x.com/intent/tweet?text=Sharding+vs.+Partitioning%3A+When+Definitions+Got+Sliced+and+Fractured%20http%3A%2F%2Flocalhost%3A4000%2Fblog%2Fpartitioning-vs-sharding%2F" class="btn btn--x" aria-label="Share on X" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on X">
+    <i class="fab fa-fw fa-x-twitter" aria-hidden="true"></i><span> X</span>
+  </a>
+
+  <a href="https://www.facebook.com/sharer/sharer.php?u=http%3A%2F%2Flocalhost%3A4000%2Fblog%2Fpartitioning-vs-sharding%2F" class="btn btn--facebook" aria-label="Share on Facebook" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on Facebook">
+    <i class="fab fa-fw fa-facebook" aria-hidden="true"></i><span> Facebook</span>
+  </a>
+
+  <a href="https://www.linkedin.com/shareArticle?mini=true&amp;url=http://localhost:4000/blog/partitioning-vs-sharding/" class="btn btn--linkedin" aria-label="Share on LinkedIn" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on LinkedIn">
+    <i class="fab fa-fw fa-linkedin" aria-hidden="true"></i><span> LinkedIn</span>
+  </a>
+
+  <a href="https://bsky.app/intent/compose?text=Sharding+vs.+Partitioning%3A+When+Definitions+Got+Sliced+and+Fractured%20http%3A%2F%2Flocalhost%3A4000%2Fblog%2Fpartitioning-vs-sharding%2F" class="btn btn--bluesky" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on Bluesky">
+    <i class="fab fa-fw fa-bluesky" aria-hidden="true"></i><span> Bluesky</span>
+  </a>
+</section>
+
+
+      
+
+  <nav class="pagination" aria-label="Post pagination">
+    
+      <a href="/blog/clustered-index-vs-clustering-index/" class="pagination--pager" title="“Clustered Index” Doesn’t Mean What You Think It Means (And That’s Alright!)">Previous</a>
+    
+    
+      <a href="#" class="pagination--pager disabled">Next</a>
+    
+  </nav>
+
+
+    </div>
+
+    
+  </article>
+
+  
+  
+    
+
+<div class="page__related">
+  
+  <h2 class="page__related-title">You May Also Enjoy</h2>
+  <div class="grid__wrapper">
+    
+      
+      
+
+
+
+
+<div class="grid__item">
+  <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
+    
+    <h2 class="archive__item-title no_toc p-name" itemprop="headline">
+      
+        <a class="u-url" href="/blog/clustered-index-vs-clustering-index/" rel="permalink">“Clustered Index” Doesn’t Mean What You Think It Means (And That’s Alright!)
+</a>
+      
+    </h2>
+    
+
+
+  <p class="page__meta">
+    
+
+    
+
+    
+      
+      
+
+      <span class="page__meta-readtime">
+        <i class="far fa-clock" aria-hidden="true"></i>
+        
+          12 minute read
+        
+      </span>
+    
+  </p>
+
+
+    <p class="archive__item-excerpt p-summary" itemprop="description">A book club argument over Kleppmann and Riccomini’s DDIA sent me chasing down why “clustering index” and “clustered index” mean two different physical struct...</p>
+  </article>
+</div>
+
+    
+  </div>
+</div>
+
+  
+  
+</div>
+
+      
+    </div>
+
+    
+
+    <div id="footer" class="page__footer">
+      <footer>
+        <!-- start custom footer snippets -->
+
+<!-- end custom footer snippets -->
+        
+
+
+<div class="page__footer-follow">
+  <ul class="social-icons">
+    
+      <li><strong>Follow:</strong></li>
+    
+
+    
+
+    
+      <li><a href="/feed.xml"><i class="fas fa-fw fa-square-rss" aria-hidden="true"></i> Feed</a></li>
+    
+  </ul>
+</div>
+
+
+<div class="page__footer-copyright">© 2026 <a href="http://localhost:4000">Edward Ribeiro</a>. Powered by <a href="https://jekyllrb.com" rel="nofollow">Jekyll</a> &amp; <a href="https://mademistakes.com/work/jekyll-themes/minimal-mistakes/" rel="nofollow">Minimal Mistakes</a>.</div>
+
+      </footer>
+    </div>
+
+    
+
+  <script src="/assets/js/main.min.js"></script>
+
+
+
+
+
+
+
+
+
+
+  </body>
+</html>

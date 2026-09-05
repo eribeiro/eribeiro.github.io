@@ -5,6 +5,12 @@ var store = [{
         "url": "/blog/clustered-index-vs-clustering-index/",
         "teaser": null
       },{
+        "title": "Sharding vs. Partitioning: When Definitions Got Sliced and Fractured",
+        "excerpt":"As I slowly, and reluctantly, try to make a comeback to microblogging sites after many years out, I stumbled across the following tweet in my very first days there: For a long time, I used sharding and partitioning as interchangeable concepts, almost like synonyms, even though in my head sharding...","categories": ["Blog"],
+        "tags": ["partitioning","horizontal-partitioning","vertical-partitioning","sharding","database-internals","fragmentation"],
+        "url": "/blog/partitioning-vs-sharding/",
+        "teaser": null
+      },{
         "title": "ReadingTracks",
         "excerpt":"ReadingTracks is a fork-and-edit template for running a reading club’s paper catalog as a static site: papers, the researchers behind them, the venues they were published in, and curated “reading tracks” showing how ideas build on each other over time. No backend, no build step, no framework — just an...","categories": [],
         "tags": [],

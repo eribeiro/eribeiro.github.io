@@ -5,6 +5,10 @@
 <lastmod>2026-08-28T00:00:00+00:00</lastmod>
 </url>
 <url>
+<loc>http://localhost:4000/blog/partitioning-vs-sharding/</loc>
+<lastmod>2026-09-06T00:00:00+00:00</lastmod>
+</url>
+<url>
 <loc>http://localhost:4000/projects/reading-tracks/</loc>
 <lastmod>2026-08-16T00:00:00+00:00</lastmod>
 </url>
@@ -83,6 +87,9 @@
 </url>
 <url>
 <loc>http://localhost:4000/CLAUDE/</loc>
+</url>
+<url>
+<loc>http://localhost:4000/references/</loc>
 </url>
 <url>
 <loc>http://localhost:4000/markdown_generator/</loc>
