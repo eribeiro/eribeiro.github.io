@@ -15,4 +15,4 @@ Book References:
 *  Silberschatz, Korth & Sudarshan's [*Database System Concepts*](https://www.db-book.com/) (7th Edition, 2021)
 
 
-*  Ramakrishnan and Gehrke's [Database Management Systems](https://pages.cs.wisc.edu/~dbbook/openAccess/thirdEdition/supporting_material.htm) (3rd Edition, 2003) 
+*  Ramakrishnan and Gehrke's [Database Management Systems] (3rd Edition, 2003) (https://pages.cs.wisc.edu/~dbbook/openAccess/thirdEdition/supporting_material.htm)

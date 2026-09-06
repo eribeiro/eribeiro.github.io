@@ -1,6 +1,6 @@
 var store = [{
         "title": "Sharding vs. Partitioning: When Definitions Got Sliced and Fractured",
-        "excerpt":"As I slowly, and reluctanctly, try to make a comeback to micro blogging social media, I stumbled accross the following tweet in my very first days there: For a long time, I used sharding and partitioning as interchangebly concepts, almost like synonyms, even though in my head sharding has ever...","categories": ["Blog"],
+        "excerpt":"As I slowly, and reluctantly, try to make a comeback to microblogging sites after many years out, I stumbled across the following tweet in my very first days there: For a long time, I used sharding and partitioning as interchangeable concepts, almost like synonyms, even though in my head sharding...","categories": ["Blog"],
         "tags": ["partitioning","sharding","database-internals"],
         "url": "/blog/partitioning_vs_sharding/",
         "teaser": null
