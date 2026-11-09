@@ -99,7 +99,17 @@ future                   : true
 read_more                : "disabled" # if enabled, adds "Read more" links to excerpts
 talkmap_link             : false      #change to true to add link to talkmap on talks page
 comments:
-  provider               : # false (default), "disqus", "discourse", "facebook", "google-plus", "staticman", "custom"
+  provider               : "giscus" # false (default), "disqus", "discourse", "facebook", "staticman", "utterances", "giscus", "custom"
+  giscus:                  # comments live in GitHub Discussions of site.repository; IDs from https://giscus.app
+    repo_id              : "R_kgDOT6aIig"
+    category_name        : "Announcements"
+    category_id          : "DIC_kwDOT6aIis4DKvrF"
+    discussion_term      : "pathname" # one discussion per post URL
+    reactions_enabled    : 1
+    theme                : "light"    # matches the "default" skin
+    input_position       : "bottom"
+    lang                 : "en"
+    lazy                 : true
   disqus:
     shortname            :
   discourse:
@@ -190,6 +200,7 @@ exclude:
   - log
   - node_modules
   - package.json*
+  - papers/
   - Rakefile
   - README
   - scripts
