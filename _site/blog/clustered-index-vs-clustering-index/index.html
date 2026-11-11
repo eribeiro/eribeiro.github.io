@@ -29,7 +29,7 @@
 <meta property="og:locale" content="en_US">
 <meta property="og:site_name" content="Edward Ribeiro">
 <meta property="og:title" content="“Clustered Index” Doesn’t Mean What You Think It Means (And That’s Alright!)">
-<meta property="og:url" content="http://localhost:4000/blog/clustered-index-vs-clustering-index/">
+<meta property="og:url" content="https://eribeiro.github.io/blog/clustered-index-vs-clustering-index/">
 
 
   <meta property="og:description" content="A book club argument over Kleppmann and Riccomini’s DDIA sent me chasing down why “clustering index” and “clustered index” mean two different physical structures, depending on which database book (or vendor’s docs) you’re reading.">
@@ -53,7 +53,7 @@
   
 
 
-<link rel="canonical" href="http://localhost:4000/blog/clustered-index-vs-clustering-index/">
+<link rel="canonical" href="https://eribeiro.github.io/blog/clustered-index-vs-clustering-index/">
 
 
 
@@ -90,11 +90,11 @@
 <!-- start custom head snippets -->
 
 <!-- Site favicon -->
-<link rel="apple-touch-icon" sizes="180x180" href="http://localhost:4000/images/apple-touch-icon-180x180.png"/>
-<link rel="icon" type="image/svg+xml" href="http://localhost:4000/images/favicon.svg"/>
-<link rel="icon" type="image/png" href="http://localhost:4000/images/favicon-32x32.png" sizes="32x32"/>
-<link rel="icon" type="image/png" href="http://localhost:4000/images/favicon-192x192.png" sizes="192x192"/>
-<link rel="manifest" href="http://localhost:4000/images/manifest.json"/>
+<link rel="apple-touch-icon" sizes="180x180" href="https://eribeiro.github.io/images/apple-touch-icon-180x180.png"/>
+<link rel="icon" type="image/svg+xml" href="https://eribeiro.github.io/images/favicon.svg"/>
+<link rel="icon" type="image/png" href="https://eribeiro.github.io/images/favicon-32x32.png" sizes="32x32"/>
+<link rel="icon" type="image/png" href="https://eribeiro.github.io/images/favicon-192x192.png" sizes="192x192"/>
+<link rel="manifest" href="https://eribeiro.github.io/images/manifest.json"/>
 <link rel="icon" href="/images/favicon.ico"/>
 <meta name="theme-color" content="#ffffff"/>
 
@@ -178,7 +178,7 @@
 
   
     <div class="author__avatar">
-      <a href="http://localhost:4000/">
+      <a href="https://eribeiro.github.io/">
         <img src="/images/profile.jpeg" alt="Edward Ribeiro" itemprop="image" class="u-photo">
       </a>
     </div>
@@ -186,7 +186,7 @@
 
   <div class="author__content">
     <h3 class="author__name p-name" itemprop="name">
-      <a class="u-url" rel="me" href="http://localhost:4000/" itemprop="url">Edward Ribeiro</a>
+      <a class="u-url" rel="me" href="https://eribeiro.github.io/" itemprop="url">Edward Ribeiro</a>
     </h3>
     
   </div>
@@ -286,7 +286,7 @@
       
         <header>
           <h1 id="page-title" class="page__title p-name" itemprop="headline">
-            <a href="http://localhost:4000/blog/clustered-index-vs-clustering-index/" itemprop="url">“Clustered Index” Doesn’t Mean What You Think It Means (And That’s Alright!)
+            <a href="https://eribeiro.github.io/blog/clustered-index-vs-clustering-index/" itemprop="url">“Clustered Index” Doesn’t Mean What You Think It Means (And That’s Alright!)
 </a>
           </h1>
           
@@ -304,7 +304,7 @@
       <span class="page__meta-readtime">
         <i class="far fa-clock" aria-hidden="true"></i>
         
-          12 minute read
+          14 minute read
         
       </span>
     
@@ -318,17 +318,17 @@
         
         <p><img src="/images/posts/i-dont-think-meme.gif" alt="I don't think meme" /></p>
 
-<p>Early this week, during a book club session, I found myself stumbling through the nuances of <em><strong>clustered indexes, index-organized tables and covering indexes</strong></em>, only to be corrected by fellow readers that were going strictly by Kleppmann and Riccomini’s <a href="https://www.oreilly.com/library/view/designing-data-intensive-applications/9781098119058/"><em>Designing Data-Intensive Applications</em></a> (2nd Edition, 2026). Driven by my  confusion, I hit the books and the web to untangle it all.</p>
+<p>Early this week, during a book club session, I found myself stumbling through the nuances of <em><strong>clustered indexes, index-organized tables and covering indexes</strong></em>, only to be corrected by fellow readers that were going strictly by Kleppmann and Riccomini’s <em>Designing Data-Intensive Applications</em> (<a href="#ref-kleppmann2026" id="cite-kleppmann2026-1">Kleppmann and Riccomini, 2026</a>). Driven by my  confusion, I hit the books and the web to untangle it all.</p>
 <div class="custom-box">
 To cut to the chase, what actually happened is that two database traditions picked  similar words (<i>"clustering index"</i> and <i>"clustered index"</i>) for two genuinely different physical structures!
 </div>
-<p>While I’d learned it first from Silberschatz, Korth &amp; Sudarshan’s <a href="https://www.db-book.com/"><em>Database System Concepts</em></a> (currently on 7th Edition, 2021), and a couple of lesser-known books,  Kleppmann and Riccomini’s definition matches something else entirely. And it turns out <strong><em>their usage is the one that matches the industry’s actual database engine implementations!</em></strong> Therefore, neither of us were way off during the book discussion or inventing anything, for that matter; we were just each drinking from different wells. 🥲</p>
+<p>While I’d learned it first from Silberschatz, Korth &amp; Sudarshan’s <em>Database System Concepts</em> (<a href="#ref-silberschatz2020" id="cite-silberschatz2020-1">Silberschatz et al., 2020</a>), and a couple of lesser-known books,  Kleppmann and Riccomini’s definition matches something else entirely. And it turns out <strong><em>their usage is the one that matches the industry’s actual database engine implementations!</em></strong> Therefore, neither of us were way off during the book discussion or inventing anything, for that matter; we were just each drinking from different wells. 🥲</p>
 
 <p><em>This post is the writeup I wish I’d had going into that conversation.</em> ;-)</p>
 
 <h2 id="the-claim-that-started-it">The claim that started it</h2>
 
-<p>The definition I knew, in Silberschatz, Korth, and Sudarshan’s own words:</p>
+<p>The definition I knew, in Silberschatz, Korth, and Sudarshan’s own words (<a href="#ref-silberschatz2020" id="cite-silberschatz2020-2">Silberschatz et al., 2020</a>):</p>
 
 <blockquote>
   <p>“… a <strong>clustering index</strong> is an index whose search key also defines the sequential order of the file. Clustering indices are also called <strong>primary indices</strong>; the term <em>primary index</em> may appear to denote an index on a primary key, but such indices can in fact be built on any search key. The search key of a clustering index is often the primary key, although that is not  necessarily so. Indices whose search key specifies an order different from the sequential order of the file are called non clustering indices, or secondary indices. The terms “clustered” and “nonclustered” are often used in place of “clustering” and “non clustering.”</p>
@@ -338,7 +338,7 @@ To cut to the chase, what actually happened is that two database traditions pick
 
 <p><img src="/images/posts/clustering_index_vs_primary_key_index.svg" alt="silberschatz clustering index concepts" /></p>
 
-<p>But if we check the literature a bit further, Elmasri and Navathe’s <a href="https://www.amazon.com.br/Fundamentals-Database-Systems-Paperback-Elmasri/dp/8131792471">Fundamentals of Database Systems</a> (7th ed, 2016) has an even more specific definition of <strong>Clustering Indexes</strong>:</p>
+<p>But if we check the literature a bit further, Elmasri and Navathe’s <em>Fundamentals of Database Systems</em> (<a href="#ref-elmasri2016" id="cite-elmasri2016-1">Elmasri and Navathe, 2016</a>) has an even more specific definition of <strong>Clustering Indexes</strong>:</p>
 
 <blockquote>
   <p><em>“If file records are physically ordered on a nonkey field — which <strong>does not</strong> have a distinct value for each record — that field is called the <strong>clustering field</strong> and the data file is called a <strong>clustered file</strong>. We can create a different type of index, called a <strong>clustering index</strong>, to speed up retrieval of all the records that have the same value for the clustering field. This differs from a primary index, which requires that the ordering field of the data file have a <strong>distinct value</strong> for each record. A <strong>clustering index</strong> is also an ordered file with two fields; the first field is of the same type as the clustering field of the data file, and the second field is a disk block pointer. There is one entry in the clustering index for each distinct value of the clustering field, and it contains the value and a pointer to the first block in the data file that has a record with that value for its clustering field.</em></p>
@@ -352,9 +352,9 @@ To cut to the chase, what actually happened is that two database traditions pick
 
 <p><img src="/images/posts/primary_index_vs_clustering_index.svg" alt="navathe clustering index concept" /></p>
 
-<p>Independently, Oracle has used the term <a href="https://docs.oracle.com/en/database/oracle/oracle-database/26/cncpt/indexes-and-index-organized-tables.html"><strong>Index-Organized Table (IOT)</strong></a> since at least Oracle8, though the underlying idea predates the name. In Oracle’s own docs, <em>an IOT is a table with no separate heap file, that is, the data lives directly inside a B-tree, keyed by (typically) the primary key.</em></p>
+<p>Independently, Oracle has used the term <strong>Index-Organized Table (IOT)</strong> (<a href="#ref-oracle-iot" id="cite-oracle-iot-1">Oracle</a>) since at least Oracle8, though the underlying idea predates the name. In Oracle’s own docs, <em>an IOT is a table with no separate heap file, that is, the data lives directly inside a B-tree, keyed by (typically) the primary key.</em></p>
 
-<p>DDIA collapses both of these into a single definition:</p>
+<p>DDIA (<a href="#ref-kleppmann2026" id="cite-kleppmann2026-2">Kleppmann and Riccomini, 2026</a>) collapses both of these into a single definition:</p>
 
 <blockquote>
   <p>“If the actual data (row, document, vertex) is stored directly within the index structure, it is called a <strong>clustered index</strong>. For example, in MySQL’s InnoDB storage engine, the primary key of a table is always a clustered index, and in SQL Server, you can specify one clustered index per table [43].”<sup id="fnref:innodb-primary-key" role="doc-noteref"><a href="#fn:innodb-primary-key" class="footnote" rel="footnote">1</a></sup></p>
@@ -366,9 +366,9 @@ To cut to the chase, what actually happened is that two database traditions pick
 <br />
 </center>
 
-<p><strong>But that’s not an error on their part!</strong> It’s the terminology <a href="https://dev.mysql.com/doc/refman/9.7/en/innodb-index-types.html">MySQL’s InnoDB</a>, <a href="https://learn.microsoft.com/en-us/sql/relational-databases/indexes/clustered-and-nonclustered-indexes-described">SQL Server</a> and <a href="https://docs.pingcap.com/tidb/stable/clustered-indexes/">TiDB</a>, among others, actually use in their own documentation. The “clustered index” in their world <em>is</em> what Oracle calls an index-organized table. Same structure, different products/companies, different words.</p>
+<p><strong>But that’s not an error on their part!</strong> It’s the terminology MySQL’s InnoDB (<a href="#ref-mysql-innodb-index" id="cite-mysql-innodb-index-1">MySQL</a>), SQL Server (<a href="#ref-sqlserver-clustered" id="cite-sqlserver-clustered-1">Microsoft</a>) and TiDB (<a href="#ref-tidb-clustered" id="cite-tidb-clustered-1">PingCAP</a>), among others, actually use in their own documentation. The “clustered index” in their world <em>is</em> what Oracle calls an index-organized table. Same structure, different products/companies, different words.</p>
 
-<p>Markus Winand’s <a href="https://sql-performance-explained.com">SQL Performance Explained</a> (2nd edition, 2025) reconciles IOT and clustered index definitions, as quoted below:</p>
+<p>Markus Winand’s <em>SQL Performance Explained</em> (<a href="#ref-winand2025" id="cite-winand2025-1">Winand, 2025</a>) reconciles IOT and clustered index definitions, as quoted below:</p>
 
 <blockquote>
   <p><em>“Some databases can indeed use an index as primary table store. The Oracle database calls this concept <strong>index-organized tables (IOT)</strong>, other databases use the term <strong>clustered index</strong>. In this section, both terms are used to either put the emphasis on the table or the index characteristics as needed. An index-organized table is thus a B-tree index without a heap table. This results in two benefits: (1) it saves the space for the heap structure; (2) every access on a clustered index is automatically an index-only scan. Both benefits sound promising but are hardly achievable in practice.”</em></p>
@@ -390,9 +390,9 @@ To cut to the chase, what actually happened is that two database traditions pick
 
 <p><a href="/images/posts/02-clustering-index-silberschatz.svg"><img src="/images/posts/02-clustering-index-silberschatz.svg" alt="Clustering index over a sorted heap" /></a></p>
 
-<p>The important detail: this is a <em>maintained property</em>, not a structural guarantee. New inserts can land out of order until the next reorganize.  <code class="language-plaintext highlighter-rouge">OPTIMIZE TABLE</code> in <a href="https://dev.mysql.com/doc/refman/8.0/en/optimize-table.html">MySQL’s MyISAM</a> engine, or <code class="language-plaintext highlighter-rouge">CLUSTER</code> in <a href="https://www.postgresql.org/docs/current/sql-cluster.html">PostgreSQL</a> are both real-world instances of this exact concept.</p>
+<p>The important detail: this is a <em>maintained property</em>, not a structural guarantee. New inserts can land out of order until the next reorganize.  <code class="language-plaintext highlighter-rouge">ALTER TABLE ... ORDER BY</code> in <a href="https://dev.mysql.com/doc/refman/8.0/en/alter-table.html">MySQL</a> (for non-clustered engines like MyISAM), or <code class="language-plaintext highlighter-rouge">CLUSTER</code> in <a href="https://www.postgresql.org/docs/current/sql-cluster.html">PostgreSQL</a> are both real-world instances of this exact concept: each physically reorders the rows once, and neither keeps that order as new rows are inserted.</p>
 
-<p><strong>Db2</strong> goes a step further than MySQL and PostgreSQL: it names this concept directly. Its own <a href="https://www.ibm.com/docs/en/db2/11.5.x?topic=indexes-clustered-non-clustered">documentation</a> describes a clustering index as one that determines how rows are physically ordered in a table space; a genuinely separate object from the table, exactly like Silberschatz’s model. <a href="https://www.ibm.com/docs/en/db2-for-zos/12.0.0?topic=gia-clustering-indexes">Db2</a> even tracks a cluster ratio to measure how well-sorted the heap currently is, and recommends a <code class="language-plaintext highlighter-rouge">REORG</code> when it drifts.</p>
+<p><strong>Db2</strong> goes a step further than MySQL and PostgreSQL: it names this concept directly. Its own documentation (<a href="#ref-db2-clustered" id="cite-db2-clustered-1">IBM, Db2 11.5</a>) describes a clustering index as one that determines how rows are physically ordered in a table space; a genuinely separate object from the table, exactly like Silberschatz’s model. Db2 (<a href="#ref-db2-zos-clustering" id="cite-db2-zos-clustering-1">IBM, Db2 for z/OS 12</a>) even tracks a cluster ratio to measure how well-sorted the heap currently is, and recommends a <code class="language-plaintext highlighter-rouge">REORG</code> when it drifts.</p>
 
 <p>One caveat: Db2’s clustering index is still a dense (B-tree) index, with one entry per row. Silberschatz’s definition allows the index itself to go sparse once ordering is guaranteed, but Db2 doesn’t take that shortcut. So it’s a real match on the heap-file question, just not on the sparse-index detail.</p>
 
@@ -414,7 +414,7 @@ To cut to the chase, what actually happened is that two database traditions pick
 
 <p><strong><em>This two-hop pattern is exactly what Kleppmann and Riccomini are describing when they discuss the cost of secondary indexes on clustered-index tables in DDIA book!</em></strong></p>
 
-<p>By the way, Winand lays out exactly why this hurts once you add a second index on top of a clustered one. As the rows inside an index-organized table can move at any time to preserve B-tree order, a secondary index can’t store a physical pointer (<em>rowid</em>) to them, so it has to store the clustering key (often the primary key) instead and use that to look the row up.</p>
+<p>By the way, Winand (<a href="#ref-winand2025" id="cite-winand2025-2">Winand, 2025</a>) lays out exactly why this hurts once you add a second index on top of a clustered one. As the rows inside an index-organized table can move at any time to preserve B-tree order, a secondary index can’t store a physical pointer (<em>rowid</em>) to them, so it has to store the clustering key (often the primary key) instead and use that to look the row up.</p>
 
 <p>In practice, this means every lookup through a secondary index costs two searches instead of one: an INDEX RANGE SCAN<sup id="fnref:index-range-scan" role="doc-noteref"><a href="#fn:index-range-scan" class="footnote" rel="footnote">2</a></sup> on the secondary index, followed by an INDEX UNIQUE SCAN<sup id="fnref:index-unique-scan" role="doc-noteref"><a href="#fn:index-unique-scan" class="footnote" rel="footnote">3</a></sup> into the clustered index for each match. <em>By the way, I am borrowing Oracle’s EXPLAIN PLAN vocabulary here purely as an illustration of the two-hop pattern; InnoDB and SQL Server surface the same cost under their own plan-operation names.</em> As Winand puts it, <em>“accessing an index-organized table via a secondary index is very inefficient.”</em></p>
 
@@ -437,7 +437,7 @@ To cut to the chase, what actually happened is that two database traditions pick
 
 <h2 id="bonus-round-covering-index-no-controversy-here">Bonus round: covering index (no controversy here!)</h2>
 
-<p>Not every indexing term is contested. While looking into this, I also revisited <strong>covering index</strong>, as defined in Markus Winand’s <a href="https://sql-performance-explained.com"><em>SQL Performance Explained</em></a> (2025). Unlike the clustered/clustering mess, this one is consistent everywhere: SQL Server docs, PostgreSQL literature, Couchbase docs, and Winand’s book all agree:</p>
+<p>Not every indexing term is contested. While looking into this, I also revisited <strong>covering index</strong>, as defined in Markus Winand’s <em>SQL Performance Explained</em> (<a href="#ref-winand2025" id="cite-winand2025-3">Winand, 2025</a>). Unlike the clustered/clustering mess, this one is consistent everywhere: SQL Server docs, PostgreSQL literature, Couchbase docs, and Winand’s book all agree:</p>
 
 <blockquote>
   <p>A <strong>covering index</strong> contains every column a query needs —<code class="language-plaintext highlighter-rouge">SELECT</code>-list columns as well as<code class="language-plaintext highlighter-rouge">WHERE</code>and<code class="language-plaintext highlighter-rouge">JOIN</code> columns —, so the database engine never has to visit the underlying table at all.</p>
@@ -453,7 +453,7 @@ To cut to the chase, what actually happened is that two database traditions pick
 
 <p>The nice part: this concept is orthogonal to the clustering debate above. It applies whether you’re skipping a hop to a heap file (Silberschatz et al’s clustering index) or skipping a hop into a clustered B-tree (DDIA’s clustered index).</p>
 
-<p>By the way, a <a href="https://www.yugabyte.com/blog/how-a-distributed-sql-database-boosts-secondary-index-queries-with-index-only-scan/">YugaByte’s blog post</a> goes further by citing other covering indexes’ diverse names:</p>
+<p>By the way, a YugaByte blog post (<a href="#ref-yugabyte-ios" id="cite-yugabyte-ios-1">Yugabyte</a>) goes further by citing other covering indexes’ diverse names:</p>
 
 <blockquote>
   <p><em>“The solution is simple and has many names: “covering index”, “include index”, “projection index”, “fat index” and even “Tapio index” from the name of the author of “Interscience Relational Database Index Design and the Optimizers” (Tapio Lahdenmäki) who explained this in detail.”</em></p>
@@ -473,6 +473,44 @@ Edward</em></p>
 <hr />
 
 <p><em>August, 28th, 2026</em></p>
+
+<h2 id="references">References</h2>
+
+<ol>
+  <li>
+    <p><span id="ref-kleppmann2026"></span>Kleppmann, M., &amp; Riccomini, C. (2026). <em><a href="https://www.oreilly.com/library/view/designing-data-intensive-applications/9781098119058/">Designing Data-Intensive Applications</a></em> (2nd ed.). O’Reilly Media. <a href="#cite-kleppmann2026-1" class="reversefootnote" role="doc-backlink">↩</a> <a href="#cite-kleppmann2026-2" class="reversefootnote" role="doc-backlink">↩<sup>2</sup></a></p>
+  </li>
+  <li>
+    <p><span id="ref-silberschatz2020"></span>Silberschatz, A., Korth, H. F., &amp; Sudarshan, S. (2020). <em><a href="https://www.db-book.com/">Database System Concepts</a></em> (7th ed.). McGraw-Hill. <a href="#cite-silberschatz2020-1" class="reversefootnote" role="doc-backlink">↩</a> <a href="#cite-silberschatz2020-2" class="reversefootnote" role="doc-backlink">↩<sup>2</sup></a></p>
+  </li>
+  <li>
+    <p><span id="ref-elmasri2016"></span>Elmasri, R., &amp; Navathe, S. B. (2016). <em>Fundamentals of Database Systems</em> (7th ed.). Pearson. <a href="#cite-elmasri2016-1" class="reversefootnote" role="doc-backlink">↩</a></p>
+  </li>
+  <li>
+    <p><span id="ref-oracle-iot"></span>Oracle Database Documentation. <a href="https://docs.oracle.com/en/database/oracle/oracle-database/26/cncpt/indexes-and-index-organized-tables.html">Indexes and Index-Organized Tables</a>. <em>Oracle Database Concepts, 26ai</em>. Oracle. <a href="#cite-oracle-iot-1" class="reversefootnote" role="doc-backlink">↩</a></p>
+  </li>
+  <li>
+    <p><span id="ref-mysql-innodb-index"></span>MySQL Documentation. <a href="https://dev.mysql.com/doc/refman/9.7/en/innodb-index-types.html">Clustered and Secondary Indexes</a>. <em>MySQL 9.7 Reference Manual</em>. Oracle. <a href="#cite-mysql-innodb-index-1" class="reversefootnote" role="doc-backlink">↩</a></p>
+  </li>
+  <li>
+    <p><span id="ref-sqlserver-clustered"></span>Microsoft SQL Server Documentation. <a href="https://learn.microsoft.com/en-us/sql/relational-databases/indexes/clustered-and-nonclustered-indexes-described">Clustered and Nonclustered Indexes Described</a>. Microsoft. <a href="#cite-sqlserver-clustered-1" class="reversefootnote" role="doc-backlink">↩</a></p>
+  </li>
+  <li>
+    <p><span id="ref-tidb-clustered"></span>TiDB Documentation. <a href="https://docs.pingcap.com/tidb/stable/clustered-indexes/">Clustered Indexes</a>. PingCAP. <a href="#cite-tidb-clustered-1" class="reversefootnote" role="doc-backlink">↩</a></p>
+  </li>
+  <li>
+    <p><span id="ref-winand2025"></span>Winand, M. (2025). <em><a href="https://sql-performance-explained.com">SQL Performance Explained</a></em> (2nd ed.). <a href="#cite-winand2025-1" class="reversefootnote" role="doc-backlink">↩</a> <a href="#cite-winand2025-2" class="reversefootnote" role="doc-backlink">↩<sup>2</sup></a> <a href="#cite-winand2025-3" class="reversefootnote" role="doc-backlink">↩<sup>3</sup></a></p>
+  </li>
+  <li>
+    <p><span id="ref-db2-clustered"></span>IBM Db2 Documentation. <a href="https://www.ibm.com/docs/en/db2/11.5.x?topic=indexes-clustered-non-clustered">Clustered and Non-Clustered Indexes</a>. <em>Db2 11.5</em>. IBM. <a href="#cite-db2-clustered-1" class="reversefootnote" role="doc-backlink">↩</a></p>
+  </li>
+  <li>
+    <p><span id="ref-db2-zos-clustering"></span>IBM Db2 for z/OS Documentation. <a href="https://www.ibm.com/docs/en/db2-for-zos/12.0.0?topic=gia-clustering-indexes">Clustering Indexes</a>. <em>Db2 12 for z/OS</em>. IBM. <a href="#cite-db2-zos-clustering-1" class="reversefootnote" role="doc-backlink">↩</a></p>
+  </li>
+  <li>
+    <p><span id="ref-yugabyte-ios"></span>Yugabyte Blog. <a href="https://www.yugabyte.com/blog/how-a-distributed-sql-database-boosts-secondary-index-queries-with-index-only-scan/">How a Distributed SQL Database Boosts Secondary Index Queries with Index Only Scan</a>. Yugabyte, Inc. <a href="#cite-yugabyte-ios-1" class="reversefootnote" role="doc-backlink">↩</a></p>
+  </li>
+</ol>
 <div class="footnotes" role="doc-endnotes">
   <ol>
     <li id="fn:innodb-primary-key" role="doc-endnote">
@@ -553,19 +591,19 @@ Edward</em></p>
 <section class="page__share">
   <h4 class="page__share-title">Share on</h4>
 
-  <a href="https://x.com/intent/tweet?text=%22Clustered+Index%22+Doesn%27t+Mean+What+You+Think+It+Means+%28And+That%27s+Alright%21%29%20http%3A%2F%2Flocalhost%3A4000%2Fblog%2Fclustered-index-vs-clustering-index%2F" class="btn btn--x" aria-label="Share on X" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on X">
+  <a href="https://x.com/intent/tweet?text=%22Clustered+Index%22+Doesn%27t+Mean+What+You+Think+It+Means+%28And+That%27s+Alright%21%29%20https%3A%2F%2Feribeiro.github.io%2Fblog%2Fclustered-index-vs-clustering-index%2F" class="btn btn--x" aria-label="Share on X" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on X">
     <i class="fab fa-fw fa-x-twitter" aria-hidden="true"></i><span> X</span>
   </a>
 
-  <a href="https://www.facebook.com/sharer/sharer.php?u=http%3A%2F%2Flocalhost%3A4000%2Fblog%2Fclustered-index-vs-clustering-index%2F" class="btn btn--facebook" aria-label="Share on Facebook" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on Facebook">
+  <a href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Feribeiro.github.io%2Fblog%2Fclustered-index-vs-clustering-index%2F" class="btn btn--facebook" aria-label="Share on Facebook" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on Facebook">
     <i class="fab fa-fw fa-facebook" aria-hidden="true"></i><span> Facebook</span>
   </a>
 
-  <a href="https://www.linkedin.com/shareArticle?mini=true&url=http://localhost:4000/blog/clustered-index-vs-clustering-index/" class="btn btn--linkedin" aria-label="Share on LinkedIn" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on LinkedIn">
+  <a href="https://www.linkedin.com/shareArticle?mini=true&url=https://eribeiro.github.io/blog/clustered-index-vs-clustering-index/" class="btn btn--linkedin" aria-label="Share on LinkedIn" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on LinkedIn">
     <i class="fab fa-fw fa-linkedin" aria-hidden="true"></i><span> LinkedIn</span>
   </a>
 
-  <a href="https://bsky.app/intent/compose?text=%22Clustered+Index%22+Doesn%27t+Mean+What+You+Think+It+Means+%28And+That%27s+Alright%21%29%20http%3A%2F%2Flocalhost%3A4000%2Fblog%2Fclustered-index-vs-clustering-index%2F" class="btn btn--bluesky" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on Bluesky">
+  <a href="https://bsky.app/intent/compose?text=%22Clustered+Index%22+Doesn%27t+Mean+What+You+Think+It+Means+%28And+That%27s+Alright%21%29%20https%3A%2F%2Feribeiro.github.io%2Fblog%2Fclustered-index-vs-clustering-index%2F" class="btn btn--bluesky" onclick="window.open(this.href, 'window', 'left=20,top=20,width=500,height=500,toolbar=1,resizable=0'); return false;" title="Share on Bluesky">
     <i class="fab fa-fw fa-bluesky" aria-hidden="true"></i><span> Bluesky</span>
   </a>
 </section>
@@ -585,6 +623,18 @@ Edward</em></p>
 
     </div>
 
+    
+      
+        
+<div class="page__comments">
+  
+  
+      <h4 class="page__comments-title">Leave a Comment</h4>
+      <section id="giscus-comments"></section>
+    
+</div>
+
+      
     
   </article>
 
@@ -627,7 +677,7 @@ Edward</em></p>
       <span class="page__meta-readtime">
         <i class="far fa-clock" aria-hidden="true"></i>
         
-          24 minute read
+          26 minute read
         
       </span>
     
@@ -674,7 +724,7 @@ Edward</em></p>
 </div>
 
 
-<div class="page__footer-copyright">&copy; 2026 <a href="http://localhost:4000">Edward Ribeiro</a>. Powered by <a href="https://jekyllrb.com" rel="nofollow">Jekyll</a> &amp; <a href="https://mademistakes.com/work/jekyll-themes/minimal-mistakes/" rel="nofollow">Minimal Mistakes</a>.</div>
+<div class="page__footer-copyright">&copy; 2026 <a href="https://eribeiro.github.io">Edward Ribeiro</a>. Powered by <a href="https://jekyllrb.com" rel="nofollow">Jekyll</a> &amp; <a href="https://mademistakes.com/work/jekyll-themes/minimal-mistakes/" rel="nofollow">Minimal Mistakes</a>.</div>
 
       </footer>
     </div>
@@ -688,6 +738,59 @@ Edward</em></p>
 
 
 
+
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-J3NKJDM4BJ"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-J3NKJDM4BJ', { 'anonymize_ip': false});
+</script>
+
+
+
+
+
+
+
+    <script>
+  'use strict';
+
+  (function () {
+    var commentContainer = document.querySelector('#giscus-comments');
+
+    if (!commentContainer) {
+      return;
+    }
+
+    var script = document.createElement('script');
+
+    script.setAttribute('src', 'https://giscus.app/client.js');
+    script.setAttribute('data-repo', 'eribeiro/eribeiro.github.io');
+    script.setAttribute('data-repo-id', 'R_kgDOT6aIig');
+    script.setAttribute('data-category', 'Announcements');
+    script.setAttribute('data-category-id', 'DIC_kwDOT6aIis4DKvrF');
+    script.setAttribute('data-mapping', 'pathname');
+    script.setAttribute('data-strict', '0');
+    script.setAttribute('data-reactions-enabled', '1');
+    script.setAttribute('data-emit-metadata', '0');
+    script.setAttribute('data-input-position', 'bottom');
+    script.setAttribute('data-theme', 'light');
+    script.setAttribute('data-lang',  'en');
+    
+    script.setAttribute('data-loading', 'lazy');
+    
+    script.setAttribute('crossorigin', 'anonymous');
+
+    script.setAttribute('async', '');
+
+    commentContainer.appendChild(script);
+  })();
+</script>
+
+  
 
 
 

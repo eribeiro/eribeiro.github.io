@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.10.0">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2026-09-07T22:30:33+00:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">Edward Ribeiro</title><subtitle>Senior Software Engineer</subtitle><author><name>Edward Ribeiro</name><email>edward.ribeiro@gmail.com</email></author><entry><title type="html">Sharding vs. Partitioning: When Definitions Got Sliced and Fractured</title><link href="http://localhost:4000/blog/partitioning-vs-sharding/" rel="alternate" type="text/html" title="Sharding vs. Partitioning: When Definitions Got Sliced and Fractured" /><published>2026-09-06T00:00:00+00:00</published><updated>2026-09-06T00:00:00+00:00</updated><id>http://localhost:4000/blog/partitioning-vs-sharding</id><content type="html" xml:base="http://localhost:4000/blog/partitioning-vs-sharding/"><![CDATA[<center>
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.10.0">Jekyll</generator><link href="https://eribeiro.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="https://eribeiro.github.io/" rel="alternate" type="text/html" /><updated>2026-11-11T23:19:02+00:00</updated><id>https://eribeiro.github.io/feed.xml</id><title type="html">Edward Ribeiro</title><subtitle>Senior Software Engineer</subtitle><author><name>Edward Ribeiro</name><email>edward.ribeiro@gmail.com</email></author><entry><title type="html">Sharding vs. Partitioning: When Definitions Got Sliced and Fractured</title><link href="https://eribeiro.github.io/blog/partitioning-vs-sharding/" rel="alternate" type="text/html" title="Sharding vs. Partitioning: When Definitions Got Sliced and Fractured" /><published>2026-09-06T00:00:00+00:00</published><updated>2026-09-06T00:00:00+00:00</updated><id>https://eribeiro.github.io/blog/partitioning-vs-sharding</id><content type="html" xml:base="https://eribeiro.github.io/blog/partitioning-vs-sharding/"><![CDATA[<center>
 <div style="display: flex; justify-content: center; align-items: center; gap: 20px; flex-wrap: wrap;">
 <img src="/images/posts/partitioning_vs_sharding/fruit-ninja.gif" alt="fruit-ninja" style="width: 40%;" />
 <img src="/images/posts/partitioning_vs_sharding/giphy.gif" alt="giphy" style="width: 40%;" />
@@ -148,7 +148,7 @@
 
 <h4 id="the-commercial-dbms-prism-lens">The commercial DBMS’ prism lens</h4>
 
-<p>On one side, we had commercial DBMSs popularizing and strongly supporting, to this day, <strong>table partitioning</strong> as a product feature for subdividing one logical table into physical pieces under a single database installation. <a href="https://docs.oracle.com/cd/B13789_01/server.101/b10743/partconc.htm">Oracle 10g</a> describes partitioning as decomposing a large table or index into smaller pieces called partitions. <a href="https://www.postgresql.org/docs/18/ddl-partitioning.html">PostgreSQL</a> uses essentially the same product-level vocabulary: <em>“splitting what is logically one large table into smaller physical pieces.”</em> We also had other instances of this trend in products like <a href="https://learn.microsoft.com/en-us/sql/relational-databases/partitions/partitioned-tables-and-indexes">SQL Server</a>, <a href="https://dev.mysql.com/doc/refman/9.7/en/partitioning.html">MySQL</a>, and <a href="https://www.ibm.com/docs/en/db2/11.5.x?topic=tables-table-partitioning">Db2</a>, for example.</p>
+<p>On one side, we had commercial DBMSs popularizing and strongly supporting, to this day, <strong>table partitioning</strong> as a product feature for subdividing one logical table into physical pieces under a single database installation. Oracle 10g (<a href="#ref-oracle10g-partitioning" id="cite-oracle10g-partitioning-1">Oracle</a>) describes partitioning as decomposing a large table or index into smaller pieces called partitions. PostgreSQL (<a href="#ref-postgresql-partitioning" id="cite-postgresql-partitioning-1">PostgreSQL</a>) uses essentially the same product-level vocabulary: <em>“splitting what is logically one large table into smaller physical pieces.”</em> We also had other instances of this trend in products like <a href="https://learn.microsoft.com/en-us/sql/relational-databases/partitions/partitioned-tables-and-indexes">SQL Server</a>, <a href="https://dev.mysql.com/doc/refman/9.7/en/partitioning.html">MySQL</a>, and <a href="https://www.ibm.com/docs/en/db2/11.5.x?topic=tables-table-partitioning">Db2</a>, for example.</p>
 
 <p>So, when a DBA in the 2000s said that <em>“we partitioned the orders table”</em>, they usually meant a native DBMS feature like this:</p>
 
@@ -162,7 +162,7 @@
 
 <h4 id="the-web-scale-systems-prism-lens">The web-scale systems’ prism lens</h4>
 
-<p>On the other side, also during the 2000s, web companies faced a somewhat different problem due to the exponential growth of the web: a single database server couldn’t support all their users’ data and load, so web companies started using the term <em>sharding</em> specifically for describing the distribution of subsets of the application’s data over multiple database servers. Sharding was the operational term for companies like eBay, Yahoo!, Facebook, among others. An old engineering post by <a href="https://code.flickr.net/2010/02/08/ticket-servers-distributed-unique-primary-keys-on-the-cheap">Flickr</a> summarises how many companies operated back in the day:</p>
+<p>On the other side, also during the 2000s, web companies faced a somewhat different problem due to the exponential growth of the web: a single database server couldn’t support all their users’ data and load, so web companies started using the term <em>sharding</em> specifically for describing the distribution of subsets of the application’s data over multiple database servers. Sharding was the operational term for companies like eBay, Yahoo!, Facebook, among others. An old engineering post by Flickr (<a href="#ref-flickr2010" id="cite-flickr2010-1">Flickr, 2010</a>) summarises how many companies operated back in the day:</p>
 
 <blockquote>
   <p><em>“<strong>Sharding</strong> (aka <strong>data partioning</strong>) is how we scale Flickr’s datastore. Instead of storing all our data on one really big database, we have lots of databases, each with some of the data, and spread the load between them.”</em></p>
@@ -172,7 +172,7 @@
 
 <p><a href="/images/posts/partitioning_vs_sharding/sharding-architecture.png"><img src="/images/posts/partitioning_vs_sharding/sharding-architecture.png" alt="sharding architecture" /></a></p>
 
-<p>And later, during the 2010s, the “sharding” term solidified through the success of NoSQL systems such as MongoDB and Riak, for example. <a href="https://www.mongodb.com/docs/manual/sharding">MongoDB documentation</a> states that <em>“Sharding is a method for distributing data across multiple machines.”</em></p>
+<p>And later, during the 2010s, the “sharding” term solidified through the success of NoSQL systems such as MongoDB and Riak, for example. MongoDB documentation (<a href="#ref-mongodb-sharding" id="cite-mongodb-sharding-1">MongoDB</a>) states that <em>“Sharding is a method for distributing data across multiple machines.”</em></p>
 
 <p>All of this produced an extremely convenient <strong>practitioner</strong> distinction:</p>
 
@@ -183,21 +183,21 @@ Sharding = split the database across machines.</p>
 
 <p>There was a sociotechnical reason for the distinction: those two activities had radically different operational implications and consequences, so having two words was useful. The distinction is pedagogically convenient and historically understandable, but people eventually started treating the convention as if it were the formal definition. That is, the problem arose when the useful practitioner distinction became retroactively interpreted as a definition of partitioning itself, something that many decades of study and research on databases never supported.</p>
 
-<p>Nevertheless, there are examples in the industry that acknowledge the relation between partitioning and sharding. <a href="https://vitess.io/docs/archive/14.0/reference/features/sharding">Vitess documentation</a> is more explicit and intellectually cleaner, as it does not treat partitioning and sharding as mutually exclusive:</p>
+<p>Nevertheless, there are examples in the industry that acknowledge the relation between partitioning and sharding. Vitess documentation (<a href="#ref-vitess-sharding" id="cite-vitess-sharding-1">Vitess</a>) is more explicit and intellectually cleaner, as it does not treat partitioning and sharding as mutually exclusive:</p>
 
 <blockquote>
   <p><em>“<strong>Sharding</strong> is a method of <strong>horizontally partitioning</strong> a database to store data across two or more database servers.”</em></p>
 </blockquote>
 
-<p>And <a href="https://docs.oracle.com/en/database/oracle/oracle-database/12.2/admin/sharding-physical-organization.html">Oracle’s sharding documentation</a> has a section literally titled <em>“Sharding as Distributed Partitioning”</em>, showing that sharding is based on horizontal partitioning of data across multiple independent physical databases. It further says that table partitions within a shard are the same kind of partitions used in a non-sharded Oracle database.</p>
+<p>And Oracle’s sharding documentation (<a href="#ref-oracle-sharding" id="cite-oracle-sharding-1">Oracle</a>) has a section literally titled <em>“Sharding as Distributed Partitioning”</em>, showing that sharding is based on horizontal partitioning of data across multiple independent physical databases. It further says that table partitions within a shard are the same kind of partitions used in a non-sharded Oracle database.</p>
 
-<p>But things are far from being settled. Google Cloud currently has explanatory material saying that partitioning keeps pieces on the same server whereas sharding places them on different servers. Its own <a href="https://cloud.google.com/discover/what-is-database-sharding">explainer on data sharding</a> draws the line almost as cleanly as the tweet that started all this:</p>
+<p>But things are far from being settled. Google Cloud currently has explanatory material saying that partitioning keeps pieces on the same server whereas sharding places them on different servers. Its own explainer on data sharding (<a href="#ref-gcloud-sharding" id="cite-gcloud-sharding-1">Google Cloud</a>) draws the line almost as cleanly as the tweet that started all this:</p>
 
 <blockquote>
   <p><em>“<strong>Sharding is a specific type of horizontal partitioning</strong> where the data pieces are distributed across completely different servers… Partitioning involves splitting a large table into smaller, more manageable pieces (like splitting a log table by month) but keeping them on the same server instance.”</em></p>
 </blockquote>
 
-<p>But a few paragraphs further down <strong>the very same page</strong>, it describes Spanner — a “distributed SQL database” — as offering <em>“a ‘no-sharding’ experience”</em> that <em>“automatically shards data and balances load across regions,”</em> and credits Bigtable’s tablet splitting as “automatic sharding” too. And the same Google ecosystem also talks about <a href="https://cloud.google.com/spanner/docs/geo-partitioning">geo-partitioning</a>, which <em>“lets you further segment and store rows in your database table across different instance configurations,”</em> and about <a href="https://cloud.google.com/spanner/docs/create-manage-partitions">distributed Spanner instance partitions</a>, which are explicitly regional or multi-region constructs, each with their own compute capacity, spanning multiple servers by design. So even industry terminology isn’t internally uniform — sometimes not even within the same web page!</p>
+<p>But a few paragraphs further down <strong>the very same page</strong>, it describes Spanner — a “distributed SQL database” — as offering <em>“a ‘no-sharding’ experience”</em> that <em>“automatically shards data and balances load across regions,”</em> and credits Bigtable’s tablet splitting as “automatic sharding” too. And the same Google ecosystem also talks about geo-partitioning (<a href="#ref-spanner-geo-partitioning" id="cite-spanner-geo-partitioning-1">Google Cloud</a>), which <em>“lets you further segment and store rows in your database table across different instance configurations,”</em> and about distributed Spanner instance partitions (<a href="#ref-spanner-instance-partitions" id="cite-spanner-instance-partitions-1">Google Cloud</a>), which are explicitly regional or multi-region constructs, each with their own compute capacity, spanning multiple servers by design. So even industry terminology isn’t internally uniform — sometimes not even within the same web page!</p>
 
 <p>Therefore, saying <em>“partitioning means single node”</em> without qualification is historically and technically misleading. A more precise statement is:</p>
 
@@ -205,17 +205,17 @@ Sharding = split the database across machines.</p>
   <p><em>“In some RDBMS discussions, partitioning conventionally means intra-database table partitioning, while sharding means horizontal partitioning across database instances.”</em></p>
 </blockquote>
 
-<p>And even though partitioning was never inherently single-node in the literature, Silberschatz, Korth &amp; Sudarshan<a href="#ref-silberschatz2020">[3]</a> acknowledge that partitions may have such a narrower meaning:</p>
+<p>And even though partitioning was never inherently single-node in the literature, Silberschatz, Korth &amp; Sudarshan (<a href="#ref-silberschatz2020" id="cite-silberschatz2020-1">Silberschatz et al., 2020</a>) acknowledge that partitions may have such a narrower meaning:</p>
 
 <blockquote>
   <p><em>“We also note that several database vendors use the term partitioning to denote the partitioning of tuples of a relation \(r\) into multiple physical relations \(r_1, r_2 ,…, r_n\), where all the physical relations \(r_i\) are stored in a single node. The relation \(r\) is not stored, but treated as a view defined by the query \(r_1 \cup r_2 \cup … \cup r_n\). Such intra-node partitioning of a relation is typically used to ensure that frequently accessed tuples are stored separately from infrequently accessed tuples and is different from horizontal partitioning across nodes.”</em></p>
 </blockquote>
 
-<p>Kleppmann and Riccomini<a href="#ref-kleppmann2026">[4]</a>, who devote no less than a whole chapter to sharding, also explain the nonconformity of the nomenclature surrounding sharding and partition:</p>
+<p>Kleppmann and Riccomini (<a href="#ref-kleppmann2026" id="cite-kleppmann2026-1">Kleppmann and Riccomini, 2026</a>), who devote no less than a whole chapter to sharding, also explain the nonconformity of the nomenclature surrounding sharding and partition:</p>
 
 <blockquote>
   <p><em>“<strong>What we call a shard in this chapter has many names depending on which software you’re using.</strong> It’s called a partition in Kafka, a range in CockroachDB, a region in HBase and TiDB, a vBucket in Couchbase, a vnode in Riak, a token-range in Cassandra, and a tablet in Bigtable, YugaByteDB, and ScyllaDB, to name just a few.</em>
-<em>Some databases treat partitions and shards as two distinct concepts. For example, <strong>in PostgreSQL, partitioning is a way of splitting a large table into several files that are stored on the same machine</strong> (which has several advantages, such as making it very fast to delete an entire partition), whereas sharding splits a dataset accross multiple machines[1,2]. <strong>In many other systems, partitioning is just another word for sharding.</strong>“</em></p>
+<em>Some databases treat partitions and shards as two distinct concepts. For example, <strong>in PostgreSQL, partitioning is a way of splitting a large table into several files that are stored on the same machine</strong> (which has several advantages, such as making it very fast to delete an entire partition), whereas sharding splits a dataset across multiple machines[1,2]. <strong>In many other systems, partitioning is just another word for sharding.</strong>“</em></p>
 </blockquote>
 
 <p>So far, we have two reputable sources stating that:</p>
@@ -229,7 +229,7 @@ Sharding = split the database across machines.</p>
 
 <p>To really understand how academia has dealt with these concepts for decades, we should focus on their vernacular and their assumptions first. It may even come as a surprise to newcomers that what the practitioners usually call <em>“partitioning”</em> is frequently referred to by respectable sources in the literature as <em>“fragmentation”</em>. And the terminology mismatch doesn’t stop there, as we have words like <em>“sites”</em> for denoting nodes or computers, for example.</p>
 
-<p>In addition to that, it was already mentioned that classical and modern database literature doesn’t restrict the applicability of data partitioning to an intra-node setup. Also, data partitioning can be applied to either parallel or distributed database systems (and arrays of disks too!). As explained by Özsu and Valduriez<a href="#ref-ozsu2020">[2]</a>, the main reasons and objectives for fragmentation in distributed versus parallel databases are slightly different. For example, data localization is not that much of a concern in parallel DBMSs since the communication cost among nodes is much less than in geo-distributed DBMSs.</p>
+<p>In addition to that, it was already mentioned that classical and modern database literature doesn’t restrict the applicability of data partitioning to an intra-node setup. Also, data partitioning can be applied to either parallel or distributed database systems (and arrays of disks too!). As explained by Özsu and Valduriez (<a href="#ref-ozsu2020" id="cite-ozsu2020-1">Özsu and Valduriez, 2020</a>), the main reasons and objectives for fragmentation in distributed versus parallel databases are slightly different. For example, data localization is not that much of a concern in parallel DBMSs since the communication cost among nodes is much less than in geo-distributed DBMSs.</p>
 
 <h2 id="fragmentation-allocation-and-replication">Fragmentation, Allocation and Replication</h2>
 <center>
@@ -254,7 +254,7 @@ Sharding = split the database across machines.</p>
 
 <h3 id="1-partitioning">1. Partitioning</h3>
 
-<p>Ramakrishnan and Gehrke<a href="#ref-ramakrishnan2003">[1]</a> define fragmentation (i.e., partitioning) as:</p>
+<p>Ramakrishnan and Gehrke (<a href="#ref-ramakrishnan2003" id="cite-ramakrishnan2003-1">Ramakrishnan and Gehrke, 2003</a>) define fragmentation (i.e., partitioning) as:</p>
 
 <blockquote>
   <p><em>“<strong>Fragmentation</strong> consists of breaking a relation into smaller relations or <strong>fragments</strong> and storing the fragments (instead of the relation itself), possibly at different sites. In <strong>horizontal fragmentation</strong>, each fragment consists of a subset of rows of the original relation. In <strong>vertical fragmentation</strong>, each fragment consists of a subset of columns of the original relation.”</em></p>
@@ -282,7 +282,7 @@ Sharding = split the database across machines.</p>
 
 <h4 id="11-partitioning-strategies">1.1. Partitioning Strategies</h4>
 
-<p>As seen in Ramakrishnan and Gehrke’s definition, data partitioning is further divided into horizontal and vertical partitioning, and this is also defined by Özsu and Valduriez<a href="#ref-ozsu2020">[2]</a>:</p>
+<p>As seen in Ramakrishnan and Gehrke’s definition, data partitioning is further divided into horizontal and vertical partitioning, and this is also defined by Özsu and Valduriez (<a href="#ref-ozsu2020" id="cite-ozsu2020-2">Özsu and Valduriez, 2020</a>):</p>
 
 <blockquote>
   <p><em>“Relational tables can be partitioned either horizontally or vertically. The basis of horizontal fragmentation is the select operator where the selection predicates determine the fragmentation, while vertical fragmentation is performed by means of the project operator. The fragmentation may, of course, be nested. If the nestings are of different types, one gets hybrid fragmentation.”</em></p>
@@ -292,7 +292,7 @@ Sharding = split the database across machines.</p>
 
 <ul>
   <li>Completeness: for any tuple \(t\) of a relation \(R\), \(t\) will be in at least one partition, that is, no information is lost. This is based on the selection and projection predicates chosen;</li>
-  <li>Reconstructibility: it should be possible to reconstruct the original relation \(R\) by using the UNION operator (for horizontal fragmentation) or the OUTER UNION operator (for vertical fragmentation);</li>
+  <li>Reconstructibility: it should be possible to reconstruct the original relation \(R\) by using the UNION operator (for horizontal fragmentation) or a JOIN on the shared key (for vertical fragmentation);</li>
   <li>Disjointness: there’s no intersection between two partitions under horizontal partitioning, and vertical partitions only share the unique key attribute (so it’s possible to reconstruct the original relation);</li>
 </ul>
 
@@ -308,7 +308,7 @@ Sharding = split the database across machines.</p>
 
 <p><a href="/images/posts/partitioning_vs_sharding/horizontal-partitioning.png"><img src="/images/posts/partitioning_vs_sharding/horizontal-partitioning.png" alt="horizontal partitioning" /></a></p>
 
-<p>Elmasri and Navathe define an interesting property of horizontal partitioning:</p>
+<p>Elmasri and Navathe (<a href="#ref-elmasri2016" id="cite-elmasri2016-1">Elmasri and Navathe, 2016</a>) define an interesting property of horizontal partitioning:</p>
 
 <blockquote>
   <p><em>“A set of horizontal fragments whose conditions \(C_1, C_2, … , C_n\) include all the tuples in R—that is, every tuple in R satisfies (\(C_1\) OR \(C_2\) OR … OR \(C_n\))—is called a <strong>complete horizontal fragmentation</strong> of R. In many cases a complete horizontal fragmentation is also <strong>disjoint</strong>; that is, no tuple in \(R\) satisfies (\(C_i\) AND \(C_j\)) for any \(i \neq j\).”</em></p>
@@ -334,7 +334,7 @@ Sharding = split the database across machines.</p>
 
 <p><strong>2. Hash Partitioning</strong></p>
 
-<p>There’s a hash function that maps a key value to a partition number. This keeps data evenly distributed even if data grows and shrinks over time. It is best suited for point queries based on the partitioning attribute, but it’s also useful for sequential scans over the entire relation or range queries on the partitioning attribute. If the hash function is good, the number of tuples in each node is roughly the same, i.e. \(\frac{1}{N}\), for \(N\) nodes. Nevertheless, it is not well suited for point queries on nonpartitioning attributes.</p>
+<p>There’s a hash function that maps a key value to a partition number. If the hash function is good, the number of tuples in each node is roughly the same, i.e. \(\frac{1}{N}\), for \(N\) nodes. It is best suited for point queries based on the partitioning attribute, and it’s also useful for sequential scans over the entire relation. Nevertheless, it is not well suited for point queries on nonpartitioning attributes, nor for range queries on the partitioning attribute, since hashing scatters contiguous key values across all nodes.</p>
 
 <p><a href="/images/posts/partitioning_vs_sharding/hash-partitioning.png"><img src="/images/posts/partitioning_vs_sharding/hash-partitioning.png" alt="hash partitioning" /></a></p>
 
@@ -344,7 +344,7 @@ Sharding = split the database across machines.</p>
 
 \[\begin{cases}
   \text{if } x &lt; v_1 \implies \text{t goes to } N_1 \\
-  \text{if } x \geq v_n \implies \text{t goes to } N_n \\
+  \text{if } x \geq v_{n-1} \implies \text{t goes to } N_n \\
   \text{if } v_i \leq x &lt; v_{i+1} \implies \text{t goes to } N_{i+1}
 \end{cases}\]
 
@@ -361,9 +361,9 @@ Partitioning strategy
    └── Composite
 ``` -->
 
-<h5 id="primary-and-secondary-horizontal-partitioning">Primary and Secondary Horizontal Partitioning</h5>
+<h5 id="primary-and-derived-horizontal-partitioning">Primary and Derived Horizontal Partitioning</h5>
 
-<p>A <strong>primary horizontal partitioning</strong> is a partition defined by predicates on root tables (source tables): tables that exist as independent entities, without any Foreign Key (FK) pointing to it, like, for example, the CUSTOMER table in the example below. This table can be partitioned by its range of IDs, for example.</p>
+<p>A <strong>primary horizontal partitioning</strong> is a partition defined by predicates on root tables (source tables): tables that exist as independent entities, without any Foreign Key (FK) referencing another table, like, for example, the CUSTOMER table in the example below. This table can be partitioned by its range of IDs, for example.</p>
 
 <p>On the other hand, <strong>derived horizontal partitioning</strong> is the partitioning of a relation that results from predicates being defined by another relation (that is, the table depends on one or more other tables to exist and have uniqueness). Tables like ORDERS and INVENTORY are examples of such tables, so that we can partition them according to how their referenced parent table (e.g., CUSTOMER) was already partitioned, keeping related rows co-located on the same fragment for faster joins.</p>
 
@@ -371,7 +371,7 @@ Partitioning strategy
 
 <h5 id="vertical-partitioning">Vertical Partitioning</h5>
 
-<p>Vertical partitioning splits a relation \(R\) into partitions each containing a subset of \(R\)’s attributes (columns). In other words, it divides a relation “vertically” by columns. This particular kind of data partitioning was successfully implemented by column-store DBMSs like MonetDB/X100, Vertica, Snowflake and DuckDB, for example, as well as columnar open data formats and OLAP query engines.</p>
+<p>Vertical partitioning splits a relation \(R\) into partitions each containing a subset of \(R\)’s attributes (columns). In other words, it divides a relation “vertically” by columns. The idea is closely related to the <em>decomposition storage model</em> behind column-store DBMSs like MonetDB, Vertica and DuckDB, as well as columnar open data formats and OLAP query engines, although there the goal is scan efficiency on a single system rather than distributing fragments among sites.</p>
 
 <p>Vertical Partitioning can be expressed as the relational algebra’s PROJECT (\(\pi\)) operation:</p>
 
@@ -383,7 +383,7 @@ Partitioning strategy
 
 <p><a href="/images/posts/partitioning_vs_sharding/vertical-partitioning.png"><img src="/images/posts/partitioning_vs_sharding/vertical-partitioning.png" alt="horizontal and vertical partitioning" /></a></p>
 
-<p>As we can see in the example above, PNO, the Primary Key (PK) of the PROJ table is duplicated on the two fragments – \(PROJ_{1}\) and \(PROJ_{2}\). This is not a coincidence, but a conscious distributed database design decision so that we are able to reconstruct the original relation \(R\) from its vertical fragments by using an OUTER UNION operation. In other words, our database design has a <em>lossless-join property</em>.</p>
+<p>As we can see in the example above, PNO, the Primary Key (PK) of the PROJ table is duplicated on the two fragments – \(PROJ_{1}\) and \(PROJ_{2}\). This is not a coincidence, but a conscious distributed database design decision so that we are able to reconstruct the original relation \(R\) from its vertical fragments by joining them on PNO. In other words, our database design has a <em>lossless-join property</em>.</p>
 
 <p>A vertical partitioning is said to be a <em><strong>lossless-join decomposition</strong></em> if it’s always possible to reconstruct the original relation \(R\) from its vertical fragments \(L_1, L_2, ... L_n\). This is more succinctly expressed in relational algebra as:</p>
 
@@ -393,7 +393,7 @@ Partitioning strategy
 
 \[R \subset \pi_{L_{1}}(R) \bowtie \pi_{L_{2}}(R)\]
 
-<p>Figure 2.2 in Georgiev’s thesis<a href="#ref-georgiev2008">[6]</a> shows examples of a lossy (a) and a lossless (b) decomposition.</p>
+<p>Figure 2.2 in Georgiev’s thesis (<a href="#ref-georgiev2008" id="cite-georgiev2008-1">Georgiev, 2008</a>) shows examples of a lossy (a) and a lossless (b) decomposition.</p>
 
 <p><a href="/images/posts/partitioning_vs_sharding/lossless-lossy-decomposition.png"><img src="/images/posts/partitioning_vs_sharding/lossless-lossy-decomposition.png" alt="lossless and lossy decompositions" /></a></p>
 
@@ -411,11 +411,11 @@ Partitioning strategy
 
 <p>where ATTRS(R) is the set of all attributes of R and PK(R) is the primary key of R;</p>
 
-<p>And to reconstruct the relation R from a complete vertical fragmentation, we apply the OUTER UNION operation to the vertical fragments. Furthermore, for the \(R_1, R_2, ... R_n\) vertical fragments of \(R\), we have that \(R_1 \cap R_2 \cap ... \cap R_n = A\), where \(A\) is a unique key attribute of \(R\).</p>
+<p>And to reconstruct the relation R from a complete vertical fragmentation, we join the vertical fragments on the primary key. Elmasri and Navathe describe this step as an OUTER UNION of the fragments, noting that a FULL OUTER JOIN gives the same result; either way, the rows are matched by their shared key. Furthermore, the attribute lists of the vertical fragments intersect exactly in the key: \(L_1 \cap L_2 \cap ... \cap L_n = A\), where \(A\) is a unique key attribute of \(R\).</p>
 
 <h5 id="hybrid-partitioning">Hybrid Partitioning</h5>
 
-<p>A <strong>hybrid partitioning</strong> is the combination of horizontal partitioning and vertical partitioning, also called <strong>mixed partitioning</strong>. In this kind of partitioning, a fragment of a relation R can be specified by a SELECT-PROJECT combination of operations \(\pi_L(\sigma_C(R))\), and the original relation \(R\) can be reconstructed by applying UNION <strong>and</strong> OUTER UNION (or OUTER JOIN) operations in the appropriate order.</p>
+<p>A <strong>hybrid partitioning</strong> is the combination of horizontal partitioning and vertical partitioning, also called <strong>mixed partitioning</strong>. In this kind of partitioning, a fragment of a relation R can be specified by a SELECT-PROJECT combination of operations \(\pi_L(\sigma_C(R))\), and the original relation \(R\) can be reconstructed by applying UNION <strong>and</strong> JOIN operations in the appropriate order.</p>
 
 <p>In the Employee table example, if we partition by Department Number (Dno) and Social Security Number (SSN), there are four resulting partitions:</p>
 
@@ -427,11 +427,11 @@ Partitioning strategy
 
 <h3 id="3-replication">3. Replication</h3>
 
-<p>Replication allows the storage of several copies of data to achieve data locality (i.e., keep the data closer to where it is most needed), availability (the probability that a system is continuously available during a time interval), reliability (the probability that a system is running at a certain point in time) and faster query execution by using local copies.</p>
+<p>Replication allows the storage of several copies of data to achieve data locality (i.e., keep the data closer to where it is most needed), availability (the probability that a system is running at a certain point in time), reliability (the probability that a system is continuously available during a time interval) and faster query execution by using local copies.</p>
 
 <p>The logical units of replication will vary depending on the requirements of the application, performance requirements, patterns of access, types and frequencies of transactions, and availability requirements. Basically, there are two extremes of replication: no replication at all – that is, each relation or fragment is stored in a single node – on one side and whole database replication on all nodes on the other side (called a <em>fully replicated database</em>). In between, we have a spectrum of partial replications of tables and table partitions. For example, H-Store/VoltDB supports both partitioned and replicated tables (that is, the whole table is replicated among all the nodes). The latter is used for small tables that are read-only or not frequently updated like a COUNTRY table, for example, while other tables are horizontally partitioned among the nodes.</p>
 
-<p>A thorough treatment of replication is beyond the scope of this blog post, but it’s strongly recommended that interested readers check Özsu and Valduriez’s<a href="#ref-ozsu2020">[2]</a>, Kleppmann and Riccomini’s<a href="#ref-kleppmann2026">[4]</a>, or Petrov’s<a href="#ref-petrov2019">[5]</a> chapters devoted to this subject.</p>
+<p>A thorough treatment of replication is beyond the scope of this blog post, but it’s strongly recommended that interested readers check the chapters devoted to this subject in <a href="#ref-ozsu2020" id="cite-ozsu2020-3">Özsu and Valduriez, 2020</a>, <a href="#ref-kleppmann2026" id="cite-kleppmann2026-2">Kleppmann and Riccomini, 2026</a>, or <a href="#ref-petrov2019" id="cite-petrov2019-1">Petrov, 2019</a>.</p>
 
 <h2 id="so-what-is-sharding-in-the-academic-perspective-after-all">So what is sharding (<em>in the academic perspective</em>), after all?</h2>
 
@@ -457,6 +457,8 @@ Partitioning strategy
 
 \[Sharding \subseteq \text{Horizontal Partitioning} \subseteq Partitioning\]
 
+<p>One caveat: practitioners also talk about <em>vertical</em> (or <em>functional</em>) sharding, where whole tables, or groups of columns, are moved to different database servers (e.g., <code class="language-plaintext highlighter-rouge">users</code> on one cluster and <code class="language-plaintext highlighter-rouge">orders</code> on another). So take the relation above as the common case, not a law: what all forms of sharding share is partitioning plus allocation among nodes.</p>
+
 <p>Or as a cool cheat sheet:</p>
 
 <p><a href="/images/posts/partitioning_vs_sharding/key-takeways.png"><img src="/images/posts/partitioning_vs_sharding/key-takeways.png" alt="key takeways" /></a></p>
@@ -464,13 +466,59 @@ Partitioning strategy
 <h2 id="references">References</h2>
 
 <ol>
-  <li><span id="ref-ramakrishnan2003"></span>Ramakrishnan, R., &amp; Gehrke, J. (2003). <em><a href="https://pages.cs.wisc.edu/~dbbook/openAccess/thirdEdition/supporting_material.htm">Database Management Systems</a></em> (3rd ed.). McGraw-Hill.</li>
-  <li><span id="ref-ozsu2020"></span>Özsu, M. T., &amp; Valduriez, P. (2020). <em><a href="https://cs.uwaterloo.ca/~ddbook/">Principles of Distributed Database Systems</a></em> (4th ed.). Springer.</li>
-  <li><span id="ref-silberschatz2020"></span>Silberschatz, A., Korth, H. F., &amp; Sudarshan, S. (2020). <em><a href="https://www.db-book.com/">Database System Concepts</a></em> (7th ed.). McGraw-Hill.</li>
-  <li><span id="ref-kleppmann2026"></span>Kleppmann, M., &amp; Riccomini, C. (2026). <em><a href="https://www.oreilly.com/library/view/designing-data-intensive-applications/9781098119058/">Designing Data-Intensive Applications</a></em> (2nd ed.). O’Reilly.</li>
-  <li><span id="ref-petrov2019"></span>Petrov, A. (2019). <em><a href="https://www.databass.dev/">Database Internals</a></em> (1st ed.). O’Reilly.</li>
-  <li><span id="ref-georgiev2008"></span>Georgiev, N. (2008). <em>A Web-Based Environment For Learning Normalization of Relational Database Schemata</em> (Master’s thesis).</li>
+  <li>
+    <p><span id="ref-oracle10g-partitioning"></span>Oracle Database Documentation. <a href="https://docs.oracle.com/cd/B13789_01/server.101/b10743/partconc.htm">Partitioning Concepts</a>. <em>Oracle Database Concepts, 10g Release 1</em>. Oracle. <a href="#cite-oracle10g-partitioning-1" class="reversefootnote" role="doc-backlink">↩</a></p>
+  </li>
+  <li>
+    <p><span id="ref-postgresql-partitioning"></span>PostgreSQL Documentation. <a href="https://www.postgresql.org/docs/18/ddl-partitioning.html">Table Partitioning</a>. <em>PostgreSQL 18 Documentation</em>. The PostgreSQL Global Development Group. <a href="#cite-postgresql-partitioning-1" class="reversefootnote" role="doc-backlink">↩</a></p>
+  </li>
+  <li>
+    <p><span id="ref-flickr2010"></span>Flickr Engineering. (2010, February 8). <a href="https://code.flickr.net/2010/02/08/ticket-servers-distributed-unique-primary-keys-on-the-cheap">Ticket Servers: Distributed Unique Primary Keys on the Cheap</a>. <em>code.flickr.net</em>. <a href="#cite-flickr2010-1" class="reversefootnote" role="doc-backlink">↩</a></p>
+  </li>
+  <li>
+    <p><span id="ref-mongodb-sharding"></span>MongoDB Documentation. <a href="https://www.mongodb.com/docs/manual/sharding">Sharding</a>. MongoDB, Inc. <a href="#cite-mongodb-sharding-1" class="reversefootnote" role="doc-backlink">↩</a></p>
+  </li>
+  <li>
+    <p><span id="ref-vitess-sharding"></span>Vitess Documentation. <a href="https://vitess.io/docs/archive/14.0/reference/features/sharding">Sharding</a>. <em>Vitess 14.0</em>. The Vitess Authors. <a href="#cite-vitess-sharding-1" class="reversefootnote" role="doc-backlink">↩</a></p>
+  </li>
+  <li>
+    <p><span id="ref-oracle-sharding"></span>Oracle Database Documentation. <a href="https://docs.oracle.com/en/database/oracle/oracle-database/12.2/admin/sharding-physical-organization.html">Sharding Physical Organization</a>. <em>Oracle Database Administrator’s Guide, 12c Release 2</em>. Oracle. <a href="#cite-oracle-sharding-1" class="reversefootnote" role="doc-backlink">↩</a></p>
+  </li>
+  <li>
+    <p><span id="ref-gcloud-sharding"></span>Google Cloud. <a href="https://cloud.google.com/discover/what-is-database-sharding">What Is Database Sharding?</a>. Google. <a href="#cite-gcloud-sharding-1" class="reversefootnote" role="doc-backlink">↩</a></p>
+  </li>
+  <li>
+    <p><span id="ref-spanner-geo-partitioning"></span>Google Cloud. <a href="https://cloud.google.com/spanner/docs/geo-partitioning">Geo-partitioning Overview</a>. <em>Spanner documentation</em>. Google. <a href="#cite-spanner-geo-partitioning-1" class="reversefootnote" role="doc-backlink">↩</a></p>
+  </li>
+  <li>
+    <p><span id="ref-spanner-instance-partitions"></span>Google Cloud. <a href="https://cloud.google.com/spanner/docs/create-manage-partitions">Create and Manage Instance Partitions</a>. <em>Spanner documentation</em>. Google. <a href="#cite-spanner-instance-partitions-1" class="reversefootnote" role="doc-backlink">↩</a></p>
+  </li>
+  <li>
+    <p><span id="ref-silberschatz2020"></span>Silberschatz, A., Korth, H. F., &amp; Sudarshan, S. (2020). <em><a href="https://www.db-book.com/">Database System Concepts</a></em> (7th ed.). McGraw-Hill. <a href="#cite-silberschatz2020-1" class="reversefootnote" role="doc-backlink">↩</a></p>
+  </li>
+  <li>
+    <p><span id="ref-kleppmann2026"></span>Kleppmann, M., &amp; Riccomini, C. (2026). <em><a href="https://www.oreilly.com/library/view/designing-data-intensive-applications/9781098119058/">Designing Data-Intensive Applications</a></em> (2nd ed.). O’Reilly Media. <a href="#cite-kleppmann2026-1" class="reversefootnote" role="doc-backlink">↩</a> <a href="#cite-kleppmann2026-2" class="reversefootnote" role="doc-backlink">↩<sup>2</sup></a></p>
+  </li>
+  <li>
+    <p><span id="ref-ozsu2020"></span>Özsu, M. T., &amp; Valduriez, P. (2020). <em><a href="https://cs.uwaterloo.ca/~ddbook/">Principles of Distributed Database Systems</a></em> (4th ed.). Springer. <a href="#cite-ozsu2020-1" class="reversefootnote" role="doc-backlink">↩</a> <a href="#cite-ozsu2020-2" class="reversefootnote" role="doc-backlink">↩<sup>2</sup></a> <a href="#cite-ozsu2020-3" class="reversefootnote" role="doc-backlink">↩<sup>3</sup></a></p>
+  </li>
+  <li>
+    <p><span id="ref-ramakrishnan2003"></span>Ramakrishnan, R., &amp; Gehrke, J. (2003). <em><a href="https://pages.cs.wisc.edu/~dbbook/openAccess/thirdEdition/supporting_material.htm">Database Management Systems</a></em> (3rd ed.). McGraw-Hill. <a href="#cite-ramakrishnan2003-1" class="reversefootnote" role="doc-backlink">↩</a></p>
+  </li>
+  <li>
+    <p><span id="ref-elmasri2016"></span>Elmasri, R., &amp; Navathe, S. B. (2016). <em>Fundamentals of Database Systems</em> (7th ed.). Pearson. <a href="#cite-elmasri2016-1" class="reversefootnote" role="doc-backlink">↩</a></p>
+  </li>
+  <li>
+    <p><span id="ref-georgiev2008"></span>Georgiev, N. (2008). <em>A Web-Based Environment For Learning Normalization of Relational Database Schemata</em> (Master’s thesis). <a href="#cite-georgiev2008-1" class="reversefootnote" role="doc-backlink">↩</a></p>
+  </li>
+  <li>
+    <p><span id="ref-petrov2019"></span>Petrov, A. (2019). <em><a href="https://www.databass.dev/">Database Internals: A Deep Dive into How Distributed Data Systems Work</a></em>. O’Reilly Media. <a href="#cite-petrov2019-1" class="reversefootnote" role="doc-backlink">↩</a></p>
+  </li>
 </ol>
+
+<hr />
+
+<p><em><strong>UPDATE [11-11-2026]</strong>: corrected the description of hash partitioning (it is <strong>not</strong> well suited for range queries on the partitioning attribute) and the definitions of availability and reliability, which were swapped. Also fixed a few smaller slips in the range-partitioning formula and in the description of primary horizontal partitioning, clarified how vertical fragments are reconstructed, and added a caveat about vertical sharding.</em></p>
 <div class="footnotes" role="doc-endnotes">
   <ol>
     <li id="fn:voltdb" role="doc-endnote">
@@ -483,19 +531,19 @@ Partitioning strategy
       <p>While interquery allows the parallel execution of a number of queries on various nodes, intraquery allows the parallel execution of a single query by breaking it up into subqueries and executing on various partitions in parallel. <a href="#fnref:intra-inter-query" class="reversefootnote" role="doc-backlink">&#8617;</a></p>
     </li>
   </ol>
-</div>]]></content><author><name>Edward Ribeiro</name><email>edward.ribeiro@gmail.com</email></author><category term="Blog" /><category term="partitioning" /><category term="horizontal-partitioning" /><category term="vertical-partitioning" /><category term="sharding" /><category term="database-internals" /><category term="fragmentation" /><summary type="html"><![CDATA[Social media replies insisting that partitioning stays on one server while sharding spans many nodes sent me on quest through vendor docs, and decades of database textbooks to check whether that clean split actually holds up.]]></summary></entry><entry><title type="html">“Clustered Index” Doesn’t Mean What You Think It Means (And That’s Alright!)</title><link href="http://localhost:4000/blog/clustered-index-vs-clustering-index/" rel="alternate" type="text/html" title="“Clustered Index” Doesn’t Mean What You Think It Means (And That’s Alright!)" /><published>2026-08-28T00:00:00+00:00</published><updated>2026-08-28T00:00:00+00:00</updated><id>http://localhost:4000/blog/clustered-index-vs-clustering-index</id><content type="html" xml:base="http://localhost:4000/blog/clustered-index-vs-clustering-index/"><![CDATA[<p><img src="/images/posts/i-dont-think-meme.gif" alt="I don't think meme" /></p>
+</div>]]></content><author><name>Edward Ribeiro</name><email>edward.ribeiro@gmail.com</email></author><category term="Blog" /><category term="partitioning" /><category term="horizontal-partitioning" /><category term="vertical-partitioning" /><category term="sharding" /><category term="database-internals" /><category term="fragmentation" /><summary type="html"><![CDATA[Social media replies insisting that partitioning stays on one server while sharding spans many nodes sent me on quest through vendor docs, and decades of database textbooks to check whether that clean split actually holds up.]]></summary></entry><entry><title type="html">“Clustered Index” Doesn’t Mean What You Think It Means (And That’s Alright!)</title><link href="https://eribeiro.github.io/blog/clustered-index-vs-clustering-index/" rel="alternate" type="text/html" title="“Clustered Index” Doesn’t Mean What You Think It Means (And That’s Alright!)" /><published>2026-08-28T00:00:00+00:00</published><updated>2026-08-28T00:00:00+00:00</updated><id>https://eribeiro.github.io/blog/clustered-index-vs-clustering-index</id><content type="html" xml:base="https://eribeiro.github.io/blog/clustered-index-vs-clustering-index/"><![CDATA[<p><img src="/images/posts/i-dont-think-meme.gif" alt="I don't think meme" /></p>
 
-<p>Early this week, during a book club session, I found myself stumbling through the nuances of <em><strong>clustered indexes, index-organized tables and covering indexes</strong></em>, only to be corrected by fellow readers that were going strictly by Kleppmann and Riccomini’s <a href="https://www.oreilly.com/library/view/designing-data-intensive-applications/9781098119058/"><em>Designing Data-Intensive Applications</em></a> (2nd Edition, 2026). Driven by my  confusion, I hit the books and the web to untangle it all.</p>
+<p>Early this week, during a book club session, I found myself stumbling through the nuances of <em><strong>clustered indexes, index-organized tables and covering indexes</strong></em>, only to be corrected by fellow readers that were going strictly by Kleppmann and Riccomini’s <em>Designing Data-Intensive Applications</em> (<a href="#ref-kleppmann2026" id="cite-kleppmann2026-1">Kleppmann and Riccomini, 2026</a>). Driven by my  confusion, I hit the books and the web to untangle it all.</p>
 <div class="custom-box">
 To cut to the chase, what actually happened is that two database traditions picked  similar words (<i>"clustering index"</i> and <i>"clustered index"</i>) for two genuinely different physical structures!
 </div>
-<p>While I’d learned it first from Silberschatz, Korth &amp; Sudarshan’s <a href="https://www.db-book.com/"><em>Database System Concepts</em></a> (currently on 7th Edition, 2021), and a couple of lesser-known books,  Kleppmann and Riccomini’s definition matches something else entirely. And it turns out <strong><em>their usage is the one that matches the industry’s actual database engine implementations!</em></strong> Therefore, neither of us were way off during the book discussion or inventing anything, for that matter; we were just each drinking from different wells. 🥲</p>
+<p>While I’d learned it first from Silberschatz, Korth &amp; Sudarshan’s <em>Database System Concepts</em> (<a href="#ref-silberschatz2020" id="cite-silberschatz2020-1">Silberschatz et al., 2020</a>), and a couple of lesser-known books,  Kleppmann and Riccomini’s definition matches something else entirely. And it turns out <strong><em>their usage is the one that matches the industry’s actual database engine implementations!</em></strong> Therefore, neither of us were way off during the book discussion or inventing anything, for that matter; we were just each drinking from different wells. 🥲</p>
 
 <p><em>This post is the writeup I wish I’d had going into that conversation.</em> ;-)</p>
 
 <h2 id="the-claim-that-started-it">The claim that started it</h2>
 
-<p>The definition I knew, in Silberschatz, Korth, and Sudarshan’s own words:</p>
+<p>The definition I knew, in Silberschatz, Korth, and Sudarshan’s own words (<a href="#ref-silberschatz2020" id="cite-silberschatz2020-2">Silberschatz et al., 2020</a>):</p>
 
 <blockquote>
   <p>“… a <strong>clustering index</strong> is an index whose search key also defines the sequential order of the file. Clustering indices are also called <strong>primary indices</strong>; the term <em>primary index</em> may appear to denote an index on a primary key, but such indices can in fact be built on any search key. The search key of a clustering index is often the primary key, although that is not  necessarily so. Indices whose search key specifies an order different from the sequential order of the file are called non clustering indices, or secondary indices. The terms “clustered” and “nonclustered” are often used in place of “clustering” and “non clustering.”</p>
@@ -505,7 +553,7 @@ To cut to the chase, what actually happened is that two database traditions pick
 
 <p><img src="/images/posts/clustering_index_vs_primary_key_index.svg" alt="silberschatz clustering index concepts" /></p>
 
-<p>But if we check the literature a bit further, Elmasri and Navathe’s <a href="https://www.amazon.com.br/Fundamentals-Database-Systems-Paperback-Elmasri/dp/8131792471">Fundamentals of Database Systems</a> (7th ed, 2016) has an even more specific definition of <strong>Clustering Indexes</strong>:</p>
+<p>But if we check the literature a bit further, Elmasri and Navathe’s <em>Fundamentals of Database Systems</em> (<a href="#ref-elmasri2016" id="cite-elmasri2016-1">Elmasri and Navathe, 2016</a>) has an even more specific definition of <strong>Clustering Indexes</strong>:</p>
 
 <blockquote>
   <p><em>“If file records are physically ordered on a nonkey field — which <strong>does not</strong> have a distinct value for each record — that field is called the <strong>clustering field</strong> and the data file is called a <strong>clustered file</strong>. We can create a different type of index, called a <strong>clustering index</strong>, to speed up retrieval of all the records that have the same value for the clustering field. This differs from a primary index, which requires that the ordering field of the data file have a <strong>distinct value</strong> for each record. A <strong>clustering index</strong> is also an ordered file with two fields; the first field is of the same type as the clustering field of the data file, and the second field is a disk block pointer. There is one entry in the clustering index for each distinct value of the clustering field, and it contains the value and a pointer to the first block in the data file that has a record with that value for its clustering field.</em></p>
@@ -519,9 +567,9 @@ To cut to the chase, what actually happened is that two database traditions pick
 
 <p><img src="/images/posts/primary_index_vs_clustering_index.svg" alt="navathe clustering index concept" /></p>
 
-<p>Independently, Oracle has used the term <a href="https://docs.oracle.com/en/database/oracle/oracle-database/26/cncpt/indexes-and-index-organized-tables.html"><strong>Index-Organized Table (IOT)</strong></a> since at least Oracle8, though the underlying idea predates the name. In Oracle’s own docs, <em>an IOT is a table with no separate heap file, that is, the data lives directly inside a B-tree, keyed by (typically) the primary key.</em></p>
+<p>Independently, Oracle has used the term <strong>Index-Organized Table (IOT)</strong> (<a href="#ref-oracle-iot" id="cite-oracle-iot-1">Oracle</a>) since at least Oracle8, though the underlying idea predates the name. In Oracle’s own docs, <em>an IOT is a table with no separate heap file, that is, the data lives directly inside a B-tree, keyed by (typically) the primary key.</em></p>
 
-<p>DDIA collapses both of these into a single definition:</p>
+<p>DDIA (<a href="#ref-kleppmann2026" id="cite-kleppmann2026-2">Kleppmann and Riccomini, 2026</a>) collapses both of these into a single definition:</p>
 
 <blockquote>
   <p>“If the actual data (row, document, vertex) is stored directly within the index structure, it is called a <strong>clustered index</strong>. For example, in MySQL’s InnoDB storage engine, the primary key of a table is always a clustered index, and in SQL Server, you can specify one clustered index per table [43].”<sup id="fnref:innodb-primary-key" role="doc-noteref"><a href="#fn:innodb-primary-key" class="footnote" rel="footnote">1</a></sup></p>
@@ -533,9 +581,9 @@ To cut to the chase, what actually happened is that two database traditions pick
 <br />
 </center>
 
-<p><strong>But that’s not an error on their part!</strong> It’s the terminology <a href="https://dev.mysql.com/doc/refman/9.7/en/innodb-index-types.html">MySQL’s InnoDB</a>, <a href="https://learn.microsoft.com/en-us/sql/relational-databases/indexes/clustered-and-nonclustered-indexes-described">SQL Server</a> and <a href="https://docs.pingcap.com/tidb/stable/clustered-indexes/">TiDB</a>, among others, actually use in their own documentation. The “clustered index” in their world <em>is</em> what Oracle calls an index-organized table. Same structure, different products/companies, different words.</p>
+<p><strong>But that’s not an error on their part!</strong> It’s the terminology MySQL’s InnoDB (<a href="#ref-mysql-innodb-index" id="cite-mysql-innodb-index-1">MySQL</a>), SQL Server (<a href="#ref-sqlserver-clustered" id="cite-sqlserver-clustered-1">Microsoft</a>) and TiDB (<a href="#ref-tidb-clustered" id="cite-tidb-clustered-1">PingCAP</a>), among others, actually use in their own documentation. The “clustered index” in their world <em>is</em> what Oracle calls an index-organized table. Same structure, different products/companies, different words.</p>
 
-<p>Markus Winand’s <a href="https://sql-performance-explained.com">SQL Performance Explained</a> (2nd edition, 2025) reconciles IOT and clustered index definitions, as quoted below:</p>
+<p>Markus Winand’s <em>SQL Performance Explained</em> (<a href="#ref-winand2025" id="cite-winand2025-1">Winand, 2025</a>) reconciles IOT and clustered index definitions, as quoted below:</p>
 
 <blockquote>
   <p><em>“Some databases can indeed use an index as primary table store. The Oracle database calls this concept <strong>index-organized tables (IOT)</strong>, other databases use the term <strong>clustered index</strong>. In this section, both terms are used to either put the emphasis on the table or the index characteristics as needed. An index-organized table is thus a B-tree index without a heap table. This results in two benefits: (1) it saves the space for the heap structure; (2) every access on a clustered index is automatically an index-only scan. Both benefits sound promising but are hardly achievable in practice.”</em></p>
@@ -557,9 +605,9 @@ To cut to the chase, what actually happened is that two database traditions pick
 
 <p><a href="/images/posts/02-clustering-index-silberschatz.svg"><img src="/images/posts/02-clustering-index-silberschatz.svg" alt="Clustering index over a sorted heap" /></a></p>
 
-<p>The important detail: this is a <em>maintained property</em>, not a structural guarantee. New inserts can land out of order until the next reorganize.  <code class="language-plaintext highlighter-rouge">OPTIMIZE TABLE</code> in <a href="https://dev.mysql.com/doc/refman/8.0/en/optimize-table.html">MySQL’s MyISAM</a> engine, or <code class="language-plaintext highlighter-rouge">CLUSTER</code> in <a href="https://www.postgresql.org/docs/current/sql-cluster.html">PostgreSQL</a> are both real-world instances of this exact concept.</p>
+<p>The important detail: this is a <em>maintained property</em>, not a structural guarantee. New inserts can land out of order until the next reorganize.  <code class="language-plaintext highlighter-rouge">ALTER TABLE ... ORDER BY</code> in <a href="https://dev.mysql.com/doc/refman/8.0/en/alter-table.html">MySQL</a> (for non-clustered engines like MyISAM), or <code class="language-plaintext highlighter-rouge">CLUSTER</code> in <a href="https://www.postgresql.org/docs/current/sql-cluster.html">PostgreSQL</a> are both real-world instances of this exact concept: each physically reorders the rows once, and neither keeps that order as new rows are inserted.</p>
 
-<p><strong>Db2</strong> goes a step further than MySQL and PostgreSQL: it names this concept directly. Its own <a href="https://www.ibm.com/docs/en/db2/11.5.x?topic=indexes-clustered-non-clustered">documentation</a> describes a clustering index as one that determines how rows are physically ordered in a table space; a genuinely separate object from the table, exactly like Silberschatz’s model. <a href="https://www.ibm.com/docs/en/db2-for-zos/12.0.0?topic=gia-clustering-indexes">Db2</a> even tracks a cluster ratio to measure how well-sorted the heap currently is, and recommends a <code class="language-plaintext highlighter-rouge">REORG</code> when it drifts.</p>
+<p><strong>Db2</strong> goes a step further than MySQL and PostgreSQL: it names this concept directly. Its own documentation (<a href="#ref-db2-clustered" id="cite-db2-clustered-1">IBM, Db2 11.5</a>) describes a clustering index as one that determines how rows are physically ordered in a table space; a genuinely separate object from the table, exactly like Silberschatz’s model. Db2 (<a href="#ref-db2-zos-clustering" id="cite-db2-zos-clustering-1">IBM, Db2 for z/OS 12</a>) even tracks a cluster ratio to measure how well-sorted the heap currently is, and recommends a <code class="language-plaintext highlighter-rouge">REORG</code> when it drifts.</p>
 
 <p>One caveat: Db2’s clustering index is still a dense (B-tree) index, with one entry per row. Silberschatz’s definition allows the index itself to go sparse once ordering is guaranteed, but Db2 doesn’t take that shortcut. So it’s a real match on the heap-file question, just not on the sparse-index detail.</p>
 
@@ -581,7 +629,7 @@ To cut to the chase, what actually happened is that two database traditions pick
 
 <p><strong><em>This two-hop pattern is exactly what Kleppmann and Riccomini are describing when they discuss the cost of secondary indexes on clustered-index tables in DDIA book!</em></strong></p>
 
-<p>By the way, Winand lays out exactly why this hurts once you add a second index on top of a clustered one. As the rows inside an index-organized table can move at any time to preserve B-tree order, a secondary index can’t store a physical pointer (<em>rowid</em>) to them, so it has to store the clustering key (often the primary key) instead and use that to look the row up.</p>
+<p>By the way, Winand (<a href="#ref-winand2025" id="cite-winand2025-2">Winand, 2025</a>) lays out exactly why this hurts once you add a second index on top of a clustered one. As the rows inside an index-organized table can move at any time to preserve B-tree order, a secondary index can’t store a physical pointer (<em>rowid</em>) to them, so it has to store the clustering key (often the primary key) instead and use that to look the row up.</p>
 
 <p>In practice, this means every lookup through a secondary index costs two searches instead of one: an INDEX RANGE SCAN<sup id="fnref:index-range-scan" role="doc-noteref"><a href="#fn:index-range-scan" class="footnote" rel="footnote">2</a></sup> on the secondary index, followed by an INDEX UNIQUE SCAN<sup id="fnref:index-unique-scan" role="doc-noteref"><a href="#fn:index-unique-scan" class="footnote" rel="footnote">3</a></sup> into the clustered index for each match. <em>By the way, I am borrowing Oracle’s EXPLAIN PLAN vocabulary here purely as an illustration of the two-hop pattern; InnoDB and SQL Server surface the same cost under their own plan-operation names.</em> As Winand puts it, <em>“accessing an index-organized table via a secondary index is very inefficient.”</em></p>
 
@@ -604,7 +652,7 @@ To cut to the chase, what actually happened is that two database traditions pick
 
 <h2 id="bonus-round-covering-index-no-controversy-here">Bonus round: covering index (no controversy here!)</h2>
 
-<p>Not every indexing term is contested. While looking into this, I also revisited <strong>covering index</strong>, as defined in Markus Winand’s <a href="https://sql-performance-explained.com"><em>SQL Performance Explained</em></a> (2025). Unlike the clustered/clustering mess, this one is consistent everywhere: SQL Server docs, PostgreSQL literature, Couchbase docs, and Winand’s book all agree:</p>
+<p>Not every indexing term is contested. While looking into this, I also revisited <strong>covering index</strong>, as defined in Markus Winand’s <em>SQL Performance Explained</em> (<a href="#ref-winand2025" id="cite-winand2025-3">Winand, 2025</a>). Unlike the clustered/clustering mess, this one is consistent everywhere: SQL Server docs, PostgreSQL literature, Couchbase docs, and Winand’s book all agree:</p>
 
 <blockquote>
   <p>A <strong>covering index</strong> contains every column a query needs —<code class="language-plaintext highlighter-rouge">SELECT</code>-list columns as well as<code class="language-plaintext highlighter-rouge">WHERE</code>and<code class="language-plaintext highlighter-rouge">JOIN</code> columns —, so the database engine never has to visit the underlying table at all.</p>
@@ -620,7 +668,7 @@ To cut to the chase, what actually happened is that two database traditions pick
 
 <p>The nice part: this concept is orthogonal to the clustering debate above. It applies whether you’re skipping a hop to a heap file (Silberschatz et al’s clustering index) or skipping a hop into a clustered B-tree (DDIA’s clustered index).</p>
 
-<p>By the way, a <a href="https://www.yugabyte.com/blog/how-a-distributed-sql-database-boosts-secondary-index-queries-with-index-only-scan/">YugaByte’s blog post</a> goes further by citing other covering indexes’ diverse names:</p>
+<p>By the way, a YugaByte blog post (<a href="#ref-yugabyte-ios" id="cite-yugabyte-ios-1">Yugabyte</a>) goes further by citing other covering indexes’ diverse names:</p>
 
 <blockquote>
   <p><em>“The solution is simple and has many names: “covering index”, “include index”, “projection index”, “fat index” and even “Tapio index” from the name of the author of “Interscience Relational Database Index Design and the Optimizers” (Tapio Lahdenmäki) who explained this in detail.”</em></p>
@@ -640,6 +688,44 @@ Edward</em></p>
 <hr />
 
 <p><em>August, 28th, 2026</em></p>
+
+<h2 id="references">References</h2>
+
+<ol>
+  <li>
+    <p><span id="ref-kleppmann2026"></span>Kleppmann, M., &amp; Riccomini, C. (2026). <em><a href="https://www.oreilly.com/library/view/designing-data-intensive-applications/9781098119058/">Designing Data-Intensive Applications</a></em> (2nd ed.). O’Reilly Media. <a href="#cite-kleppmann2026-1" class="reversefootnote" role="doc-backlink">↩</a> <a href="#cite-kleppmann2026-2" class="reversefootnote" role="doc-backlink">↩<sup>2</sup></a></p>
+  </li>
+  <li>
+    <p><span id="ref-silberschatz2020"></span>Silberschatz, A., Korth, H. F., &amp; Sudarshan, S. (2020). <em><a href="https://www.db-book.com/">Database System Concepts</a></em> (7th ed.). McGraw-Hill. <a href="#cite-silberschatz2020-1" class="reversefootnote" role="doc-backlink">↩</a> <a href="#cite-silberschatz2020-2" class="reversefootnote" role="doc-backlink">↩<sup>2</sup></a></p>
+  </li>
+  <li>
+    <p><span id="ref-elmasri2016"></span>Elmasri, R., &amp; Navathe, S. B. (2016). <em>Fundamentals of Database Systems</em> (7th ed.). Pearson. <a href="#cite-elmasri2016-1" class="reversefootnote" role="doc-backlink">↩</a></p>
+  </li>
+  <li>
+    <p><span id="ref-oracle-iot"></span>Oracle Database Documentation. <a href="https://docs.oracle.com/en/database/oracle/oracle-database/26/cncpt/indexes-and-index-organized-tables.html">Indexes and Index-Organized Tables</a>. <em>Oracle Database Concepts, 26ai</em>. Oracle. <a href="#cite-oracle-iot-1" class="reversefootnote" role="doc-backlink">↩</a></p>
+  </li>
+  <li>
+    <p><span id="ref-mysql-innodb-index"></span>MySQL Documentation. <a href="https://dev.mysql.com/doc/refman/9.7/en/innodb-index-types.html">Clustered and Secondary Indexes</a>. <em>MySQL 9.7 Reference Manual</em>. Oracle. <a href="#cite-mysql-innodb-index-1" class="reversefootnote" role="doc-backlink">↩</a></p>
+  </li>
+  <li>
+    <p><span id="ref-sqlserver-clustered"></span>Microsoft SQL Server Documentation. <a href="https://learn.microsoft.com/en-us/sql/relational-databases/indexes/clustered-and-nonclustered-indexes-described">Clustered and Nonclustered Indexes Described</a>. Microsoft. <a href="#cite-sqlserver-clustered-1" class="reversefootnote" role="doc-backlink">↩</a></p>
+  </li>
+  <li>
+    <p><span id="ref-tidb-clustered"></span>TiDB Documentation. <a href="https://docs.pingcap.com/tidb/stable/clustered-indexes/">Clustered Indexes</a>. PingCAP. <a href="#cite-tidb-clustered-1" class="reversefootnote" role="doc-backlink">↩</a></p>
+  </li>
+  <li>
+    <p><span id="ref-winand2025"></span>Winand, M. (2025). <em><a href="https://sql-performance-explained.com">SQL Performance Explained</a></em> (2nd ed.). <a href="#cite-winand2025-1" class="reversefootnote" role="doc-backlink">↩</a> <a href="#cite-winand2025-2" class="reversefootnote" role="doc-backlink">↩<sup>2</sup></a> <a href="#cite-winand2025-3" class="reversefootnote" role="doc-backlink">↩<sup>3</sup></a></p>
+  </li>
+  <li>
+    <p><span id="ref-db2-clustered"></span>IBM Db2 Documentation. <a href="https://www.ibm.com/docs/en/db2/11.5.x?topic=indexes-clustered-non-clustered">Clustered and Non-Clustered Indexes</a>. <em>Db2 11.5</em>. IBM. <a href="#cite-db2-clustered-1" class="reversefootnote" role="doc-backlink">↩</a></p>
+  </li>
+  <li>
+    <p><span id="ref-db2-zos-clustering"></span>IBM Db2 for z/OS Documentation. <a href="https://www.ibm.com/docs/en/db2-for-zos/12.0.0?topic=gia-clustering-indexes">Clustering Indexes</a>. <em>Db2 12 for z/OS</em>. IBM. <a href="#cite-db2-zos-clustering-1" class="reversefootnote" role="doc-backlink">↩</a></p>
+  </li>
+  <li>
+    <p><span id="ref-yugabyte-ios"></span>Yugabyte Blog. <a href="https://www.yugabyte.com/blog/how-a-distributed-sql-database-boosts-secondary-index-queries-with-index-only-scan/">How a Distributed SQL Database Boosts Secondary Index Queries with Index Only Scan</a>. Yugabyte, Inc. <a href="#cite-yugabyte-ios-1" class="reversefootnote" role="doc-backlink">↩</a></p>
+  </li>
+</ol>
 <div class="footnotes" role="doc-endnotes">
   <ol>
     <li id="fn:innodb-primary-key" role="doc-endnote">
