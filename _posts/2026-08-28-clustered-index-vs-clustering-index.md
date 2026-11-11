@@ -14,11 +14,11 @@ tags:
 
 ![I don't think meme](/images/posts/i-dont-think-meme.gif)
 
-Early this week, during a book club session, I found myself stumbling through the nuances of _**clustered indexes, index-organized tables and covering indexes**_, only to be corrected by fellow readers that were going strictly by Kleppmann and Riccomini's *Designing Data-Intensive Applications* ([Kleppmann and Riccomini, 2026](#ref-kleppmann2026){: #cite-kleppmann2026-1}). Driven by my  confusion, I hit the books and the web to untangle it all.
+In August 2026, during a book club session, I found myself stumbling through the nuances of _**clustered indexes, index-organized tables and covering indexes**_, only to be corrected by fellow readers who were going strictly by Kleppmann and Riccomini's *Designing Data-Intensive Applications* ([Kleppmann and Riccomini, 2026](#ref-kleppmann2026){: #cite-kleppmann2026-1}). Driven by my  confusion, I hit the books and the web to untangle it all.
 <div class="custom-box">
 To cut to the chase, what actually happened is that two database traditions picked  similar words (<i>"clustering index"</i> and <i>"clustered index"</i>) for two genuinely different physical structures!
 </div>
-While I'd learned it first from Silberschatz, Korth & Sudarshan's *Database System Concepts* ([Silberschatz et al., 2020](#ref-silberschatz2020){: #cite-silberschatz2020-1}), and a couple of lesser-known books,  Kleppmann and Riccomini's definition matches something else entirely. And it turns out **_their usage is the one that matches the industry's actual database engine implementations!_** Therefore, neither of us were way off during the book discussion or inventing anything, for that matter; we were just each drinking from different wells. 🥲
+While I'd learned it first from Silberschatz, Korth & Sudarshan's *Database System Concepts* ([Silberschatz et al., 2020](#ref-silberschatz2020){: #cite-silberschatz2020-1}), and a couple of lesser-known books,  Kleppmann and Riccomini's definition matches something else entirely. And it turns out **_their usage is the one that matches the industry's actual database engine implementations!_** Therefore, neither of us was way off during the book discussion or inventing anything, for that matter; we were just each drinking from different wells. 🥲
 
 _This post is the writeup I wish I'd had going into that conversation._ ;-)
 
@@ -39,16 +39,16 @@ But if we check the literature a bit further, Elmasri and Navathe's *Fundamental
 > 
 > _(...)_
 > 
-> _A clustering index is another example of a nondense (E.N., sparse) index because it has an entry for every distinct value of the indexing field, which is a nonkey by definition and hence has duplicate values rather than a unique value for every record in the file."_
+> _A clustering index is another example of a nondense [i.e., sparse] index because it has an entry for every distinct value of the indexing field, which is a nonkey by definition and hence has duplicate values rather than a unique value for every record in the file."_
 
 There's a subtle distinction worth flagging here. In Elmasri and Navathe terminology, _if the physical ordering field is the primary key, they normally call the associated index a primary index, not a clustering index._
 
 ![navathe clustering index concept](/images/posts/primary_index_vs_clustering_index.svg)
 
 
-Independently, Oracle has used the term **Index-Organized Table (IOT)** ([Oracle](#ref-oracle-iot){: #cite-oracle-iot-1}) since at least Oracle8, though the underlying idea predates the name. In Oracle's own docs, _an IOT is a table with no separate heap file, that is, the data lives directly inside a B-tree, keyed by (typically) the primary key._
+Independently, Oracle uses the term **Index-Organized Table (IOT)** ([Oracle](#ref-oracle-iot){: #cite-oracle-iot-1}). In Oracle's own docs, _an IOT is a table with no separate heap file, that is, the data lives directly inside a B-tree, keyed by (typically) the primary key._
 
-DDIA ([Kleppmann and Riccomini, 2026](#ref-kleppmann2026){: #cite-kleppmann2026-2}) collapses both of these into a single definition:
+DDIA ([Kleppmann and Riccomini, 2026](#ref-kleppmann2026){: #cite-kleppmann2026-2}) skips the textbook sense altogether and uses the engines' vocabulary, defining a clustered index as what Oracle calls an IOT:
 
 > "If the actual data (row, document, vertex) is stored directly within the index structure, it is called a **clustered index**. For example, in MySQL’s InnoDB storage engine, the primary key of a table is always a clustered index, and in SQL Server, you can specify one clustered index per table [43]."[^innodb-primary-key]
 
@@ -100,7 +100,7 @@ Here the sort order isn't something you maintain. It's structurally impossible t
 
 One more consequence follows directly from structure 3:
 
-### 4. The two-hop cost of secondary indexes on a clustered index
+### A consequence: the two-hop cost of secondary indexes on a clustered index
 
 Once there's no heap to point into, a secondary index (say, on `email`) can't store a physical rowid. It stores the clustering key instead, then does a second lookup into the clustered B-tree index to fetch the row.
 
@@ -111,6 +111,8 @@ Once there's no heap to point into, a secondary index (say, on `email`) can't st
 By the way, Winand ([Winand, 2025](#ref-winand2025){: #cite-winand2025-2}) lays out exactly why this hurts once you add a second index on top of a clustered one. As the rows inside an index-organized table can move at any time to preserve B-tree order, a secondary index can't store a physical pointer (_rowid_) to them, so it has to store the clustering key (often the primary key) instead and use that to look the row up. 
 
 In practice, this means every lookup through a secondary index costs two searches instead of one: an INDEX RANGE SCAN[^index-range-scan] on the secondary index, followed by an INDEX UNIQUE SCAN[^index-unique-scan] into the clustered index for each match. _By the way, I am borrowing Oracle's EXPLAIN PLAN vocabulary here purely as an illustration of the two-hop pattern; InnoDB and SQL Server surface the same cost under their own plan-operation names._ As Winand puts it, _"accessing an index-organized table via a secondary index is very inefficient."_ 
+
+Oracle adds an interesting twist here. Its secondary indexes on IOTs store a _logical rowid_: the row's primary key plus a _physical guess_, that is, the block where the row lived when the index entry was written. If the guess is still right, Oracle reads that block directly and skips the second B-tree traversal; if the row has moved (e.g., after a block split), it falls back to the primary-key lookup ([Oracle](#ref-oracle-iot){: #cite-oracle-iot-2}). It's a middle ground between a heap table's physical rowid and InnoDB's pure primary-key pointer.
 
 [^index-range-scan]: **Index Range Scan** is a database operation where the system traverses an index tree to find a starting point and then walks through connected leaf nodes to read a targeted range of matching entries. Source: [Use The Index, Luke — Execution Plan Operations](https://use-the-index-luke.com/sql/explain-plan/oracle/operations).
 
@@ -129,17 +131,17 @@ The fix is the same one used for heap tables: an index-only scan, though here it
 <strong>Heads up:</strong> Silberschatz's <i>"primary index"</i> (roughly a clustering index) and Elmasri/Navathe's <i>"primary index"</i> (ordered-by-unique-key, contrasted against their <i>"clustering index"</i>) are two more terms colliding under one name! Track which book you're in.
 </div>
 
-Two structures, several vocabularies, one underlying set of concepts, with Db2 being the rare case where a vendor's terminology and the classical textbook terminology actually agree. But none of the sources is "wrong" in isolation; the confusion only shows up when you read across them, or cross-references them, which is exactly what happens in a book club drawing on multiple references.
+Two contested structures (plus the heap baseline), several vocabularies, one underlying set of concepts, with Db2 being the rare case where a vendor's terminology and the classical textbook terminology actually agree. But none of the sources is "wrong" in isolation; the confusion only shows up when you read across them, or cross-reference them, which is exactly what happens in a book club drawing on multiple references.
 
-## Bonus round: covering index (no controversy here!)
+## Bonus round: covering index (many names, one idea)
 
-Not every indexing term is contested. While looking into this, I also revisited **covering index**, as defined in Markus Winand's *SQL Performance Explained* ([Winand, 2025](#ref-winand2025){: #cite-winand2025-3}). Unlike the clustered/clustering mess, this one is consistent everywhere: SQL Server docs, PostgreSQL literature, Couchbase docs, and Winand's book all agree:
+Covering index has the opposite problem of clustered/clustering index: many names, but one definition. While looking into this, I also revisited **covering index**, as defined in Markus Winand's *SQL Performance Explained* ([Winand, 2025](#ref-winand2025){: #cite-winand2025-3}). SQL Server docs, PostgreSQL literature, Couchbase docs, and Winand's book all describe the same mechanism:
 
 > A **covering index** contains every column a query needs —`SELECT`-list columns as well as`WHERE`and`JOIN` columns —, so the database engine never has to visit the underlying table at all.
 
 [![Covering index compared to a non-covering index](/images/posts/05-covering-index.svg)](/images/posts/05-covering-index.svg)
 
-Or specifically quoting Winand's book:
+Winand even objects to the name itself, though not to the idea:
 
 > _"If an index prevents a table access it is also called a **covering index**.The term is misleading, however, because it sounds like an index property. The phrase index-only scan correctly suggests that it is an execution plan operation."_
 
@@ -172,7 +174,7 @@ _August, 28th, 2026_
 
 3. <span id="ref-elmasri2016"></span>Elmasri, R., & Navathe, S. B. (2016). *Fundamentals of Database Systems* (7th ed.). Pearson. <a href="#cite-elmasri2016-1" class="reversefootnote" role="doc-backlink">&#8617;</a>
 
-4. <span id="ref-oracle-iot"></span>Oracle Database Documentation. [Indexes and Index-Organized Tables](https://docs.oracle.com/en/database/oracle/oracle-database/26/cncpt/indexes-and-index-organized-tables.html). *Oracle Database Concepts, 26ai*. Oracle. <a href="#cite-oracle-iot-1" class="reversefootnote" role="doc-backlink">&#8617;</a>
+4. <span id="ref-oracle-iot"></span>Oracle Database Documentation. [Indexes and Index-Organized Tables](https://docs.oracle.com/en/database/oracle/oracle-database/26/cncpt/indexes-and-index-organized-tables.html). *Oracle Database Concepts, 26ai*. Oracle. <a href="#cite-oracle-iot-1" class="reversefootnote" role="doc-backlink">&#8617;</a> <a href="#cite-oracle-iot-2" class="reversefootnote" role="doc-backlink">&#8617;<sup>2</sup></a>
 
 5. <span id="ref-mysql-innodb-index"></span>MySQL Documentation. [Clustered and Secondary Indexes](https://dev.mysql.com/doc/refman/9.7/en/innodb-index-types.html). *MySQL 9.7 Reference Manual*. Oracle. <a href="#cite-mysql-innodb-index-1" class="reversefootnote" role="doc-backlink">&#8617;</a>
 
