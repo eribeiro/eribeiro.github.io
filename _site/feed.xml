@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.10.0">Jekyll</generator><link href="https://eribeiro.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="https://eribeiro.github.io/" rel="alternate" type="text/html" /><updated>2026-11-11T23:56:48+00:00</updated><id>https://eribeiro.github.io/feed.xml</id><title type="html">Edward Ribeiro</title><subtitle>Senior Software Engineer</subtitle><author><name>Edward Ribeiro</name><email>edward.ribeiro@gmail.com</email></author><entry><title type="html">Sharding vs. Partitioning: When Definitions Got Sliced and Fractured</title><link href="https://eribeiro.github.io/blog/partitioning-vs-sharding/" rel="alternate" type="text/html" title="Sharding vs. Partitioning: When Definitions Got Sliced and Fractured" /><published>2026-09-06T00:00:00+00:00</published><updated>2026-09-06T00:00:00+00:00</updated><id>https://eribeiro.github.io/blog/partitioning-vs-sharding</id><content type="html" xml:base="https://eribeiro.github.io/blog/partitioning-vs-sharding/"><![CDATA[<center>
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.10.0">Jekyll</generator><link href="https://eribeiro.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="https://eribeiro.github.io/" rel="alternate" type="text/html" /><updated>2026-11-12T14:04:22+00:00</updated><id>https://eribeiro.github.io/feed.xml</id><title type="html">Edward Ribeiro</title><subtitle>Senior Software Engineer</subtitle><author><name>Edward Ribeiro</name><email>edward.ribeiro@gmail.com</email></author><entry><title type="html">Sharding vs. Partitioning: When Definitions Got Sliced and Fractured</title><link href="https://eribeiro.github.io/blog/partitioning-vs-sharding/" rel="alternate" type="text/html" title="Sharding vs. Partitioning: When Definitions Got Sliced and Fractured" /><published>2026-09-06T00:00:00+00:00</published><updated>2026-09-06T00:00:00+00:00</updated><id>https://eribeiro.github.io/blog/partitioning-vs-sharding</id><content type="html" xml:base="https://eribeiro.github.io/blog/partitioning-vs-sharding/"><![CDATA[<center>
 <div style="display: flex; justify-content: center; align-items: center; gap: 20px; flex-wrap: wrap;">
 <img src="/images/posts/partitioning_vs_sharding/fruit-ninja.gif" alt="fruit-ninja" style="width: 40%;" />
 <img src="/images/posts/partitioning_vs_sharding/giphy.gif" alt="giphy" style="width: 40%;" />
@@ -463,6 +463,10 @@ Partitioning strategy
 
 <p><a href="/images/posts/partitioning_vs_sharding/key-takeways.png"><img src="/images/posts/partitioning_vs_sharding/key-takeways.png" alt="key takeways" /></a></p>
 
+<h2 id="disclaimer">Disclaimer</h2>
+
+<p>I used Claude Opus 5.5 (via Claude Code) to draw the diagrams, fix errors, and reformat the citations. Any mistakes are my own.</p>
+
 <h2 id="references">References</h2>
 
 <ol>
@@ -690,6 +694,10 @@ Edward</em></p>
 <hr />
 
 <p><em>August, 28th, 2026</em></p>
+
+<h2 id="disclaimer">Disclaimer</h2>
+
+<p>I used Claude Opus 5.5 (via Claude Code) to draw the diagrams, fix errors, and reformat the citations. Any mistakes are my own.</p>
 
 <h2 id="references">References</h2>
 

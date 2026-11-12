@@ -166,6 +166,10 @@ Edward_
 
 _August, 28th, 2026_
 
+## Disclaimer
+
+I used Claude Opus 5.5 (via Claude Code) to draw the diagrams, fix errors, and reformat the citations. Any mistakes are my own.
+
 ## References
 
 1. <span id="ref-kleppmann2026"></span>Kleppmann, M., & Riccomini, C. (2026). *[Designing Data-Intensive Applications](https://www.oreilly.com/library/view/designing-data-intensive-applications/9781098119058/)* (2nd ed.). O'Reilly Media. <a href="#cite-kleppmann2026-1" class="reversefootnote" role="doc-backlink">&#8617;</a> <a href="#cite-kleppmann2026-2" class="reversefootnote" role="doc-backlink">&#8617;<sup>2</sup></a>

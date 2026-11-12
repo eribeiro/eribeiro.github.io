@@ -396,6 +396,10 @@ Or as a cool cheat sheet:
 
 [![key takeways](/images/posts/partitioning_vs_sharding/key-takeways.png)](/images/posts/partitioning_vs_sharding/key-takeways.png)
 
+## Disclaimer
+
+I used Claude Opus 5.5 (via Claude Code) to draw the diagrams, fix errors, and reformat the citations. Any mistakes are my own.
+
 ## References
 
 1. <span id="ref-oracle10g-partitioning"></span>Oracle Database Documentation. [Partitioning Concepts](https://docs.oracle.com/cd/B13789_01/server.101/b10743/partconc.htm). *Oracle Database Concepts, 10g Release 1*. Oracle. <a href="#cite-oracle10g-partitioning-1" class="reversefootnote" role="doc-backlink">&#8617;</a>
