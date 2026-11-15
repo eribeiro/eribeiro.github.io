@@ -23,7 +23,48 @@
     }
   };
 </script>
+{% if page.pseudocode %}
+<script>
+  window.MathJax.chtml = { adaptiveCSS: false };
+</script>
+{% endif %}
 <script defer src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.min.js"></script>
+{% endif %}
+
+{% if page.pseudocode %}
+<!-- pseudocode.js: renders CLRS-style algorithms written as LaTeX
+     algorithmic inside <pre class="pseudocode">. Requires `mathjax: true`
+     too. It converts math via MathJax.tex2chtml(), whose glyphs only show
+     if MathJax emitted their CSS, hence `adaptiveCSS: false` in the MathJax block above (CSS for
+     every glyph, not just those in already-typeset math). -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/pseudocode@2.4.1/build/pseudocode.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/pseudocode@2.4.1/build/pseudocode.min.js"></script>
+<script>
+  window.addEventListener("load", function () {
+    MathJax.startup.promise.then(function () {
+      pseudocode.renderClass("pseudocode", { lineNumber: true, noEnd: true });
+    });
+  });
+</script>
+{% endif %}
+
+{% if page.mermaid %}
+<!-- Mermaid: renders ```mermaid fenced blocks. Rouge has no mermaid lexer,
+     so kramdown emits them as plain code wrapped in .language-mermaid;
+     swap each for <pre class="mermaid"> holding the raw source, then let
+     Mermaid draw them. Opt in per post/page with `mermaid: true`. -->
+<script type="module">
+  import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs";
+  mermaid.initialize({ startOnLoad: false });
+  document.querySelectorAll(".language-mermaid").forEach(function (block) {
+    if (block.parentElement.closest(".language-mermaid")) return;
+    var pre = document.createElement("pre");
+    pre.className = "mermaid";
+    pre.textContent = block.textContent;
+    (block.closest("pre") || block).replaceWith(pre);
+  });
+  await mermaid.run({ querySelector: "pre.mermaid" });
+</script>
 {% endif %}
 
 <!-- end custom head snippets -->

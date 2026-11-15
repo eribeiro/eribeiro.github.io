@@ -1,0 +1,68 @@
+@startuml dvv-lost-write
+title Algorithm 6.3 (corrected) — Figure 6 scenario: two clients, same server\nvectors ordered [A, B]
+
+skinparam sequenceMessageAlign center
+skinparam noteFontSize 11
+skinparam ParticipantPadding 30
+
+actor "Client 1" as C1
+actor "Client 2" as C2
+participant "Server A" as A
+participant "Replica B" as B
+
+note over A, B : Initially VV = [0,0], D = ∅ on both replicas
+
+== Steps 1-2: both clients read ==
+C1 -> A : GET
+A --> C1 : x = 0, ctx {}
+C2 -> A : GET
+A --> C2 : x = 0, ctx {}
+note over C1, A
+  Algorithm 6.3 has no GET and no context input:
+  what each client saw is never given to the server
+end note
+
+== Step 3: Client 1 writes ==
+C1 -> A : PUT 10 (ctx {} is ignored)
+activate A
+note right of A #E8F5E9
+  local: VV_A ← [1,0]
+  d* = (A,1), D_A ← {(A,1)}
+  ✓ no siblings existed, assumption holds
+end note
+A -> B : broadcast ([1,0], (A,1))
+deactivate A
+note right of B
+  new? 1 ≤ VV_B[A]=0 → no, so new
+  D_B = {(A,1)→10}, VV_B = [1,0]
+end note
+
+== Step 4: Client 2 writes ==
+C2 -> A : PUT 20 (ctx {} is ignored)
+activate A
+note right of A #FFEBEE
+  local: VV_A ← [2,0]
+  d* = (A,2), D_A ← {(A,2)}
+  ✗ Client 2 read before (A,1) existed,
+     but 10 is discarded anyway
+end note
+A -> B : broadcast ([2,0], (A,2))
+deactivate A
+note right of B #FFEBEE
+  new? 2 ≤ VV_B[A]=1 → no, so new
+  prune (A,1): 1 ≤ VV_M[A]=2 ✓ → 10 removed
+  D_B = {(A,2)→20}, VV_B = [2,0]
+end note
+
+note over A, B #FFEBEE
+  Result: both replicas hold only {(A,2)→20}.
+  Client 1's write is lost: VV_M = [2,0] claims
+  the 20 write "saw" (A,1), but Client 2 never did.
+end note
+
+note over C1, B #E3F2FD
+  With the client's context (paper's update(S, S_r, r), DVVS Put):
+  Put(20, ctx=[0,0]) → is (A,1) known by ctx? 1 ≤ 0 → no, keep 10
+  Result: {(A,1)→10, (A,2)→20}, two siblings, nothing lost
+end note
+@enduml

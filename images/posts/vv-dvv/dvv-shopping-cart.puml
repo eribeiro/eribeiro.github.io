@@ -1,0 +1,80 @@
+@startuml dvv-shopping-cart
+title Algorithm 6.3 (corrected) — shopping cart on two devices\nvectors ordered [A, B]
+
+skinparam sequenceMessageAlign center
+skinparam noteFontSize 11
+skinparam ParticipantPadding 30
+
+actor "Phone user" as UA
+participant "Phone\n(Replica A)" as A
+participant "Laptop\n(Replica B)" as B
+actor "Laptop user" as UB
+
+note over A, B : Initially VV = [0,0], D = {}, U = [] on both replicas
+
+== Step 1-2: create the cart ==
+UA -> A : write {milk}
+activate A
+note right of A
+  local: VV_A = [1,0]
+  d* = (A,1), D_A = {(A,1)}, U = [{milk}]
+end note
+A -> B : broadcast ([1,0], {(A,1)}, {milk})
+deactivate A
+note right of B
+  D_B = {(A,1)}, VV_B = [1,0], U = [{milk}]
+end note
+
+== Network split (messages held) ==
+group Step 3: concurrent edit
+  UA -> A : read {milk} + write {milk, eggs}\n(one atomic step)
+  note right of A #E8F5E9
+    local: VV_A = [2,0]
+    d* = (A,2), D_A = {(A,2)}
+    U = [{milk, eggs}]
+    **saw its only sibling (A,1)**
+  end note
+end
+group Step 4: concurrent edit
+  UB -> B : read {milk} + write {milk, bread}\n(one atomic step)
+  note left of B #E8F5E9
+    local: VV_B = [1,1]
+    d* = (B,1), D_B = {(B,1)}
+    U = [{milk, bread}]
+    **saw its only sibling (A,1)**
+  end note
+end
+
+== Network heals ==
+A -> B : ([2,0], (A,2))
+note right of B #FFF3E0
+  D_B = {(A,2), (B,1)}
+  U = [{milk,eggs}, {milk,bread}] - siblings
+  VV_B = [2,1]
+end note
+B -> A : ([1,1], (B,1))
+note left of A #FFF3E0
+  Step 6: new? 1 ≤ VV_A[B]=0 → no, so new
+  prune (A,2)? 2 ≤ VV_M[A]=1 → no, keep
+  same two siblings, VV_A = [2,1]
+end note
+
+== Step 7-8: resolve the conflict ==
+UA -> A : read both siblings +\nwrite merged {milk, eggs, bread}
+activate A
+note right of A #E8F5E9
+  local: VV_A: [3,1]
+  d* = (A,3), D_A = {(A,3)}
+  U = [{milk, eggs, bread}]
+  **saw both siblings, nothing lost**
+end note
+A -> B : broadcast ([3,1], (A,3))
+deactivate A
+note right of B
+  prune (A,2): 2 <= 3,   prune (B,1): 1 <= 1
+  D_B = {(A,3)}, VV_B = [3,1]
+  U = [{milk,eggs,bread}]
+end note
+
+note over A, B #E3F2FD : Converged: both replicas hold {(A,3)}, VV = [3,1], U = [{milk, eggs, bread}]
+@enduml

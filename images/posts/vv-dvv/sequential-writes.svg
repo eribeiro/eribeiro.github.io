@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 921 230" width="921" height="230" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" fill="#1a1a1a">
+  <title>Scenario A, sequential writes: Client 1 reads "red" before writing "blue", so "blue" supersedes "red"</title>
+  <defs>
+    <marker id="tl" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#777"/></marker>
+    <marker id="ctl" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#1565c0"/></marker>
+    <marker id="cl" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#1565c0"/></marker>
+  </defs>
+
+  <!-- client timeline -->
+  <line x1="100" y1="50" x2="896" y2="50" stroke="#1565c0" stroke-width="1.2" marker-end="url(#ctl)"/>
+  <text x="90" y="56" font-size="16" font-weight="bold" text-anchor="end" fill="#1565c0">Client 1</text>
+
+  <!-- replica timeline -->
+  <line x1="100" y1="160" x2="896" y2="160" stroke="#777" stroke-width="1.6" marker-end="url(#tl)"/>
+  <text x="90" y="166" font-size="16" font-weight="bold" text-anchor="end">Replica A</text>
+
+  <!-- client requests -->
+  <g stroke="#1565c0" stroke-width="1.5" marker-end="url(#cl)">
+    <line x1="150" y1="50" x2="161" y2="152"/>   <!-- (1) PUT red -->
+    <line x1="400" y1="160" x2="411" y2="58"/>   <!-- (2) GET reply -->
+    <line x1="620" y1="50" x2="631" y2="152"/>   <!-- (3) PUT blue -->
+  </g>
+  <g fill="#1565c0">
+    <circle cx="150" cy="50" r="4"/>
+    <circle cx="412" cy="50" r="4"/>
+    <circle cx="620" cy="50" r="4"/>
+  </g>
+  <g font-size="12" font-style="italic" fill="#1565c0">
+    <text x="162" y="44">PUT(K, "red")</text>
+    <text x="420" y="44">GET(K): "red"</text>
+    <text x="632" y="44">PUT(K, "blue")</text>
+  </g>
+
+  <!-- replica events -->
+  <circle cx="162" cy="160" r="6"/>
+  <circle cx="400" cy="160" r="6" fill="#fff" stroke="#1a1a1a" stroke-width="2"/>
+  <circle cx="632" cy="160" r="6"/>
+  <g font-size="13">
+    <text x="162" y="184" text-anchor="middle">(1) K = "red"</text>
+    <text x="400" y="184" text-anchor="middle">(2) read "red"</text>
+    <text x="632" y="184" text-anchor="middle" fill="#2e7d32">(3) K = "blue": supersedes "red" ✓</text>
+  </g>
+
+  <text x="10" y="220" font-size="13" fill="#555">Blue arrows: client requests; open circle: GET. The second PUT observed the first, so it replaces it.</text>
+</svg>
