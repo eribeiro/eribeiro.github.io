@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.10.0">Jekyll</generator><link href="https://eribeiro.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="https://eribeiro.github.io/" rel="alternate" type="text/html" /><updated>2026-11-16T15:39:03+00:00</updated><id>https://eribeiro.github.io/feed.xml</id><title type="html">Edward Ribeiro</title><subtitle>Senior Software Engineer</subtitle><author><name>Edward Ribeiro</name><email>edward.ribeiro@gmail.com</email></author><entry><title type="html">Connecting the Dots: Version Vectors vs. Dotted Version Vectors</title><link href="https://eribeiro.github.io/blog/vv-dvv/" rel="alternate" type="text/html" title="Connecting the Dots: Version Vectors vs. Dotted Version Vectors" /><published>2026-11-16T00:00:00+00:00</published><updated>2026-11-16T00:00:00+00:00</updated><id>https://eribeiro.github.io/blog/vv-dvv</id><content type="html" xml:base="https://eribeiro.github.io/blog/vv-dvv/"><![CDATA[<p><img src="/images/posts/vv-dvv/new-math-lady.webp" alt="math lady" /></p>
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.10.0">Jekyll</generator><link href="https://eribeiro.github.io/feed.xml" rel="self" type="application/atom+xml" /><link href="https://eribeiro.github.io/" rel="alternate" type="text/html" /><updated>2026-11-16T16:03:25+00:00</updated><id>https://eribeiro.github.io/feed.xml</id><title type="html">Edward Ribeiro</title><subtitle>Senior Software Engineer</subtitle><author><name>Edward Ribeiro</name><email>edward.ribeiro@gmail.com</email></author><entry><title type="html">Connecting the Dots: Version Vectors vs. Dotted Version Vectors</title><link href="https://eribeiro.github.io/blog/vv-dvv/" rel="alternate" type="text/html" title="Connecting the Dots: Version Vectors vs. Dotted Version Vectors" /><published>2026-11-16T00:00:00+00:00</published><updated>2026-11-16T00:00:00+00:00</updated><id>https://eribeiro.github.io/blog/vv-dvv</id><content type="html" xml:base="https://eribeiro.github.io/blog/vv-dvv/"><![CDATA[<p><img src="/images/posts/vv-dvv/new-math-lady.webp" alt="math lady" /></p>
 
 <h2 id="introduction">Introduction</h2>
 
@@ -612,8 +612,8 @@ Therefore, for a given key K, it has either a single version or a set of sibling
   </ol>
 </div>]]></content><author><name>Edward Ribeiro</name><email>edward.ribeiro@gmail.com</email></author><category term="Blog" /><category term="causality" /><category term="replication" /><category term="logical-clocks" /><category term="version-vectors" /><category term="dotted-version-vectors" /><summary type="html"><![CDATA[An introductory but deep dive into the uses, invariants and limitations of Version Vectors (VV), Dotted Version Vectors (DVV) and Dotted Version Vector Sets (DVVS)]]></summary></entry><entry><title type="html">Sharding vs. Partitioning: When Definitions Got Sliced and Fractured</title><link href="https://eribeiro.github.io/blog/partitioning-vs-sharding/" rel="alternate" type="text/html" title="Sharding vs. Partitioning: When Definitions Got Sliced and Fractured" /><published>2026-09-06T00:00:00+00:00</published><updated>2026-09-06T00:00:00+00:00</updated><id>https://eribeiro.github.io/blog/partitioning-vs-sharding</id><content type="html" xml:base="https://eribeiro.github.io/blog/partitioning-vs-sharding/"><![CDATA[<center>
 <div style="display: flex; justify-content: center; align-items: center; gap: 20px; flex-wrap: wrap;">
-<img src="/images/posts/partitioning_vs_sharding/fruit-ninja.gif" alt="fruit-ninja" style="width: 40%;" />
-<img src="/images/posts/partitioning_vs_sharding/giphy.gif" alt="giphy" style="width: 40%;" />
+<img src="/images/posts/partitioning-vs-sharding/fruit-ninja.gif" alt="fruit-ninja" style="width: 40%;" />
+<img src="/images/posts/partitioning-vs-sharding/giphy.gif" alt="giphy" style="width: 40%;" />
 </div>
 <br />
 <br />
@@ -622,7 +622,7 @@ Therefore, for a given key K, it has either a single version or a set of sibling
 <p>As I slowly, <em>and reluctantly</em>, try to make a comeback to microblogging sites after many years out, I stumbled across the following tweet in my very first days there:</p>
 
 <center>
-<img src="/images/posts/partitioning_vs_sharding/twitter-post.png" alt="Twitter post" style="width: 50%;" />
+<img src="/images/posts/partitioning-vs-sharding/twitter-post.png" alt="Twitter post" style="width: 50%;" />
 <br />
 <br />
 </center>
@@ -638,7 +638,7 @@ Therefore, for a given key K, it has either a single version or a set of sibling
 <p>In a previous life, this small discordance would immediately engage me on a real-life version of that famous <a href="https://xkcd.com/386/">XKCD cartoon</a>:</p>
 
 <center>
-<img src="/images/posts/partitioning_vs_sharding/duty_calls_2x.png" alt="Duty Calls XKCD" style="width: 40%;" />
+<img src="/images/posts/partitioning-vs-sharding/duty_calls_2x.png" alt="Duty Calls XKCD" style="width: 40%;" />
 <br />
 <br />
 </center>
@@ -648,7 +648,7 @@ Therefore, for a given key K, it has either a single version or a set of sibling
 <p><em>And for what’s worth, a genuine and relevant doubt unfolded itself into a nice oportunity to review some crucial concepts in databases and distributed systems!</em> 😄</p>
 
 <center>
-<img src="/images/posts/partitioning_vs_sharding/duty_calls_3x.jpg" alt="Duty Calls 2 XKCD" style="width: 50%;" />
+<img src="/images/posts/partitioning-vs-sharding/duty_calls_3x.jpg" alt="Duty Calls 2 XKCD" style="width: 50%;" />
 <br />
 <br />
 </center>
@@ -660,7 +660,7 @@ Therefore, for a given key K, it has either a single version or a set of sibling
 <!-- **UPDATE [09-05-2026]**: while wrapping up this post, I stumbled upon yet another post mentioning the aforementioned distinction between partitioning and sharding... Maybe this could be a timely blog post, after all? 😏
 
 <center>
-<img src="/images/posts/partitioning_vs_sharding/threads-post.png" alt="Duty Calls 2 XKCD" style="width: 40%;">
+<img src="/images/posts/partitioning-vs-sharding/threads-post.png" alt="Duty Calls 2 XKCD" style="width: 40%;">
 <br/>
 <br/>
 </center> -->
@@ -764,7 +764,7 @@ Therefore, for a given key K, it has either a single version or a set of sibling
 
 <p>So, when a DBA in the 2000s said that <em>“we partitioned the orders table”</em>, they usually meant a native DBMS feature like this:</p>
 
-<p><a href="/images/posts/partitioning_vs_sharding/table-partitioning.png"><img src="/images/posts/partitioning_vs_sharding/table-partitioning.png" alt="table partitioning" /></a></p>
+<p><a href="/images/posts/partitioning-vs-sharding/table-partitioning.png"><img src="/images/posts/partitioning-vs-sharding/table-partitioning.png" alt="table partitioning" /></a></p>
 
 <p>These features often look like:</p>
 
@@ -782,7 +782,7 @@ Therefore, for a given key K, it has either a single version or a set of sibling
 
 <p>Back in the day, when an eBay/Flickr/Facebook/Google engineer said that <em>“we sharded users”</em>, they usually meant something like:</p>
 
-<p><a href="/images/posts/partitioning_vs_sharding/sharding-architecture.png"><img src="/images/posts/partitioning_vs_sharding/sharding-architecture.png" alt="sharding architecture" /></a></p>
+<p><a href="/images/posts/partitioning-vs-sharding/sharding-architecture.png"><img src="/images/posts/partitioning-vs-sharding/sharding-architecture.png" alt="sharding architecture" /></a></p>
 
 <p>And later, during the 2010s, the “sharding” term solidified through the success of NoSQL systems such as MongoDB and Riak, for example. MongoDB documentation (<a href="#ref-mongodb-sharding" id="cite-mongodb-sharding-1">MongoDB</a>) states that <em>“Sharding is a method for distributing data across multiple machines.”</em></p>
 
@@ -845,7 +845,7 @@ Sharding = split the database across machines.</p>
 
 <h2 id="fragmentation-allocation-and-replication">Fragmentation, Allocation and Replication</h2>
 <center>
-<img src="/images/posts/partitioning_vs_sharding/good-bad-ugly-movie.gif" alt="The Good, The Bad and The Ugly" style="width: 70%;" />
+<img src="/images/posts/partitioning-vs-sharding/good-bad-ugly-movie.gif" alt="The Good, The Bad and The Ugly" style="width: 70%;" />
 <br />
 <br />
 </center>
@@ -860,7 +860,7 @@ Sharding = split the database across machines.</p>
 
 <p><a id="figure-1"></a></p>
 
-<p><a href="/images/posts/partitioning_vs_sharding/three-axis.png"><img src="/images/posts/partitioning_vs_sharding/three-axis.png" alt="Three axes of classification" /></a></p>
+<p><a href="/images/posts/partitioning-vs-sharding/three-axis.png"><img src="/images/posts/partitioning-vs-sharding/three-axis.png" alt="Three axes of classification" /></a></p>
 
 <p><strong>Figure 1 - Three axes of classification</strong></p>
 
@@ -884,11 +884,11 @@ Sharding = split the database across machines.</p>
 
 <p>This definition doesn’t conditionate partitioning of data to its  placement, be it local or distributed among nodes. Those partitions \(P_{i}\), for \(i = \{1,.., n\}\) could either reside on a single node,</p>
 
-<p><a href="/images/posts/partitioning_vs_sharding/single-node-partition.png"><img src="/images/posts/partitioning_vs_sharding/single-node-partition.png" alt="single node partition" /></a></p>
+<p><a href="/images/posts/partitioning-vs-sharding/single-node-partition.png"><img src="/images/posts/partitioning-vs-sharding/single-node-partition.png" alt="single node partition" /></a></p>
 
 <p>or be distributed among various nodes,</p>
 
-<p><a href="/images/posts/partitioning_vs_sharding/multi-node-partition.png"><img src="/images/posts/partitioning_vs_sharding/multi-node-partition.png" alt="multi-node partition" /></a></p>
+<p><a href="/images/posts/partitioning-vs-sharding/multi-node-partition.png"><img src="/images/posts/partitioning-vs-sharding/multi-node-partition.png" alt="multi-node partition" /></a></p>
 
 <p>or even be a combination of single and multi-node, but, in any case, they are still <em>partitions</em>.</p>
 
@@ -918,7 +918,7 @@ Sharding = split the database across machines.</p>
 
 <p>Suppose we have the following <em>PROJ</em> table and apply conditions \(C_{1} = BUDGET &lt; 250000\) and \(C_{2} = BUDGET \ge 250000\), this will produce two horizontal partitionings as below:</p>
 
-<p><a href="/images/posts/partitioning_vs_sharding/horizontal-partitioning.png"><img src="/images/posts/partitioning_vs_sharding/horizontal-partitioning.png" alt="horizontal partitioning" /></a></p>
+<p><a href="/images/posts/partitioning-vs-sharding/horizontal-partitioning.png"><img src="/images/posts/partitioning-vs-sharding/horizontal-partitioning.png" alt="horizontal partitioning" /></a></p>
 
 <p>Elmasri and Navathe (<a href="#ref-elmasri2016" id="cite-elmasri2016-1">Elmasri and Navathe, 2016</a>) define an interesting property of horizontal partitioning:</p>
 
@@ -930,7 +930,7 @@ Sharding = split the database across machines.</p>
 
 <p>It’s also important to observe that depending on the \(C_i\) conditions of the horizontal partitioning, this may result in an uneven data distribution among the partitions (<strong>data skew</strong>), as illustrated by the image below where we split the horizontal fragments by the Dno column. This can potentially create <strong>hot spots</strong> and performance bottlenecks, with some partitions overloaded while others are mostly idle.</p>
 
-<p><a href="/images/posts/partitioning_vs_sharding/employee-horizontal-partitioning.png"><img src="/images/posts/partitioning_vs_sharding/employee-horizontal-partitioning.png" alt="employee horizontal partitioning" /></a></p>
+<p><a href="/images/posts/partitioning-vs-sharding/employee-horizontal-partitioning.png"><img src="/images/posts/partitioning-vs-sharding/employee-horizontal-partitioning.png" alt="employee horizontal partitioning" /></a></p>
 
 <p>Both Silberschatz et al and Özsu and Valduriez mention that horizontal partitioning is widely used for parallel and distributed database systems because of its inherent opportunities for both interquery and intraquery parallelism<sup id="fnref:intra-inter-query" role="doc-noteref"><a href="#fn:intra-inter-query" class="footnote" rel="footnote">3</a></sup>.</p>
 
@@ -942,13 +942,13 @@ Sharding = split the database across machines.</p>
 
 <p>For n processors, the ith tuple is assigned to the processor \(i \bmod n\). This technique is ideally suited for applications that read the entire relation sequentially for each query. As far as the literature goes, it is especially used in RAID disk arrays.</p>
 
-<p><a href="/images/posts/partitioning_vs_sharding/round-robin-partitioning.png"><img src="/images/posts/partitioning_vs_sharding/round-robin-partitioning.png" alt="round-robin partitioning" /></a></p>
+<p><a href="/images/posts/partitioning-vs-sharding/round-robin-partitioning.png"><img src="/images/posts/partitioning-vs-sharding/round-robin-partitioning.png" alt="round-robin partitioning" /></a></p>
 
 <p><strong>2. Hash Partitioning</strong></p>
 
 <p>There’s a hash function that maps a key value to a partition number. If the hash function is good, the number of tuples in each node is roughly the same, i.e. \(\frac{1}{N}\), for \(N\) nodes. It is best suited for point queries based on the partitioning attribute, and it’s also useful for sequential scans over the entire relation. Nevertheless, it is not well suited for point queries on nonpartitioning attributes, nor for range queries on the partitioning attribute, since hashing scatters contiguous key values across all nodes.</p>
 
-<p><a href="/images/posts/partitioning_vs_sharding/hash-partitioning.png"><img src="/images/posts/partitioning_vs_sharding/hash-partitioning.png" alt="hash partitioning" /></a></p>
+<p><a href="/images/posts/partitioning-vs-sharding/hash-partitioning.png"><img src="/images/posts/partitioning-vs-sharding/hash-partitioning.png" alt="hash partitioning" /></a></p>
 
 <p><strong>3. Range Partitioning</strong></p>
 
@@ -960,7 +960,7 @@ Sharding = split the database across machines.</p>
   \text{if } v_i \leq x &lt; v_{i+1} \implies \text{t goes to } N_{i+1}
 \end{cases}\]
 
-<p><a href="/images/posts/partitioning_vs_sharding/range-partitioning.png"><img src="/images/posts/partitioning_vs_sharding/range-partitioning.png" alt="range partitioning" /></a></p>
+<p><a href="/images/posts/partitioning-vs-sharding/range-partitioning.png"><img src="/images/posts/partitioning-vs-sharding/range-partitioning.png" alt="range partitioning" /></a></p>
 
 <!-- ```
 Partitioning strategy
@@ -979,7 +979,7 @@ Partitioning strategy
 
 <p>On the other hand, <strong>derived horizontal partitioning</strong> is the partitioning of a relation that results from predicates being defined by another relation (that is, the table depends on one or more other tables to exist and have uniqueness). Tables like ORDERS and INVENTORY are examples of such tables, so that we can partition them according to how their referenced parent table (e.g., CUSTOMER) was already partitioned, keeping related rows co-located on the same fragment for faster joins.</p>
 
-<p><a href="/images/posts/partitioning_vs_sharding/primary-secondary-horizontal-partitioning.png"><img src="/images/posts/partitioning_vs_sharding/primary-secondary-horizontal-partitioning.png" alt="primary and derived horizontal partitioning" /></a></p>
+<p><a href="/images/posts/partitioning-vs-sharding/primary-secondary-horizontal-partitioning.png"><img src="/images/posts/partitioning-vs-sharding/primary-secondary-horizontal-partitioning.png" alt="primary and derived horizontal partitioning" /></a></p>
 
 <h5 id="vertical-partitioning">Vertical Partitioning</h5>
 
@@ -993,7 +993,7 @@ Partitioning strategy
 
 <p>Suppose that our PROJ table is split by two lists of attributes, \(L_{1} = \{PNO, BUDGET\}\) and \(L_{2} = \{PNO, PNAME, LOC\}\)</p>
 
-<p><a href="/images/posts/partitioning_vs_sharding/vertical-partitioning.png"><img src="/images/posts/partitioning_vs_sharding/vertical-partitioning.png" alt="horizontal and vertical partitioning" /></a></p>
+<p><a href="/images/posts/partitioning-vs-sharding/vertical-partitioning.png"><img src="/images/posts/partitioning-vs-sharding/vertical-partitioning.png" alt="horizontal and vertical partitioning" /></a></p>
 
 <p>As we can see in the example above, PNO, the Primary Key (PK) of the PROJ table is duplicated on the two fragments – \(PROJ_{1}\) and \(PROJ_{2}\). This is not a coincidence, but a conscious distributed database design decision so that we are able to reconstruct the original relation \(R\) from its vertical fragments by joining them on PNO. In other words, our database design has a <em>lossless-join property</em>.</p>
 
@@ -1007,7 +1007,7 @@ Partitioning strategy
 
 <p>Figure 2.2 in Georgiev’s thesis (<a href="#ref-georgiev2008" id="cite-georgiev2008-1">Georgiev, 2008</a>) shows examples of a lossy (a) and a lossless (b) decomposition.</p>
 
-<p><a href="/images/posts/partitioning_vs_sharding/lossless-lossy-decomposition.png"><img src="/images/posts/partitioning_vs_sharding/lossless-lossy-decomposition.png" alt="lossless and lossy decompositions" /></a></p>
+<p><a href="/images/posts/partitioning-vs-sharding/lossless-lossy-decomposition.png"><img src="/images/posts/partitioning-vs-sharding/lossless-lossy-decomposition.png" alt="lossless and lossy decompositions" /></a></p>
 
 <p>Finally, Ramakrishnan and Gehrke state the following about  vertical partitioning:</p>
 
@@ -1031,7 +1031,7 @@ Partitioning strategy
 
 <p>In the Employee table example, if we partition by Department Number (Dno) and Social Security Number (SSN), there are four resulting partitions:</p>
 
-<p><a href="/images/posts/partitioning_vs_sharding/employee-hybrid-partitioning.png"><img src="/images/posts/partitioning_vs_sharding/employee-hybrid-partitioning.png" alt="hybrid partition" /></a></p>
+<p><a href="/images/posts/partitioning-vs-sharding/employee-hybrid-partitioning.png"><img src="/images/posts/partitioning-vs-sharding/employee-hybrid-partitioning.png" alt="hybrid partition" /></a></p>
 
 <h3 id="2-allocation">2. Allocation</h3>
 
@@ -1073,7 +1073,7 @@ Partitioning strategy
 
 <p>Or as a cool cheat sheet:</p>
 
-<p><a href="/images/posts/partitioning_vs_sharding/key-takeways.png"><img src="/images/posts/partitioning_vs_sharding/key-takeways.png" alt="key takeways" /></a></p>
+<p><a href="/images/posts/partitioning-vs-sharding/key-takeways.png"><img src="/images/posts/partitioning-vs-sharding/key-takeways.png" alt="key takeways" /></a></p>
 
 <h2 id="disclaimer">Disclaimer</h2>
 
@@ -1147,7 +1147,7 @@ Partitioning strategy
       <p>While interquery allows the parallel execution of a number of queries on various nodes, intraquery allows the parallel execution of a single query by breaking it up into subqueries and executing on various partitions in parallel. <a href="#fnref:intra-inter-query" class="reversefootnote" role="doc-backlink">&#8617;</a></p>
     </li>
   </ol>
-</div>]]></content><author><name>Edward Ribeiro</name><email>edward.ribeiro@gmail.com</email></author><category term="Blog" /><category term="partitioning" /><category term="horizontal-partitioning" /><category term="vertical-partitioning" /><category term="sharding" /><category term="database-internals" /><category term="fragmentation" /><summary type="html"><![CDATA[Social media replies insisting that partitioning stays on one server while sharding spans many nodes sent me on quest through vendor docs, and decades of database textbooks to check whether that clean split actually holds up.]]></summary></entry><entry><title type="html">“Clustered Index” Doesn’t Mean What You Think It Means (And That’s Alright!)</title><link href="https://eribeiro.github.io/blog/clustered-index-vs-clustering-index/" rel="alternate" type="text/html" title="“Clustered Index” Doesn’t Mean What You Think It Means (And That’s Alright!)" /><published>2026-08-28T00:00:00+00:00</published><updated>2026-08-28T00:00:00+00:00</updated><id>https://eribeiro.github.io/blog/clustered-index-vs-clustering-index</id><content type="html" xml:base="https://eribeiro.github.io/blog/clustered-index-vs-clustering-index/"><![CDATA[<p><img src="/images/posts/i-dont-think-meme.gif" alt="I don't think meme" /></p>
+</div>]]></content><author><name>Edward Ribeiro</name><email>edward.ribeiro@gmail.com</email></author><category term="Blog" /><category term="partitioning" /><category term="horizontal-partitioning" /><category term="vertical-partitioning" /><category term="sharding" /><category term="database-internals" /><category term="fragmentation" /><summary type="html"><![CDATA[Social media replies insisting that partitioning stays on one server while sharding spans many nodes sent me on quest through vendor docs, and decades of database textbooks to check whether that clean split actually holds up.]]></summary></entry><entry><title type="html">“Clustered Index” Doesn’t Mean What You Think It Means (And That’s Alright!)</title><link href="https://eribeiro.github.io/blog/clustered-index-vs-clustering-index/" rel="alternate" type="text/html" title="“Clustered Index” Doesn’t Mean What You Think It Means (And That’s Alright!)" /><published>2026-08-28T00:00:00+00:00</published><updated>2026-08-28T00:00:00+00:00</updated><id>https://eribeiro.github.io/blog/clustered-index-vs-clustering-index</id><content type="html" xml:base="https://eribeiro.github.io/blog/clustered-index-vs-clustering-index/"><![CDATA[<p><img src="/images/posts/clustering-vs-clustered/i-dont-think-meme.gif" alt="I don't think meme" /></p>
 
 <p>In August 2026, during a book club session, I found myself stumbling through the nuances of <em><strong>clustered indexes, index-organized tables and covering indexes</strong></em>, only to be corrected by fellow readers who were going strictly by Kleppmann and Riccomini’s <em>Designing Data-Intensive Applications</em> (<a href="#ref-kleppmann2026" id="cite-kleppmann2026-1">Kleppmann and Riccomini, 2026</a>). Driven by my  confusion, I hit the books and the web to untangle it all.</p>
 <div class="custom-box">
@@ -1167,7 +1167,7 @@ To cut to the chase, what actually happened is that two database traditions pick
 
 <p>In other words, they describe a clustering index as one where the heap file itself is ordered according to the index search key.</p>
 
-<p><img src="/images/posts/clustering_index_vs_primary_key_index.svg" alt="silberschatz clustering index concepts" /></p>
+<p><img src="/images/posts/clustering-vs-clustered/clustering_index_vs_primary_key_index.svg" alt="silberschatz clustering index concepts" /></p>
 
 <p>But if we check the literature a bit further, Elmasri and Navathe’s <em>Fundamentals of Database Systems</em> (<a href="#ref-elmasri2016" id="cite-elmasri2016-1">Elmasri and Navathe, 2016</a>) has an even more specific definition of <strong>Clustering Indexes</strong>:</p>
 
@@ -1181,7 +1181,7 @@ To cut to the chase, what actually happened is that two database traditions pick
 
 <p>There’s a subtle distinction worth flagging here. In Elmasri and Navathe terminology, <em>if the physical ordering field is the primary key, they normally call the associated index a primary index, not a clustering index.</em></p>
 
-<p><img src="/images/posts/primary_index_vs_clustering_index.svg" alt="navathe clustering index concept" /></p>
+<p><img src="/images/posts/clustering-vs-clustered/primary_index_vs_clustering_index.svg" alt="navathe clustering index concept" /></p>
 
 <p>Independently, Oracle uses the term <strong>Index-Organized Table (IOT)</strong> (<a href="#ref-oracle-iot" id="cite-oracle-iot-1">Oracle</a>). In Oracle’s own docs, <em>an IOT is a table with no separate heap file, that is, the data lives directly inside a B-tree, keyed by (typically) the primary key.</em></p>
 
@@ -1192,7 +1192,7 @@ To cut to the chase, what actually happened is that two database traditions pick
 </blockquote>
 
 <center>
-<img src="/images/posts/peter-parker-meme.jpg" alt="alt text" style="width: 30%;" />
+<img src="/images/posts/clustering-vs-clustered/peter-parker-meme.jpg" alt="alt text" style="width: 30%;" />
 <br />
 <br />
 </center>
@@ -1213,13 +1213,13 @@ To cut to the chase, what actually happened is that two database traditions pick
 
 <p>Rows sit in an unordered heap and a B+-Tree index points into it.</p>
 
-<p><a href="/images/posts/01-heap-plus-secondary-index.svg"><img src="/images/posts/01-heap-plus-secondary-index.svg" alt="Heap file with secondary index" /></a></p>
+<p><a href="/images/posts/clustering-vs-clustered/01-heap-plus-secondary-index.svg"><img src="/images/posts/clustering-vs-clustered/01-heap-plus-secondary-index.svg" alt="Heap file with secondary index" /></a></p>
 
 <h3 id="2-clustering-index-the-academic-vernacular-silberschatzsnavathes">2. “Clustering index”: the academic vernacular (Silberschatz’s/Navathe’s)</h3>
 
 <p><em>The heap file is still there, but it’s been physically sorted to match the index key.</em> Because order matches, the index doesn’t even need an entry for every row, one entry per disk block is enough (i.e., it can be a sparse index).</p>
 
-<p><a href="/images/posts/02-clustering-index-silberschatz.svg"><img src="/images/posts/02-clustering-index-silberschatz.svg" alt="Clustering index over a sorted heap" /></a></p>
+<p><a href="/images/posts/clustering-vs-clustered/02-clustering-index-silberschatz.svg"><img src="/images/posts/clustering-vs-clustered/02-clustering-index-silberschatz.svg" alt="Clustering index over a sorted heap" /></a></p>
 
 <p>The important detail: this is a <em>maintained property</em>, not a structural guarantee. New inserts can land out of order until the next reorganize.  <code class="language-plaintext highlighter-rouge">ALTER TABLE ... ORDER BY</code> in <a href="https://dev.mysql.com/doc/refman/8.0/en/alter-table.html">MySQL</a> (for non-clustered engines like MyISAM), or <code class="language-plaintext highlighter-rouge">CLUSTER</code> in <a href="https://www.postgresql.org/docs/current/sql-cluster.html">PostgreSQL</a> are both real-world instances of this exact concept: each physically reorders the rows once, and neither keeps that order as new rows are inserted.</p>
 
@@ -1231,7 +1231,7 @@ To cut to the chase, what actually happened is that two database traditions pick
 
 <p><em>No heap file exists.</em> The B-tree’s leaf nodes directly hold the row data.</p>
 
-<p><a href="/images/posts/03-clustered-index-iot.svg"><img src="/images/posts/03-clustered-index-iot.svg" alt="Clustered index with no separate heap" /></a></p>
+<p><a href="/images/posts/clustering-vs-clustered/03-clustered-index-iot.svg"><img src="/images/posts/clustering-vs-clustered/03-clustered-index-iot.svg" alt="Clustered index with no separate heap" /></a></p>
 
 <p>Here the sort order isn’t something you maintain. It’s structurally impossible to violate, because there’s nothing to fall out of sync. The row <em>is</em> the leaf.</p>
 
@@ -1241,7 +1241,7 @@ To cut to the chase, what actually happened is that two database traditions pick
 
 <p>Once there’s no heap to point into, a secondary index (say, on <code class="language-plaintext highlighter-rouge">email</code>) can’t store a physical rowid. It stores the clustering key instead, then does a second lookup into the clustered B-tree index to fetch the row.</p>
 
-<p><a href="/images/posts/04-secondary-index-over-clustered-index.svg"><img src="/images/posts/04-secondary-index-over-clustered-index.svg" alt="Secondary index pointing into a clustered index" /></a></p>
+<p><a href="/images/posts/clustering-vs-clustered/04-secondary-index-over-clustered-index.svg"><img src="/images/posts/clustering-vs-clustered/04-secondary-index-over-clustered-index.svg" alt="Secondary index pointing into a clustered index" /></a></p>
 
 <p><strong><em>This two-hop pattern is exactly what Kleppmann and Riccomini are describing when they discuss the cost of secondary indexes on clustered-index tables in DDIA book!</em></strong></p>
 
@@ -1276,7 +1276,7 @@ To cut to the chase, what actually happened is that two database traditions pick
   <p>A <strong>covering index</strong> contains every column a query needs —<code class="language-plaintext highlighter-rouge">SELECT</code>-list columns as well as<code class="language-plaintext highlighter-rouge">WHERE</code>and<code class="language-plaintext highlighter-rouge">JOIN</code> columns —, so the database engine never has to visit the underlying table at all.</p>
 </blockquote>
 
-<p><a href="/images/posts/05-covering-index.svg"><img src="/images/posts/05-covering-index.svg" alt="Covering index compared to a non-covering index" /></a></p>
+<p><a href="/images/posts/clustering-vs-clustered/05-covering-index.svg"><img src="/images/posts/clustering-vs-clustered/05-covering-index.svg" alt="Covering index compared to a non-covering index" /></a></p>
 
 <p>Winand even objects to the name itself, though not to the idea:</p>
 
@@ -1298,7 +1298,7 @@ To cut to the chase, what actually happened is that two database traditions pick
 
 <p>If you’re reading multiple database books then assume “clustered/clustering index” means different things depending on which book is in your hand, until proven otherwise. When in doubt, ask yourself: <em>is there a separate heap file here, or not?</em> That question cuts through the vocabulary every time.</p>
 
-<p><img src="/images/posts/heap_file_decision_takeaway.svg" alt="key-takeway" /></p>
+<p><img src="/images/posts/clustering-vs-clustered/heap_file_decision_takeaway.svg" alt="key-takeway" /></p>
 
 <p><em>Cheers!<br />
 Edward</em></p>

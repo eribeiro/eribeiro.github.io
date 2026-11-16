@@ -12,7 +12,7 @@ tags:
   - database-internals
 ---
 
-![I don't think meme](/images/posts/i-dont-think-meme.gif)
+![I don't think meme](/images/posts/clustering-vs-clustered/i-dont-think-meme.gif)
 
 In August 2026, during a book club session, I found myself stumbling through the nuances of _**clustered indexes, index-organized tables and covering indexes**_, only to be corrected by fellow readers who were going strictly by Kleppmann and Riccomini's *Designing Data-Intensive Applications* ([Kleppmann and Riccomini, 2026](#ref-kleppmann2026){: #cite-kleppmann2026-1}). Driven by my  confusion, I hit the books and the web to untangle it all.
 <div class="custom-box">
@@ -31,7 +31,7 @@ The definition I knew, in Silberschatz, Korth, and Sudarshan's own words ([Silbe
 
 In other words, they describe a clustering index as one where the heap file itself is ordered according to the index search key.
 
-![silberschatz clustering index concepts](/images/posts/clustering_index_vs_primary_key_index.svg)
+![silberschatz clustering index concepts](/images/posts/clustering-vs-clustered/clustering_index_vs_primary_key_index.svg)
 
 But if we check the literature a bit further, Elmasri and Navathe's *Fundamentals of Database Systems* ([Elmasri and Navathe, 2016](#ref-elmasri2016){: #cite-elmasri2016-1}) has an even more specific definition of **Clustering Indexes**:
 
@@ -43,7 +43,7 @@ But if we check the literature a bit further, Elmasri and Navathe's *Fundamental
 
 There's a subtle distinction worth flagging here. In Elmasri and Navathe terminology, _if the physical ordering field is the primary key, they normally call the associated index a primary index, not a clustering index._
 
-![navathe clustering index concept](/images/posts/primary_index_vs_clustering_index.svg)
+![navathe clustering index concept](/images/posts/clustering-vs-clustered/primary_index_vs_clustering_index.svg)
 
 
 Independently, Oracle uses the term **Index-Organized Table (IOT)** ([Oracle](#ref-oracle-iot){: #cite-oracle-iot-1}). In Oracle's own docs, _an IOT is a table with no separate heap file, that is, the data lives directly inside a B-tree, keyed by (typically) the primary key._
@@ -55,7 +55,7 @@ DDIA ([Kleppmann and Riccomini, 2026](#ref-kleppmann2026){: #cite-kleppmann2026-
 [^innodb-primary-key]: More precisely, if a table has no primary key, InnoDB clusters on the first unique NOT NULL index instead, or a hidden internal row ID as a last resort, as discussed [here](https://blog.jcole.us/2013/05/02/how-does-innodb-behave-without-a-primary-key/) and [here](https://dev.mysql.com/doc/refman/5.7/en/innodb-index-types.html).
 
 <center>
-<img src="/images/posts/peter-parker-meme.jpg" alt="alt text" style="width: 30%;">
+<img src="/images/posts/clustering-vs-clustered/peter-parker-meme.jpg" alt="alt text" style="width: 30%;">
 <br/>
 <br/>
 </center>
@@ -75,13 +75,13 @@ Before getting to the confusing part, here's the structure everyone agrees on an
 
 Rows sit in an unordered heap and a B+-Tree index points into it.
 
-[![Heap file with secondary index](/images/posts/01-heap-plus-secondary-index.svg)](/images/posts/01-heap-plus-secondary-index.svg)
+[![Heap file with secondary index](/images/posts/clustering-vs-clustered/01-heap-plus-secondary-index.svg)](/images/posts/clustering-vs-clustered/01-heap-plus-secondary-index.svg)
 
 ### 2. "Clustering index": the academic vernacular (Silberschatz's/Navathe's)
 
 _The heap file is still there, but it's been physically sorted to match the index key._ Because order matches, the index doesn't even need an entry for every row, one entry per disk block is enough (i.e., it can be a sparse index).
 
-[![Clustering index over a sorted heap](/images/posts/02-clustering-index-silberschatz.svg)](/images/posts/02-clustering-index-silberschatz.svg)
+[![Clustering index over a sorted heap](/images/posts/clustering-vs-clustered/02-clustering-index-silberschatz.svg)](/images/posts/clustering-vs-clustered/02-clustering-index-silberschatz.svg)
 
 The important detail: this is a *maintained property*, not a structural guarantee. New inserts can land out of order until the next reorganize.  `ALTER TABLE ... ORDER BY` in [MySQL](https://dev.mysql.com/doc/refman/8.0/en/alter-table.html) (for non-clustered engines like MyISAM), or `CLUSTER` in [PostgreSQL](https://www.postgresql.org/docs/current/sql-cluster.html) are both real-world instances of this exact concept: each physically reorders the rows once, and neither keeps that order as new rows are inserted.
 
@@ -93,7 +93,7 @@ One caveat: Db2's clustering index is still a dense (B-tree) index, with one ent
 
 _No heap file exists._ The B-tree's leaf nodes directly hold the row data.
 
-[![Clustered index with no separate heap](/images/posts/03-clustered-index-iot.svg)](/images/posts/03-clustered-index-iot.svg)
+[![Clustered index with no separate heap](/images/posts/clustering-vs-clustered/03-clustered-index-iot.svg)](/images/posts/clustering-vs-clustered/03-clustered-index-iot.svg)
 
 
 Here the sort order isn't something you maintain. It's structurally impossible to violate, because there's nothing to fall out of sync. The row *is* the leaf.
@@ -104,7 +104,7 @@ One more consequence follows directly from structure 3:
 
 Once there's no heap to point into, a secondary index (say, on `email`) can't store a physical rowid. It stores the clustering key instead, then does a second lookup into the clustered B-tree index to fetch the row.
 
-[![Secondary index pointing into a clustered index](/images/posts/04-secondary-index-over-clustered-index.svg)](/images/posts/04-secondary-index-over-clustered-index.svg)
+[![Secondary index pointing into a clustered index](/images/posts/clustering-vs-clustered/04-secondary-index-over-clustered-index.svg)](/images/posts/clustering-vs-clustered/04-secondary-index-over-clustered-index.svg)
 
 **_This two-hop pattern is exactly what Kleppmann and Riccomini are describing when they discuss the cost of secondary indexes on clustered-index tables in DDIA book!_** 
 
@@ -139,7 +139,7 @@ Covering index has the opposite problem of clustered/clustering index: many name
 
 > A **covering index** contains every column a query needs —`SELECT`-list columns as well as`WHERE`and`JOIN` columns —, so the database engine never has to visit the underlying table at all.
 
-[![Covering index compared to a non-covering index](/images/posts/05-covering-index.svg)](/images/posts/05-covering-index.svg)
+[![Covering index compared to a non-covering index](/images/posts/clustering-vs-clustered/05-covering-index.svg)](/images/posts/clustering-vs-clustered/05-covering-index.svg)
 
 Winand even objects to the name itself, though not to the idea:
 
@@ -157,7 +157,7 @@ But, all in all, they're all aliases/nicknames for the same mechanism, not compe
 
 If you're reading multiple database books then assume "clustered/clustering index" means different things depending on which book is in your hand, until proven otherwise. When in doubt, ask yourself: *is there a separate heap file here, or not?* That question cuts through the vocabulary every time.
 
-![key-takeway](/images/posts/heap_file_decision_takeaway.svg)
+![key-takeway](/images/posts/clustering-vs-clustered/heap_file_decision_takeaway.svg)
 
 _Cheers!<br/>
 Edward_

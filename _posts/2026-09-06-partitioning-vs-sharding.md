@@ -16,8 +16,8 @@ tags:
 
 <center>
 <div style="display: flex; justify-content: center; align-items: center; gap: 20px; flex-wrap: wrap;">
-<img src="/images/posts/partitioning_vs_sharding/fruit-ninja.gif" alt="fruit-ninja" style="width: 40%;">
-<img src="/images/posts/partitioning_vs_sharding/giphy.gif" alt="giphy" style="width: 40%;">
+<img src="/images/posts/partitioning-vs-sharding/fruit-ninja.gif" alt="fruit-ninja" style="width: 40%;">
+<img src="/images/posts/partitioning-vs-sharding/giphy.gif" alt="giphy" style="width: 40%;">
 </div>
 <br/>
 <br/>
@@ -26,7 +26,7 @@ tags:
 As I slowly, _and reluctantly_, try to make a comeback to microblogging sites after many years out, I stumbled across the following tweet in my very first days there:
 
 <center>
-<img src="/images/posts/partitioning_vs_sharding/twitter-post.png" alt="Twitter post" style="width: 50%;">
+<img src="/images/posts/partitioning-vs-sharding/twitter-post.png" alt="Twitter post" style="width: 50%;">
 <br/>
 <br/>
 </center>
@@ -40,7 +40,7 @@ The same adage, expressed by different individuals, indicated a more solid, ingr
 In a previous life, this small discordance would immediately engage me on a real-life version of that famous [XKCD cartoon](https://xkcd.com/386/):
 
 <center>
-<img src="/images/posts/partitioning_vs_sharding/duty_calls_2x.png" alt="Duty Calls XKCD" style="width: 40%;">
+<img src="/images/posts/partitioning-vs-sharding/duty_calls_2x.png" alt="Duty Calls XKCD" style="width: 40%;">
 <br/>
 <br/>
 </center>
@@ -50,7 +50,7 @@ But jumping headfirst into heated discussions for countless hours in a medium of
 _And for what's worth, a genuine and relevant doubt unfolded itself into a nice oportunity to review some crucial concepts in databases and distributed systems!_ 😄
 
 <center>
-<img src="/images/posts/partitioning_vs_sharding/duty_calls_3x.jpg" alt="Duty Calls 2 XKCD" style="width: 50%;">
+<img src="/images/posts/partitioning-vs-sharding/duty_calls_3x.jpg" alt="Duty Calls 2 XKCD" style="width: 50%;">
 <br/>
 <br/>
 </center>
@@ -62,7 +62,7 @@ _And for what's worth, a genuine and relevant doubt unfolded itself into a nice 
 <!-- **UPDATE [09-05-2026]**: while wrapping up this post, I stumbled upon yet another post mentioning the aforementioned distinction between partitioning and sharding... Maybe this could be a timely blog post, after all? 😏
 
 <center>
-<img src="/images/posts/partitioning_vs_sharding/threads-post.png" alt="Duty Calls 2 XKCD" style="width: 40%;">
+<img src="/images/posts/partitioning-vs-sharding/threads-post.png" alt="Duty Calls 2 XKCD" style="width: 40%;">
 <br/>
 <br/>
 </center> -->
@@ -107,7 +107,7 @@ On one side, we had commercial DBMSs popularizing and strongly supporting, to th
 
 So, when a DBA in the 2000s said that _"we partitioned the orders table"_, they usually meant a native DBMS feature like this:
 
-[![table partitioning](/images/posts/partitioning_vs_sharding/table-partitioning.png)](/images/posts/partitioning_vs_sharding/table-partitioning.png)
+[![table partitioning](/images/posts/partitioning-vs-sharding/table-partitioning.png)](/images/posts/partitioning-vs-sharding/table-partitioning.png)
 
 These features often look like:
 
@@ -124,7 +124,7 @@ On the other side, also during the 2000s, web companies faced a somewhat differe
 
 Back in the day, when an eBay/Flickr/Facebook/Google engineer said that _"we sharded users”_, they usually meant something like:
 
-[![sharding architecture](/images/posts/partitioning_vs_sharding/sharding-architecture.png)](/images/posts/partitioning_vs_sharding/sharding-architecture.png)
+[![sharding architecture](/images/posts/partitioning-vs-sharding/sharding-architecture.png)](/images/posts/partitioning-vs-sharding/sharding-architecture.png)
 
 And later, during the 2010s, the "sharding" term solidified through the success of NoSQL systems such as MongoDB and Riak, for example. MongoDB documentation ([MongoDB](#ref-mongodb-sharding){: #cite-mongodb-sharding-1}) states that _"Sharding is a method for distributing data across multiple machines."_ 
 
@@ -173,7 +173,7 @@ In addition to that, it was already mentioned that classical and modern database
 
 ## Fragmentation, Allocation and Replication
 <center>
-<img src="/images/posts/partitioning_vs_sharding/good-bad-ugly-movie.gif" alt="The Good, The Bad and The Ugly" style="width: 70%;">
+<img src="/images/posts/partitioning-vs-sharding/good-bad-ugly-movie.gif" alt="The Good, The Bad and The Ugly" style="width: 70%;">
 <br/>
 <br/>
 </center>
@@ -188,7 +188,7 @@ The academic distributed/database literature cleanly separates the concepts of _
 
 <a id="figure-1"></a>
 
-[![Three axes of classification](/images/posts/partitioning_vs_sharding/three-axis.png)](/images/posts/partitioning_vs_sharding/three-axis.png)
+[![Three axes of classification](/images/posts/partitioning-vs-sharding/three-axis.png)](/images/posts/partitioning-vs-sharding/three-axis.png)
 
 **Figure 1 - Three axes of classification**
 
@@ -209,11 +209,11 @@ $$R = P_1 \cup P_2 \cup P_3 \cup ... \cup P_n $$
 
 This definition doesn't conditionate partitioning of data to its  placement, be it local or distributed among nodes. Those partitions $$P_{i}$$, for $$i = \{1,.., n\}$$ could either reside on a single node,
 
-[![single node partition](/images/posts/partitioning_vs_sharding/single-node-partition.png)](/images/posts/partitioning_vs_sharding/single-node-partition.png)
+[![single node partition](/images/posts/partitioning-vs-sharding/single-node-partition.png)](/images/posts/partitioning-vs-sharding/single-node-partition.png)
 
 or be distributed among various nodes,
 
-[![multi-node partition](/images/posts/partitioning_vs_sharding/multi-node-partition.png)](/images/posts/partitioning_vs_sharding/multi-node-partition.png)
+[![multi-node partition](/images/posts/partitioning-vs-sharding/multi-node-partition.png)](/images/posts/partitioning-vs-sharding/multi-node-partition.png)
 
 or even be a combination of single and multi-node, but, in any case, they are still *partitions*.
 
@@ -242,7 +242,7 @@ Condition $$C$$ is a predicate often composed of a single attribute -- with the 
 
 Suppose we have the following _PROJ_ table and apply conditions $$C_{1} = BUDGET < 250000$$ and $$C_{2} = BUDGET \ge 250000 $$, this will produce two horizontal partitionings as below:
 
-[![horizontal partitioning](/images/posts/partitioning_vs_sharding/horizontal-partitioning.png)](/images/posts/partitioning_vs_sharding/horizontal-partitioning.png)
+[![horizontal partitioning](/images/posts/partitioning-vs-sharding/horizontal-partitioning.png)](/images/posts/partitioning-vs-sharding/horizontal-partitioning.png)
 
 Elmasri and Navathe ([Elmasri and Navathe, 2016](#ref-elmasri2016){: #cite-elmasri2016-1}) define an interesting property of horizontal partitioning:
 
@@ -252,7 +252,7 @@ And to reconstruct the relation R from a **complete horizontal fragmentation**, 
 
 It's also important to observe that depending on the $$C_i$$ conditions of the horizontal partitioning, this may result in an uneven data distribution among the partitions (**data skew**), as illustrated by the image below where we split the horizontal fragments by the Dno column. This can potentially create **hot spots** and performance bottlenecks, with some partitions overloaded while others are mostly idle. 
 
-[![employee horizontal partitioning](/images/posts/partitioning_vs_sharding/employee-horizontal-partitioning.png)](/images/posts/partitioning_vs_sharding/employee-horizontal-partitioning.png)
+[![employee horizontal partitioning](/images/posts/partitioning-vs-sharding/employee-horizontal-partitioning.png)](/images/posts/partitioning-vs-sharding/employee-horizontal-partitioning.png)
 
 Both Silberschatz et al and Özsu and Valduriez mention that horizontal partitioning is widely used for parallel and distributed database systems because of its inherent opportunities for both interquery and intraquery parallelism[^intra-inter-query].
 
@@ -265,14 +265,14 @@ Horizontal partitioning can be further divided into different schemes to split t
 
 For n processors, the ith tuple is assigned to the processor $$i \bmod n$$. This technique is ideally suited for applications that read the entire relation sequentially for each query. As far as the literature goes, it is especially used in RAID disk arrays.
 
-[![round-robin partitioning](/images/posts/partitioning_vs_sharding/round-robin-partitioning.png)](/images/posts/partitioning_vs_sharding/round-robin-partitioning.png)
+[![round-robin partitioning](/images/posts/partitioning-vs-sharding/round-robin-partitioning.png)](/images/posts/partitioning-vs-sharding/round-robin-partitioning.png)
 
 
 **2. Hash Partitioning** 
 
 There's a hash function that maps a key value to a partition number. If the hash function is good, the number of tuples in each node is roughly the same, i.e. $$\frac{1}{N}$$, for $$N$$ nodes. It is best suited for point queries based on the partitioning attribute, and it's also useful for sequential scans over the entire relation. Nevertheless, it is not well suited for point queries on nonpartitioning attributes, nor for range queries on the partitioning attribute, since hashing scatters contiguous key values across all nodes. 
 
-[![hash partitioning](/images/posts/partitioning_vs_sharding/hash-partitioning.png)](/images/posts/partitioning_vs_sharding/hash-partitioning.png)
+[![hash partitioning](/images/posts/partitioning-vs-sharding/hash-partitioning.png)](/images/posts/partitioning-vs-sharding/hash-partitioning.png)
 
 **3. Range Partitioning**
 
@@ -286,7 +286,7 @@ $$
 \end{cases}
 $$
 
-[![range partitioning](/images/posts/partitioning_vs_sharding/range-partitioning.png)](/images/posts/partitioning_vs_sharding/range-partitioning.png)
+[![range partitioning](/images/posts/partitioning-vs-sharding/range-partitioning.png)](/images/posts/partitioning-vs-sharding/range-partitioning.png)
 
 <!-- ```
 Partitioning strategy
@@ -305,7 +305,7 @@ A **primary horizontal partitioning** is a partition defined by predicates on ro
 
 On the other hand, **derived horizontal partitioning** is the partitioning of a relation that results from predicates being defined by another relation (that is, the table depends on one or more other tables to exist and have uniqueness). Tables like ORDERS and INVENTORY are examples of such tables, so that we can partition them according to how their referenced parent table (e.g., CUSTOMER) was already partitioned, keeping related rows co-located on the same fragment for faster joins.
 
-[![primary and derived horizontal partitioning](/images/posts/partitioning_vs_sharding/primary-secondary-horizontal-partitioning.png)](/images/posts/partitioning_vs_sharding/primary-secondary-horizontal-partitioning.png)
+[![primary and derived horizontal partitioning](/images/posts/partitioning-vs-sharding/primary-secondary-horizontal-partitioning.png)](/images/posts/partitioning-vs-sharding/primary-secondary-horizontal-partitioning.png)
 
 
 ##### Vertical Partitioning
@@ -320,7 +320,7 @@ where $${L_i}$$ is the list of attributes (columns) of $$R$$, for $$i = 1,..., N
 
 Suppose that our PROJ table is split by two lists of attributes, $$L_{1} = \{PNO, BUDGET\}$$ and $$L_{2} = \{PNO, PNAME, LOC\}$$
 
-[![horizontal and vertical partitioning](/images/posts/partitioning_vs_sharding/vertical-partitioning.png)](/images/posts/partitioning_vs_sharding/vertical-partitioning.png)
+[![horizontal and vertical partitioning](/images/posts/partitioning-vs-sharding/vertical-partitioning.png)](/images/posts/partitioning-vs-sharding/vertical-partitioning.png)
 
 As we can see in the example above, PNO, the Primary Key (PK) of the PROJ table is duplicated on the two fragments -- $$PROJ_{1}$$ and $$PROJ_{2}$$. This is not a coincidence, but a conscious distributed database design decision so that we are able to reconstruct the original relation $$R$$ from its vertical fragments by joining them on PNO. In other words, our database design has a _lossless-join property_.
 
@@ -334,7 +334,7 @@ $$R \subset \pi_{L_{1}}(R) \bowtie \pi_{L_{2}}(R)$$
 
 Figure 2.2 in Georgiev's thesis ([Georgiev, 2008](#ref-georgiev2008){: #cite-georgiev2008-1}) shows examples of a lossy (a) and a lossless (b) decomposition.
 
-[![lossless and lossy decompositions](/images/posts/partitioning_vs_sharding/lossless-lossy-decomposition.png)](/images/posts/partitioning_vs_sharding/lossless-lossy-decomposition.png)
+[![lossless and lossy decompositions](/images/posts/partitioning-vs-sharding/lossless-lossy-decomposition.png)](/images/posts/partitioning-vs-sharding/lossless-lossy-decomposition.png)
 
 Finally, Ramakrishnan and Gehrke state the following about  vertical partitioning:
 
@@ -354,7 +354,7 @@ A **hybrid partitioning** is the combination of horizontal partitioning and vert
 
 In the Employee table example, if we partition by Department Number (Dno) and Social Security Number (SSN), there are four resulting partitions:
 
-[![hybrid partition](/images/posts/partitioning_vs_sharding/employee-hybrid-partitioning.png)](/images/posts/partitioning_vs_sharding/employee-hybrid-partitioning.png)
+[![hybrid partition](/images/posts/partitioning-vs-sharding/employee-hybrid-partitioning.png)](/images/posts/partitioning-vs-sharding/employee-hybrid-partitioning.png)
 
 
 ### 2. Allocation
@@ -394,7 +394,7 @@ One caveat: practitioners also talk about _vertical_ (or _functional_) sharding,
 
 Or as a cool cheat sheet:
 
-[![key takeways](/images/posts/partitioning_vs_sharding/key-takeways.png)](/images/posts/partitioning_vs_sharding/key-takeways.png)
+[![key takeways](/images/posts/partitioning-vs-sharding/key-takeways.png)](/images/posts/partitioning-vs-sharding/key-takeways.png)
 
 ## Disclaimer
 

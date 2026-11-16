@@ -320,7 +320,7 @@
 
       <section class="page__content e-content" itemprop="text">
         
-        <p><img src="/images/posts/i-dont-think-meme.gif" alt="I don't think meme" /></p>
+        <p><img src="/images/posts/clustering-vs-clustered/i-dont-think-meme.gif" alt="I don't think meme" /></p>
 
 <p>In August 2026, during a book club session, I found myself stumbling through the nuances of <em><strong>clustered indexes, index-organized tables and covering indexes</strong></em>, only to be corrected by fellow readers who were going strictly by Kleppmann and Riccomini’s <em>Designing Data-Intensive Applications</em> (<a href="#ref-kleppmann2026" id="cite-kleppmann2026-1">Kleppmann and Riccomini, 2026</a>). Driven by my  confusion, I hit the books and the web to untangle it all.</p>
 <div class="custom-box">
@@ -340,7 +340,7 @@ To cut to the chase, what actually happened is that two database traditions pick
 
 <p>In other words, they describe a clustering index as one where the heap file itself is ordered according to the index search key.</p>
 
-<p><img src="/images/posts/clustering_index_vs_primary_key_index.svg" alt="silberschatz clustering index concepts" /></p>
+<p><img src="/images/posts/clustering-vs-clustered/clustering_index_vs_primary_key_index.svg" alt="silberschatz clustering index concepts" /></p>
 
 <p>But if we check the literature a bit further, Elmasri and Navathe’s <em>Fundamentals of Database Systems</em> (<a href="#ref-elmasri2016" id="cite-elmasri2016-1">Elmasri and Navathe, 2016</a>) has an even more specific definition of <strong>Clustering Indexes</strong>:</p>
 
@@ -354,7 +354,7 @@ To cut to the chase, what actually happened is that two database traditions pick
 
 <p>There’s a subtle distinction worth flagging here. In Elmasri and Navathe terminology, <em>if the physical ordering field is the primary key, they normally call the associated index a primary index, not a clustering index.</em></p>
 
-<p><img src="/images/posts/primary_index_vs_clustering_index.svg" alt="navathe clustering index concept" /></p>
+<p><img src="/images/posts/clustering-vs-clustered/primary_index_vs_clustering_index.svg" alt="navathe clustering index concept" /></p>
 
 <p>Independently, Oracle uses the term <strong>Index-Organized Table (IOT)</strong> (<a href="#ref-oracle-iot" id="cite-oracle-iot-1">Oracle</a>). In Oracle’s own docs, <em>an IOT is a table with no separate heap file, that is, the data lives directly inside a B-tree, keyed by (typically) the primary key.</em></p>
 
@@ -365,7 +365,7 @@ To cut to the chase, what actually happened is that two database traditions pick
 </blockquote>
 
 <center>
-<img src="/images/posts/peter-parker-meme.jpg" alt="alt text" style="width: 30%;" />
+<img src="/images/posts/clustering-vs-clustered/peter-parker-meme.jpg" alt="alt text" style="width: 30%;" />
 <br />
 <br />
 </center>
@@ -386,13 +386,13 @@ To cut to the chase, what actually happened is that two database traditions pick
 
 <p>Rows sit in an unordered heap and a B+-Tree index points into it.</p>
 
-<p><a href="/images/posts/01-heap-plus-secondary-index.svg"><img src="/images/posts/01-heap-plus-secondary-index.svg" alt="Heap file with secondary index" /></a></p>
+<p><a href="/images/posts/clustering-vs-clustered/01-heap-plus-secondary-index.svg"><img src="/images/posts/clustering-vs-clustered/01-heap-plus-secondary-index.svg" alt="Heap file with secondary index" /></a></p>
 
 <h3 id="2-clustering-index-the-academic-vernacular-silberschatzsnavathes">2. “Clustering index”: the academic vernacular (Silberschatz’s/Navathe’s)</h3>
 
 <p><em>The heap file is still there, but it’s been physically sorted to match the index key.</em> Because order matches, the index doesn’t even need an entry for every row, one entry per disk block is enough (i.e., it can be a sparse index).</p>
 
-<p><a href="/images/posts/02-clustering-index-silberschatz.svg"><img src="/images/posts/02-clustering-index-silberschatz.svg" alt="Clustering index over a sorted heap" /></a></p>
+<p><a href="/images/posts/clustering-vs-clustered/02-clustering-index-silberschatz.svg"><img src="/images/posts/clustering-vs-clustered/02-clustering-index-silberschatz.svg" alt="Clustering index over a sorted heap" /></a></p>
 
 <p>The important detail: this is a <em>maintained property</em>, not a structural guarantee. New inserts can land out of order until the next reorganize.  <code class="language-plaintext highlighter-rouge">ALTER TABLE ... ORDER BY</code> in <a href="https://dev.mysql.com/doc/refman/8.0/en/alter-table.html">MySQL</a> (for non-clustered engines like MyISAM), or <code class="language-plaintext highlighter-rouge">CLUSTER</code> in <a href="https://www.postgresql.org/docs/current/sql-cluster.html">PostgreSQL</a> are both real-world instances of this exact concept: each physically reorders the rows once, and neither keeps that order as new rows are inserted.</p>
 
@@ -404,7 +404,7 @@ To cut to the chase, what actually happened is that two database traditions pick
 
 <p><em>No heap file exists.</em> The B-tree’s leaf nodes directly hold the row data.</p>
 
-<p><a href="/images/posts/03-clustered-index-iot.svg"><img src="/images/posts/03-clustered-index-iot.svg" alt="Clustered index with no separate heap" /></a></p>
+<p><a href="/images/posts/clustering-vs-clustered/03-clustered-index-iot.svg"><img src="/images/posts/clustering-vs-clustered/03-clustered-index-iot.svg" alt="Clustered index with no separate heap" /></a></p>
 
 <p>Here the sort order isn’t something you maintain. It’s structurally impossible to violate, because there’s nothing to fall out of sync. The row <em>is</em> the leaf.</p>
 
@@ -414,7 +414,7 @@ To cut to the chase, what actually happened is that two database traditions pick
 
 <p>Once there’s no heap to point into, a secondary index (say, on <code class="language-plaintext highlighter-rouge">email</code>) can’t store a physical rowid. It stores the clustering key instead, then does a second lookup into the clustered B-tree index to fetch the row.</p>
 
-<p><a href="/images/posts/04-secondary-index-over-clustered-index.svg"><img src="/images/posts/04-secondary-index-over-clustered-index.svg" alt="Secondary index pointing into a clustered index" /></a></p>
+<p><a href="/images/posts/clustering-vs-clustered/04-secondary-index-over-clustered-index.svg"><img src="/images/posts/clustering-vs-clustered/04-secondary-index-over-clustered-index.svg" alt="Secondary index pointing into a clustered index" /></a></p>
 
 <p><strong><em>This two-hop pattern is exactly what Kleppmann and Riccomini are describing when they discuss the cost of secondary indexes on clustered-index tables in DDIA book!</em></strong></p>
 
@@ -449,7 +449,7 @@ To cut to the chase, what actually happened is that two database traditions pick
   <p>A <strong>covering index</strong> contains every column a query needs —<code class="language-plaintext highlighter-rouge">SELECT</code>-list columns as well as<code class="language-plaintext highlighter-rouge">WHERE</code>and<code class="language-plaintext highlighter-rouge">JOIN</code> columns —, so the database engine never has to visit the underlying table at all.</p>
 </blockquote>
 
-<p><a href="/images/posts/05-covering-index.svg"><img src="/images/posts/05-covering-index.svg" alt="Covering index compared to a non-covering index" /></a></p>
+<p><a href="/images/posts/clustering-vs-clustered/05-covering-index.svg"><img src="/images/posts/clustering-vs-clustered/05-covering-index.svg" alt="Covering index compared to a non-covering index" /></a></p>
 
 <p>Winand even objects to the name itself, though not to the idea:</p>
 
@@ -471,7 +471,7 @@ To cut to the chase, what actually happened is that two database traditions pick
 
 <p>If you’re reading multiple database books then assume “clustered/clustering index” means different things depending on which book is in your hand, until proven otherwise. When in doubt, ask yourself: <em>is there a separate heap file here, or not?</em> That question cuts through the vocabulary every time.</p>
 
-<p><img src="/images/posts/heap_file_decision_takeaway.svg" alt="key-takeway" /></p>
+<p><img src="/images/posts/clustering-vs-clustered/heap_file_decision_takeaway.svg" alt="key-takeway" /></p>
 
 <p><em>Cheers!<br />
 Edward</em></p>
