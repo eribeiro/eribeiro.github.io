@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 907 311" width="907" height="311" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" fill="#1a1a1a">
+  <title>DVVS: concurrent writes vs. a superseded version</title>
+  <rect x="13" y="12" width="425" height="288" rx="16" fill="#eff1f2"/>
+  <rect x="469" y="12" width="425" height="288" rx="16" fill="#eff1f2"/>
+  <text x="26" y="38" font-size="16.5"><tspan font-weight="bold">Concurrent writes</tspan></text>
+  <text x="481" y="38" font-size="16.5"><tspan font-weight="bold">A superseded version</tspan></text>
+  <text x="26" y="66" font-size="14.5">Both replicas start with C = [0,0] and E = {};</text>
+  <text x="26" y="95" font-size="14.5">A: Put("Alice", [0,0])    B: Put("Alicia", [0,0])</text>
+  <text x="26" y="124" font-size="14.5">C<tspan dy="4" font-size="10.4">A</tspan><tspan dy="-4"></tspan> = [1,0], E<tspan dy="4" font-size="10.4">A</tspan><tspan dy="-4"></tspan> = {((A,1), Alice)}</text>
+  <text x="26" y="153" font-size="14.5">C<tspan dy="4" font-size="10.4">B</tspan><tspan dy="-4"></tspan> = [0,1], E<tspan dy="4" font-size="10.4">B</tspan><tspan dy="-4"></tspan> = {((B,1), Alicia)}</text>
+  <text x="26" y="181" font-size="14.5">A runs Sync(C<tspan dy="4" font-size="10.4">B</tspan><tspan dy="-4"></tspan>, E<tspan dy="4" font-size="10.4">B</tspan><tspan dy="-4"></tspan>): (A,1) is not known by B, and (B,1)</text>
+  <text x="26" y="200" font-size="14.5">is not known by A:</text>
+  <text x="26" y="228" font-size="14.5">C<tspan dy="4" font-size="10.4">A</tspan><tspan dy="-4"></tspan> = [1,1], E<tspan dy="4" font-size="10.4">A</tspan><tspan dy="-4"></tspan> = {((A,1), Alice), ((B,1), Alicia)}</text>
+  <text x="26" y="258" font-size="14.5" fill="#c62828">Both versions survive: they are concurrent;</text>
+  <text x="481" y="66" font-size="14.5">C<tspan dy="4" font-size="10.4">A</tspan><tspan dy="-4"></tspan> = [1,0], E<tspan dy="4" font-size="10.4">A</tspan><tspan dy="-4"></tspan> = {((A,1), Alice)}</text>
+  <text x="481" y="95" font-size="14.5">C<tspan dy="4" font-size="10.4">B</tspan><tspan dy="-4"></tspan> = [1,1], E<tspan dy="4" font-size="10.4">B</tspan><tspan dy="-4"></tspan> = {((B,1), Alicia)}</text>
+  <text x="481" y="124" font-size="14.5">B knows (A,1) but no longer stores it: a client ran Get at</text>
+  <text x="481" y="143" font-size="14.5">B, saw Alice, and Put Alicia;</text>
+  <text x="481" y="171" font-size="14.5">A runs Sync(C<tspan dy="4" font-size="10.4">B</tspan><tspan dy="-4"></tspan>, E<tspan dy="4" font-size="10.4">B</tspan><tspan dy="-4"></tspan>): (A,1) is known by B and not in E<tspan dy="4" font-size="10.4">B</tspan><tspan dy="-4"></tspan>,</text>
+  <text x="481" y="190" font-size="14.5">so it is dropped:</text>
+  <text x="481" y="219" font-size="14.5">C<tspan dy="4" font-size="10.4">A</tspan><tspan dy="-4"></tspan> = [1,1], E<tspan dy="4" font-size="10.4">A</tspan><tspan dy="-4"></tspan> = {((B,1), Alicia)}</text>
+  <text x="481" y="247" font-size="14.5" fill="#2e7d32">(A,1) must not reappear;</text>
+</svg>

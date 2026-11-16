@@ -1,0 +1,61 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 921 400" width="921" height="400" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" fill="#1a1a1a">
+  <title>Scenario B, concurrent writes: Client 1 writes "red" at Replica A and Client 2 writes "blue" at Replica B; after replication both values are kept</title>
+  <defs>
+    <marker id="tl" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#777"/></marker>
+    <marker id="gray" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#777"/></marker>
+    <marker id="ctl" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#1565c0"/></marker>
+    <marker id="cl" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#1565c0"/></marker>
+  </defs>
+
+  <!-- client timelines -->
+  <g stroke="#1565c0" stroke-width="1.2" marker-end="url(#ctl)">
+    <line x1="100" y1="50" x2="896" y2="50"/>
+    <line x1="100" y1="340" x2="896" y2="340"/>
+  </g>
+  <g font-size="16" font-weight="bold" text-anchor="end" fill="#1565c0">
+    <text x="90" y="56">Client 1</text>
+    <text x="90" y="346">Client 2</text>
+  </g>
+
+  <!-- replica timelines -->
+  <line x1="100" y1="150" x2="896" y2="150" stroke="#777" stroke-width="1.6" marker-end="url(#tl)"/>
+  <line x1="100" y1="240" x2="896" y2="240" stroke="#777" stroke-width="1.6" marker-end="url(#tl)"/>
+  <text x="90" y="156" font-size="16" font-weight="bold" text-anchor="end">Replica A</text>
+  <text x="90" y="246" font-size="16" font-weight="bold" text-anchor="end">Replica B</text>
+
+  <!-- client requests -->
+  <g stroke="#1565c0" stroke-width="1.5" marker-end="url(#cl)">
+    <line x1="160" y1="50" x2="171" y2="142"/>    <!-- (1) Client 1 PUT red at A -->
+    <line x1="200" y1="340" x2="211" y2="248"/>   <!-- (2) Client 2 PUT blue at B -->
+  </g>
+  <g fill="#1565c0">
+    <circle cx="160" cy="50" r="4"/>
+    <circle cx="200" cy="340" r="4"/>
+  </g>
+  <g font-size="12" font-style="italic" fill="#1565c0">
+    <text x="172" y="44">PUT(K, "red")</text>
+    <text x="212" y="362">PUT(K, "blue")</text>
+  </g>
+
+  <!-- replication (asynchronous) -->
+  <g stroke="#777" stroke-width="2" stroke-dasharray="6 4" marker-end="url(#gray)">
+    <line x1="420" y1="155" x2="477" y2="233"/>   <!-- A to B -->
+    <line x1="560" y1="235" x2="617" y2="157"/>   <!-- B to A -->
+  </g>
+  <text x="425" y="200" font-size="12" fill="#777" font-style="italic" text-anchor="end">replication runs asynchronously</text>
+
+  <!-- replica events -->
+  <circle cx="172" cy="150" r="6"/>
+  <circle cx="212" cy="240" r="6"/>
+  <circle cx="480" cy="240" r="6"/>
+  <circle cx="620" cy="150" r="6"/>
+  <g font-size="13">
+    <text x="184" y="138">(1) K = "red"</text>
+    <text x="224" y="262">(2) K = "blue"</text>
+    <text x="480" y="264" text-anchor="middle" fill="#c62828">(3) K = {"red", "blue"}</text>
+    <text x="620" y="134" text-anchor="middle" fill="#c62828">(3) K = {"red", "blue"}</text>
+  </g>
+  <text x="896" y="200" font-size="13" fill="#c62828" text-anchor="end">Neither write observed the other: both are kept as siblings</text>
+
+  <text x="10" y="390" font-size="13" fill="#555">Blue arrows: client requests; gray dashed arrows: replication between replicas.</text>
+</svg>

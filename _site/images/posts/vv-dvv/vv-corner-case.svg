@@ -1,0 +1,57 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 921 300" width="921" height="300" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" fill="#1a1a1a">
+  <title>Corner case: a per-server version vector discards a concurrent write</title>
+  <defs>
+    <marker id="tl" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#777"/></marker>
+    <marker id="gray" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#777"/></marker>
+    <marker id="ctl" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#1565c0"/></marker>
+    <marker id="cl" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#1565c0"/></marker>
+  </defs>
+
+  <!-- client timelines -->
+  <g stroke="#1565c0" stroke-width="1.2" marker-end="url(#ctl)">
+    <line x1="100" y1="50" x2="896" y2="50"/>
+    <line x1="100" y1="120" x2="896" y2="120"/>
+  </g>
+  <g font-size="16" font-weight="bold" text-anchor="end" fill="#1565c0">
+    <text x="90" y="56">Client 1</text>
+    <text x="90" y="126">Client 2</text>
+  </g>
+
+  <!-- server timeline -->
+  <line x1="100" y1="210" x2="896" y2="210" stroke="#777" stroke-width="1.6" marker-end="url(#tl)"/>
+  <text x="90" y="216" font-size="16" font-weight="bold" text-anchor="end">Server A</text>
+  <text x="90" y="232" font-size="10.5" fill="#555" text-anchor="end">per-server VV</text>
+
+  <!-- client requests -->
+  <g stroke="#1565c0" stroke-width="1.5" marker-end="url(#cl)">
+    <line x1="150" y1="210" x2="163" y2="58"/>   <!-- GET reply to Client 1 -->
+    <line x1="230" y1="210" x2="241" y2="128"/>  <!-- GET reply to Client 2 -->
+    <line x1="330" y1="50" x2="343" y2="202"/>   <!-- (1) Client 1 PUT 10 -->
+    <line x1="530" y1="120" x2="541" y2="202"/>  <!-- (2) Client 2 PUT 20 -->
+  </g>
+  <g fill="#1565c0">
+    <circle cx="164" cy="50" r="4"/>
+    <circle cx="242" cy="120" r="4"/>
+    <circle cx="330" cy="50" r="4"/>
+    <circle cx="530" cy="120" r="4"/>
+  </g>
+  <g font-size="12" font-style="italic" fill="#1565c0">
+    <text x="172" y="44">GET: x=0, ctx {}</text>
+    <text x="250" y="114">GET: x=0, ctx {}</text>
+    <text x="342" y="44">PUT 10, ctx {}</text>
+    <text x="542" y="114">PUT 20, ctx {}</text>
+  </g>
+
+  <!-- server events -->
+  <circle cx="150" cy="210" r="6" fill="#fff" stroke="#1a1a1a" stroke-width="2"/>
+  <circle cx="230" cy="210" r="6" fill="#fff" stroke="#1a1a1a" stroke-width="2"/>
+  <circle cx="344" cy="210" r="6"/>
+  <circle cx="542" cy="210" r="6"/>
+  <g font-size="13">
+    <text x="344" y="234" text-anchor="middle">(1) [1] → 10</text>
+    <text x="542" y="234" text-anchor="middle">(2) [2] → 20</text>
+    <text x="542" y="252" fill="#c62828" text-anchor="middle">[2] &gt; [1] ⇒ 10 discarded ✗</text>
+  </g>
+
+  <text x="10" y="290" font-size="13" fill="#555">Key x; the server keeps one VV entry. Blue arrows: client requests; open circles: GETs.</text>
+</svg>

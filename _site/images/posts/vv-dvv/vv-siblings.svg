@@ -1,0 +1,57 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 931 343" width="931" height="343" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" fill="#1a1a1a" text-anchor="middle">
+  <title>Version Vector conflict: concurrent writes become siblings, then a merge dominates both</title>
+  <defs>
+    <marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#1a1a1a"/>
+    </marker>
+  </defs>
+
+  <!-- boxes -->
+  <rect x="15" y="124" width="149" height="96" rx="10" fill="#eff1f2"/>
+  <rect x="208" y="17" width="208" height="101" rx="10" fill="#eff1f2"/>
+  <rect x="208" y="226" width="208" height="101" rx="10" fill="#eff1f2"/>
+  <rect x="466" y="70" width="208" height="203" rx="14" fill="#eff1f2"/>
+  <rect x="718" y="70" width="199" height="203" rx="14" fill="#eff1f2"/>
+
+  <!-- arrows -->
+  <g stroke="#1a1a1a" stroke-width="2" marker-end="url(#ah)">
+    <line x1="164" y1="153" x2="205" y2="74"/>
+    <line x1="164" y1="191" x2="205" y2="268"/>
+    <line x1="417" y1="70" x2="464" y2="124"/>
+    <line x1="417" y1="274" x2="464" y2="218"/>
+    <line x1="676" y1="171" x2="715" y2="171"/>
+  </g>
+
+  <!-- initial -->
+  <text x="89.5" y="152" font-size="13" fill="#555">initial</text>
+  <text x="89.5" y="177" font-size="17">"Alice"</text>
+  <text x="89.5" y="203" font-size="17" font-weight="bold">{A:1}</text>
+
+  <!-- write via A -->
+  <text x="312" y="47" font-size="13" fill="#555">write via replica A</text>
+  <text x="312" y="72" font-size="17">"Alice Smith"</text>
+  <text x="312" y="98" font-size="17" font-weight="bold">{A:2}</text>
+
+  <!-- write via B -->
+  <text x="312" y="256" font-size="13" fill="#555">write via replica B</text>
+  <text x="312" y="281" font-size="17">"Alice Johnson"</text>
+  <text x="312" y="307" font-size="17" font-weight="bold">{A:1, B:1}</text>
+
+  <!-- incomparable -->
+  <text x="312" y="168" font-size="15" font-weight="bold" fill="#c62828">incomparable</text>
+  <text x="312" y="188" font-size="15" fill="#c62828">⇒ concurrent siblings</text>
+
+  <!-- GET -->
+  <text x="570" y="133" font-size="13" fill="#555">GET returns both</text>
+  <text x="570" y="155" font-size="14.5">"Alice Smith" <tspan font-size="13">  {A:2}</tspan></text>
+  <text x="570" y="176" font-size="14.5">"Alice Johnson" <tspan font-size="13"> {A:1,B:1}</tspan></text>
+  <text x="570" y="197" font-size="13" fill="#555">context</text>
+  <text x="570" y="222" font-size="17" font-weight="bold">{A:2, B:1}</text>
+
+  <!-- merge -->
+  <text x="817.5" y="133" font-size="13" fill="#555">app merges · PUT via A</text>
+  <text x="817.5" y="158" font-size="16">"Alice Smith Johnson"</text>
+  <text x="817.5" y="184" font-size="17" font-weight="bold">{A:3, B:1}</text>
+  <text x="817.5" y="204" font-size="12.5" font-weight="bold" fill="#2e7d32">dominates both ⇒ siblings</text>
+  <text x="817.5" y="220" font-size="12.5" font-weight="bold" fill="#2e7d32">dropped</text>
+</svg>

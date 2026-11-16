@@ -9,7 +9,7 @@
 
 main:
   - title: "Blog Posts"
-    url: /year-archive/
+    url: /blog/
   - title: "ReadingTracks"
     url: https://eribeiro.github.io/reading-tracks/
 

@@ -1,0 +1,95 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 480" width="960" height="480" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" fill="#1a1a1a">
+  <title>Version vectors with two clients and three replicas</title>
+  <defs>
+    <marker id="tl" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#777"/></marker>
+    <marker id="gray" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#777"/></marker>
+    <marker id="ctl" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#1565c0"/></marker>
+    <marker id="cl" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#1565c0"/></marker>
+  </defs>
+
+  <!-- client timelines -->
+  <g stroke="#1565c0" stroke-width="1.2" marker-end="url(#ctl)">
+    <line x1="100" y1="50" x2="935" y2="50"/>
+    <line x1="100" y1="420" x2="935" y2="420"/>
+  </g>
+  <g font-size="16" font-weight="bold" text-anchor="end" fill="#1565c0">
+    <text x="90" y="56">Client X</text>
+    <text x="90" y="426">Client Y</text>
+  </g>
+
+  <!-- replica timelines -->
+  <g stroke="#777" stroke-width="1.6" marker-end="url(#tl)">
+    <line x1="100" y1="150" x2="935" y2="150"/>
+    <line x1="100" y1="240" x2="935" y2="240"/>
+    <line x1="100" y1="330" x2="935" y2="330"/>
+  </g>
+  <g font-size="16" font-weight="bold" text-anchor="end">
+    <text x="90" y="156">Replica A</text>
+    <text x="90" y="246">Replica B</text>
+    <text x="90" y="336">Replica C</text>
+  </g>
+
+  <!-- client requests -->
+  <g stroke="#1565c0" stroke-width="1.5" marker-end="url(#cl)">
+    <line x1="130" y1="50" x2="139" y2="142"/>  <!-- (1) X PUT v1 at A -->
+    <line x1="270" y1="240" x2="284" y2="412"/> <!-- (2a) GET reply B to Y -->
+    <line x1="310" y1="420" x2="319" y2="248"/> <!-- (2a) Y PUT v2 at B -->
+    <line x1="430" y1="330" x2="444" y2="58"/>  <!-- (2b) GET reply C to X -->
+    <line x1="470" y1="50" x2="485" y2="322"/>  <!-- (2b) X PUT v3 at C -->
+    <line x1="720" y1="150" x2="734" y2="412"/> <!-- (5) GET reply A to Y -->
+    <line x1="770" y1="420" x2="785" y2="158"/> <!-- (5) Y PUT v4 at A -->
+  </g>
+  <g fill="#1565c0">
+    <circle cx="130" cy="50" r="4"/>
+    <circle cx="285" cy="420" r="4"/>
+    <circle cx="310" cy="420" r="4"/>
+    <circle cx="445" cy="50" r="4"/>
+    <circle cx="470" cy="50" r="4"/>
+    <circle cx="735" cy="420" r="4"/>
+    <circle cx="770" cy="420" r="4"/>
+  </g>
+  <g font-size="12" font-style="italic" fill="#1565c0">
+    <text x="142" y="44">PUT v1, ctx [0,0,0]</text>
+    <text x="438" y="40" text-anchor="end">GET: {v1}, ctx [1,0,0]</text>
+    <text x="478" y="40">PUT v3, ctx [1,0,0]</text>
+    <text x="230" y="442">GET: {v1}, ctx [1,0,0]</text>
+    <text x="322" y="410">PUT v2, ctx [1,0,0]</text>
+    <text x="640" y="442">GET: {v2, v3}, ctx [1,1,1]</text>
+    <text x="782" y="410">PUT v4, ctx [1,1,1]</text>
+  </g>
+
+  <!-- replica sync (dashed) -->
+  <g stroke="#777" stroke-width="2" stroke-dasharray="6 4" marker-end="url(#gray)">
+    <line x1="148" y1="155" x2="194" y2="233"/>  <!-- (1) A to B -->
+    <line x1="144" y1="157" x2="214" y2="323"/>  <!-- (1) A to C -->
+    <line x1="500" y1="236" x2="510" y2="158"/>  <!-- (3) B to A -->
+    <line x1="580" y1="326" x2="594" y2="248"/>  <!-- (4) C to B -->
+    <line x1="600" y1="326" x2="630" y2="158"/>  <!-- (4) C to A -->
+  </g>
+
+  <!-- replica events -->
+  <circle cx="140" cy="150" r="6"/>
+  <circle cx="198" cy="240" r="6"/>
+  <circle cx="218" cy="330" r="6"/>
+  <circle cx="270" cy="240" r="6" fill="#fff" stroke="#1a1a1a" stroke-width="2"/>
+  <circle cx="320" cy="240" r="6"/>
+  <circle cx="430" cy="330" r="6" fill="#fff" stroke="#1a1a1a" stroke-width="2"/>
+  <circle cx="486" cy="330" r="6"/>
+  <circle cx="512" cy="150" r="6"/>
+  <circle cx="580" cy="330" r="6"/>
+  <circle cx="597" cy="240" r="6"/>
+  <circle cx="632" cy="150" r="6"/>
+  <circle cx="720" cy="150" r="6" fill="#fff" stroke="#1a1a1a" stroke-width="2"/>
+  <circle cx="786" cy="150" r="6"/>
+  <g font-size="13">
+    <text x="150" y="138">(1) v1 [1,0,0]</text>
+    <text x="328" y="228">(2a) v2 [1,1,0]</text>
+    <text x="494" y="352">(2b) v3 [1,0,1]</text>
+    <text x="520" y="138" fill="#2e7d32">(3) v2 replaces v1</text>
+    <text x="640" y="172" fill="#c62828">(4) siblings</text>
+    <text x="622" y="262" fill="#c62828">(4) siblings</text>
+    <text x="796" y="138" fill="#2e7d32">(5) v4 [2,1,1]</text>
+  </g>
+
+  <text x="10" y="470" font-size="13" fill="#555">Key K; vectors list A, B, C. Blue arrows: client requests; gray dashed arrows: replica sync; open circles: GETs.</text>
+</svg>
