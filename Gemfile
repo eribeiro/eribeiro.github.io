@@ -6,3 +6,4 @@ gem "csv"
 gem "bigdecimal"
 gem "webrick", "~> 1.8"
 
+gem "rubyzip", ">= 3.4.0"
