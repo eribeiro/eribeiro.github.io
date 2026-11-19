@@ -1,4 +1,10 @@
 var store = [{
+        "title": "title",
+        "excerpt":" ","categories": ["Blog"],
+        "tags": ["tag1","tag2","tag3"],
+        "url": "/blog/template/",
+        "teaser": null
+      },{
         "title": "\"Clustered Index\" Doesn't Mean What You Think It Means (And That's Alright!)",
         "excerpt":"In August 2026, during a book club session, I found myself stumbling through the nuances of clustered indexes, index-organized tables and covering indexes, only to be corrected by fellow readers who were going strictly by Kleppmann and Riccomini’s Designing Data-Intensive Applications (Kleppmann and Riccomini, 2026). Driven by my confusion, I...","categories": ["Blog"],
         "tags": ["clustered-index","clustering-index","index-organized-table","covering-index","database-internals"],
